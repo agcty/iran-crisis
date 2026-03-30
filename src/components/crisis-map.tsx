@@ -13,6 +13,7 @@ import {
   TOTAL_DAYS,
   BRENT_PRICES,
   DUBAI_PRICES,
+  JET_FUEL_PRICES,
   COUNTRY_STATUS,
   COUNTRY_NAMES,
   SEVERITY_LEVELS,
@@ -128,32 +129,39 @@ function drawOilChart(
   const PAD_T = 10;
   const PAD_B = 10;
 
-  const mn = 60;
-  const mx = 160;
+  // Indexed chart: all series normalized to Day 1 = 100
+  const bBase = BRENT_PRICES[0];
+  const dBase = DUBAI_PRICES[0];
+  const jBase = JET_FUEL_PRICES[0];
 
-  function toY(price: number) {
-    return PAD_T + ((mx - price) / (mx - mn)) * (H - PAD_T - PAD_B);
+  const mn = 85;
+  const mx = 220;
+
+  function toIdx(val: number, base: number) {
+    return (val / base) * 100;
+  }
+  function toY(idx: number) {
+    return PAD_T + ((mx - idx) / (mx - mn)) * (H - PAD_T - PAD_B);
   }
   function toX(i: number) {
     return PAD_L + (i / (TOTAL_DAYS - 1)) * (W - PAD_L - PAD_R);
   }
 
-  // Clear
   ctx.clearRect(0, 0, W, H);
 
   // Grid lines
-  const gridPrices = [80, 100, 120, 140];
+  const gridLevels = [100, 125, 150, 175, 200];
   ctx.strokeStyle = '#1a1e28';
   ctx.lineWidth = 0.5;
-  ctx.font = '9px JetBrains Mono, monospace';
+  ctx.font = '8px JetBrains Mono, monospace';
   ctx.fillStyle = '#333';
-  for (const p of gridPrices) {
-    const y = toY(p);
+  for (const lvl of gridLevels) {
+    const y = toY(lvl);
     ctx.beginPath();
     ctx.moveTo(PAD_L, y);
     ctx.lineTo(W - PAD_R, y);
     ctx.stroke();
-    ctx.fillText('$' + p, W - PAD_R + 4, y + 3);
+    ctx.fillText(lvl === 100 ? 'base' : '+' + (lvl - 100) + '%', W - PAD_R + 3, y + 3);
   }
 
   // Current day highlight
@@ -161,55 +169,48 @@ function drawOilChart(
   ctx.fillStyle = 'rgba(255, 107, 53, 0.07)';
   ctx.fillRect(cx - 4, 0, 8, H);
 
-  // Gradient fill between Brent and Dubai
+  // Gradient fill between jet fuel and Brent (refining margin amplification)
   if (dayIndex >= 1) {
     ctx.beginPath();
-    for (let i = 0; i <= dayIndex; i++) ctx.lineTo(toX(i), toY(DUBAI_PRICES[i]));
-    for (let i = dayIndex; i >= 0; i--) ctx.lineTo(toX(i), toY(BRENT_PRICES[i]));
+    for (let i = 0; i <= dayIndex; i++) ctx.lineTo(toX(i), toY(toIdx(JET_FUEL_PRICES[i], jBase)));
+    for (let i = dayIndex; i >= 0; i--) ctx.lineTo(toX(i), toY(toIdx(BRENT_PRICES[i], bBase)));
     ctx.closePath();
-    ctx.fillStyle = 'rgba(255, 51, 102, 0.06)';
+    ctx.fillStyle = 'rgba(24, 255, 255, 0.04)';
     ctx.fill();
   }
 
-  // Brent line (orange)
-  ctx.beginPath();
-  ctx.strokeStyle = '#ff6b35';
-  ctx.lineWidth = 2;
+  // Draw lines: Brent (orange), Dubai (pink), Jet fuel (cyan)
+  const series: [string, number[], number][] = [
+    ['#ff6b35', BRENT_PRICES, bBase],
+    ['#ff3366', DUBAI_PRICES, dBase],
+    ['#18ffff', JET_FUEL_PRICES, jBase],
+  ];
+
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
-  for (let i = 0; i <= dayIndex; i++) {
-    const x = toX(i), y = toY(BRENT_PRICES[i]);
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  }
-  ctx.stroke();
 
-  // Dubai line (pink)
-  ctx.beginPath();
-  ctx.strokeStyle = '#ff3366';
-  ctx.lineWidth = 2;
-  for (let i = 0; i <= dayIndex; i++) {
-    const x = toX(i), y = toY(DUBAI_PRICES[i]);
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  for (const [col, arr, base] of series) {
+    ctx.beginPath();
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 2;
+    for (let i = 0; i <= dayIndex; i++) {
+      const x = toX(i), y = toY(toIdx(arr[i], base));
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
   }
-  ctx.stroke();
 
   // Dots at current position
-  const dots: [string, number[]][] = [
-    ['#ff6b35', BRENT_PRICES],
-    ['#ff3366', DUBAI_PRICES],
-  ];
-  for (const [col, arr] of dots) {
+  for (const [col, arr, base] of series) {
     const x = toX(dayIndex);
-    const y = toY(arr[dayIndex]);
-    // Glow
+    const y = toY(toIdx(arr[dayIndex], base));
     ctx.beginPath();
     ctx.fillStyle = col + '30';
-    ctx.arc(x, y, 8, 0, Math.PI * 2);
+    ctx.arc(x, y, 7, 0, Math.PI * 2);
     ctx.fill();
-    // Solid dot
     ctx.beginPath();
     ctx.fillStyle = col;
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.arc(x, y, 3.5, 0, Math.PI * 2);
     ctx.fill();
   }
 }
@@ -488,26 +489,12 @@ export default function CrisisMap() {
           <div className="flex flex-col gap-3 min-h-0">
             {/* Oil price chart */}
             <div className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3">
-              <div className="flex justify-between items-baseline mb-2">
-                <div
-                  className="text-[11px] text-[#888]"
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                >
-                  OIL PRICE ($/barrel)
-                </div>
-                <div className="flex gap-3">
-                  <span
-                    className="text-[13px] font-bold text-[#ff6b35]"
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                  >
-                    Brent ${stats.brent}
-                  </span>
-                  <span
-                    className="text-[13px] font-bold text-[#ff3366]"
-                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                  >
-                    Dubai ${stats.dubai}
-                  </span>
+              <div className="mb-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                <div className="text-[10px] text-[#666] mb-1">ENERGY PRICES (indexed, Day 1 = 100)</div>
+                <div className="flex gap-2 flex-wrap text-[11px] font-bold">
+                  <span className="text-[#ff6b35]">Brent ${stats.brent}</span>
+                  <span className="text-[#ff3366]">Dubai ${stats.dubai}</span>
+                  <span className="text-[#18ffff]">Jet ${stats.jetFuel.toLocaleString()}/mt {stats.jetFuelChange > 0 ? '+' : ''}{stats.jetFuelChange}%</span>
                 </div>
               </div>
               <div>

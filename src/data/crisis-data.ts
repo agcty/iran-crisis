@@ -13,6 +13,15 @@ export const TOTAL_DAYS = DATES.length; // 31
 export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,115,118,114,110,113,108,106,110,113,110,113,115,114,115];
 export const DUBAI_PRICES = [71,88,96,105,115,125,130,128,120,115,110,108,115,120,128,125,135,140,145,140,132,138,130,126,132,136,130,126,128,125,126];
 
+// European jet fuel CIF NWE ($/metric tonne, S&P Global Platts assessments)
+// Pre-war: $831/mt. Peak: $1,698/mt on Mar 16 (all-time Platts record).
+// ~50% of EU jet imports came from Middle East in 2025. Kuwait alone ~25%.
+// Kuwait refineries struck Mar 19 → 260K bpd of 1.77M global seaborne jet trade.
+// Jet-to-LSGO spread hit $400/mt (record). Bid-offer $30/mt wide (vs $0.50 normal).
+// By Day 31, major EU airports warning airlines "no fuel available" within 1 week.
+// Jet fuel leads diesel by 2-4 weeks (Shell CEO Sawan, CERAWeek Mar 24).
+export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1435,1501,1540,1580,1620,1660,1698,1660,1620,1580,1550,1560,1570,1580,1590,1600,1620,1650,1680,1700,1700];
+
 // Strait of Hormuz oil flow (million barrels per day)
 // Pre-crisis baseline: 20.9 mbpd (EIA, 2025 H1 average)
 // Day 1: war starts late day, full day of normal flow
@@ -292,6 +301,8 @@ export function getDayStats(dayIndex: number) {
     brent,
     dubai,
     spread: dubai - brent,
+    jetFuel: JET_FUEL_PRICES[dayIndex],
+    jetFuelChange: Math.round((JET_FUEL_PRICES[dayIndex] / JET_FUEL_PRICES[0] - 1) * 100),
     hormuzFlow: HORMUZ_FLOW[dayIndex],
     hormuzTransits: HORMUZ_TRANSITS[dayIndex],
     supplyOffline: SUPPLY_OFFLINE[dayIndex],
