@@ -352,6 +352,12 @@ export const EVENTS: CrisisEvent[] = [
   // Day 29: Thailand Hormuz deal + US protests
   { day: 29, country: "Thailand", who: "PM Anutin", type: "diplomatic", text: "Secures Hormuz transit deal with Iran. Thailand added to \"friendly\" list alongside CN, RU, IN, PK.", gap: null },
   { day: 29, country: "USA", who: "\"No Kings Day\"", type: "political", text: "8-9M protesters in 3,300 events across 50 states — largest single-day protest in US history. Trump at 36% approval.", gap: null },
+
+  // Day 4: Poland PM dismisses concerns
+  { day: 4, country: "Poland", who: "PM Tusk", type: "reassurance", text: "Accuses opposition of \"destabilising\" country with \"false fuel shortage claims.\"", gap: "Diesel hit all-time record 3 weeks later" },
+
+  // Day 27: Poland record diesel + VAT slash
+  { day: 27, country: "Poland", who: "PM Tusk", type: "price_controls", text: "Diesel hits all-time record 8.69 PLN/L (€2.04). VAT slashed 23% → 8%, excise to EU minimum. Fuel panic reported.", gap: null },
 ];
 
 // Helper: get stats for a given day index (0-based)
