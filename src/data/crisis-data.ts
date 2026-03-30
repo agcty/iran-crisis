@@ -285,6 +285,73 @@ export const EVENTS: CrisisEvent[] = [
   { day: 30, country: "Australia", who: "PM Albanese", type: "price_controls", text: "50% fuel excise cut. \"Supply secure.\" 500+ stations ran dry.", gap: "'Secure' while 500+ stations dry" },
   { day: 31, country: "Japan", who: "PM Takaichi", type: "medical_warning", text: "Dialysis tubing, surgical containers at risk. \"Remain calm.\"", gap: "Emergency task force while saying 'calm'" },
   { day: 31, country: "USA", who: "President Trump", type: "political", text: "Considering seizing Kharg Island. \"We have a lot of options.\"", gap: null },
+
+  // ── Additional verified events (research round 2) ──
+
+  // Day 2: Pakistan protests after Khamenei killing
+  { day: 2, country: "Pakistan", who: "Shia communities", type: "emergency", text: "Nationwide protests; 26-35 killed, 120+ injured. US Consulate Karachi stormed; Marines open fire.", gap: null },
+
+  // Day 3: Shipping insurance collapses
+  { day: 3, country: "Global shipping", who: "Marine insurers", type: "warning", text: "War risk cover cancelled for Gulf. Premiums 0.2% → 1% of vessel value. Strait effectively uninsurable.", gap: null },
+  { day: 3, country: "Maersk", who: "A.P. Moller-Maersk", type: "warning", text: "Emergency freight increase: +$1,800/20ft, +$3,000/40ft for all Gulf cargo.", gap: null },
+
+  // Day 5: South Korea market crash
+  { day: 5, country: "South Korea", who: "KOSPI", type: "warning", text: "Circuit breaker triggered. Biggest crash since 2008 — down up to 12%.", gap: null },
+
+  // Day 6: China export ban + Bangladesh rationing
+  { day: 6, country: "China", who: "NDRC", type: "export_ban", text: "Orders PetroChina, Sinopec, CNOOC to halt all diesel, gasoline, jet fuel exports immediately.", gap: "Deepened Asia's fuel crisis while calling for 'stable supply'" },
+  { day: 6, country: "Bangladesh", who: "BPC", type: "rationing", text: "Fuel rationing: motorcycles 2L/day, cars 10L, SUVs 20L, trucks 200L. \"To prevent hoarding.\"", gap: null },
+
+  // Day 7: Thailand export ban
+  { day: 7, country: "Thailand", who: "PM Anutin", type: "export_ban", text: "PM Order 2/2026: bans exports of gasoline, diesel, Jet A1, LPG. Exceptions only for Myanmar/Laos.", gap: null },
+
+  // Day 9: Bangladesh escalation + France inspections
+  { day: 9, country: "Bangladesh", who: "Government", type: "emergency", text: "All universities closed. Military takes charge of oil depots. 4 of 5 fertilizer factories halted. Power cuts doubled to 5hr/day.", gap: null },
+  { day: 9, country: "France", who: "PM Lecornu", type: "price_controls", text: "Orders 500 fuel station inspections for abusive pricing. Diesel +16% in one week.", gap: null },
+
+  // Day 10: Pakistan austerity
+  { day: 10, country: "Pakistan", who: "PM Sharif", type: "rationing", text: "Televised address: 4-day workweek, 50% WFH, schools closed, weddings capped at 200 guests. Navy deploys Operation Muhafiz-ul-Bahr.", gap: "'Adequate supply' while shutting down half the economy" },
+
+  // Day 11: Croatia
+  { day: 11, country: "Croatia", who: "PM Plenković", type: "price_controls", text: "Fuel price caps: Eurosuper €1.50/L, diesel €1.55/L. €450M support package.", gap: null },
+
+  // Day 12: UNSC
+  { day: 12, country: "UN Security Council", who: "Resolution 2817", type: "diplomatic", text: "Condemns Iran's attacks on Gulf states. 13-0-2 (China, Russia abstain). 135 co-sponsors.", gap: null },
+
+  // Day 14: TotalEnergies France caps
+  { day: 14, country: "France", who: "TotalEnergies", type: "price_controls", text: "Caps prices at 3,300 French stations: petrol €1.99/L, diesel €2.09/L through March 31.", gap: null },
+
+  // Day 15: Sri Lanka QR rationing
+  { day: 15, country: "Sri Lanka", who: "Government", type: "rationing", text: "QR-based National Fuel Pass reactivated. Motorcycles 8L/wk, cars 25L/wk, buses 100L/wk.", gap: null },
+
+  // Day 19: ECB + BASF
+  { day: 19, country: "ECB", who: "Governing Council", type: "warning", text: "Holds rates at 2.0%. Inflation forecast raised to 2.6%. Gas futures surge 30% to €74/MWh on same day.", gap: null },
+  { day: 19, country: "Germany", who: "BASF SE", type: "warning", text: "Price increases up to 30% across European product portfolio citing energy costs.", gap: null },
+
+  // Day 20: IMF
+  { day: 20, country: "IMF", who: "Julie Kozack", type: "warning", text: "Every 10% sustained oil rise = +0.4pp global inflation, -0.1-0.2% output. Fertilizer disruptions \"substantial\" food price risk.", gap: null },
+
+  // Day 22: Trump ultimatum + Taiwan nuclear
+  { day: 22, country: "USA", who: "President Trump", type: "political", text: "48-hour ultimatum to Iran: reopen Hormuz or face escalation. Posted 23:44 GMT on Truth Social.", gap: null },
+  { day: 23, country: "Taiwan", who: "President Lai", type: "warning", text: "Announces restart of 2 nuclear plants — reversing DPP's \"nuclear-free\" policy. 70% of crude from Middle East.", gap: null },
+
+  // Day 24: IEA Birol
+  { day: 24, country: "IEA", who: "Dir. Fatih Birol", type: "warning", text: "\"Worse than the 1970s oil shocks combined.\" 11 mbpd lost vs 10 mbpd in '73 + '79 together. 40+ energy assets damaged.", gap: null },
+
+  // Day 25: Lagarde
+  { day: 25, country: "ECB", who: "Pres. Lagarde", type: "warning", text: "\"We will not be paralyzed by hesitation.\" Warns firms/workers may pass costs faster than 2022.", gap: null },
+
+  // Day 26: OECD
+  { day: 26, country: "OECD", who: "Interim Outlook", type: "warning", text: "Global inflation to 4.0% (+1.2pp). Eurozone growth slashed to 0.8%. US inflation 4.2%.", gap: null },
+
+  // Day 27: Malaysia + Vietnam + Japan
+  { day: 27, country: "Malaysia", who: "PM Anwar", type: "diplomatic", text: "Secures Hormuz passage from Iran. \"Countries whose impacts are far worse than ours.\" Non-aligned policy pays off.", gap: null },
+  { day: 27, country: "Vietnam", who: "Vietnam Airlines", type: "warning", text: "Suspends 23 weekly domestic flights from April 1. VietJet cuts 18%. Jet fuel only guaranteed through March.", gap: null },
+  { day: 28, country: "Japan", who: "METI", type: "warning", text: "Orders wholesalers to switch from Dubai to Brent pricing. Dubai at $170 vs Brent $110 — Japanese firms paying $140-200/bbl.", gap: null },
+
+  // Day 29: Thailand Hormuz deal + US protests
+  { day: 29, country: "Thailand", who: "PM Anutin", type: "diplomatic", text: "Secures Hormuz transit deal with Iran. Thailand added to \"friendly\" list alongside CN, RU, IN, PK.", gap: null },
+  { day: 29, country: "USA", who: "\"No Kings Day\"", type: "political", text: "8-9M protesters in 3,300 events across 50 states — largest single-day protest in US history. Trump at 36% approval.", gap: null },
 ];
 
 // Helper: get stats for a given day index (0-based)
