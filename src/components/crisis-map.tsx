@@ -334,18 +334,29 @@ export default function CrisisMap() {
 
         {/* Stats row 1: crisis metrics */}
         <div className="flex gap-2.5 mb-2 flex-wrap">
+          <StatBox value={'$' + stats.brent} label="Brent (paper)" color="#ff6b35" />
+          <StatBox value={'$' + stats.dubai} label="Dubai (physical)" color="#ff3366" />
+          <StatBox value={'$' + stats.spread} label="Paper-physical spread" color={stats.spread >= 20 ? '#ef5350' : stats.spread >= 10 ? '#ffab40' : '#66bb6a'} />
+          <StatBox value={'$' + stats.gold.toLocaleString()} label="Gold ($/oz)" color="#ffd740" />
+          <StatBox value={stats.vix.toFixed(1)} label="VIX" color="#e57373" />
+        </div>
+
+        {/* Stats row 2: supply */}
+        <div className="flex gap-2.5 mb-2 flex-wrap">
+          <StatBox value={stats.hormuzTransits} label="Hormuz transits/day" color="#4dd0e1" />
+          <StatBox value={stats.supplyOffline.toFixed(1)} label="Supply offline (mbpd)" color="#ef5350" />
+          <StatBox value={stats.euGasStorage.toFixed(1) + '%'} label="EU gas storage" color="#26c6da" />
+          <StatBox value={stats.sprReleased.toFixed(1) + 'M'} label="SPR released (of 400M)" color="#ffab40" />
+          <StatBox value={stats.forceMajeures} label="Force majeures" color="#ff8a65" />
+        </div>
+
+        {/* Stats row 3: impact */}
+        <div className="flex gap-2.5 mb-3 flex-wrap">
           <StatBox value={stats.affected} label="Countries w/ measures" color="#ff6b35" />
           <StatBox value={stats.rationing} label="Rationing" color="#cc2a2a" />
           <StatBox value={stats.emergencies} label="Emergencies" color="#ff3366" />
-          <StatBox value={'$' + stats.brent} label="Brent (paper)" color="#ff6b35" />
-          <StatBox value={'$' + stats.dubai} label="Dubai (physical)" color="#ff3366" />
-        </div>
-
-        {/* Stats row 2: supply disruption metrics */}
-        <div className="flex gap-2.5 mb-3 flex-wrap">
-          <StatBox value={stats.hormuzFlow.toFixed(1)} label="Hormuz flow (mbpd)" color="#4dd0e1" />
-          <StatBox value={stats.supplyOffline.toFixed(1)} label="Supply offline (mbpd)" color="#ef5350" />
-          <StatBox value={stats.sprReleased.toFixed(1) + 'M'} label="SPR released (of 400M bbl)" color="#ffab40" />
+          <StatBox value={stats.signalGaps} label="Signal-action gaps" color="#ffd54f" />
+          <StatBox value={stats.unrest + '/5'} label="Unrest index" color={['#66bb6a','#66bb6a','#ffab40','#ff9800','#ef5350','#d32f2f'][stats.unrest]} />
         </div>
 
         {/* Legend */}

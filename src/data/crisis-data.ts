@@ -48,6 +48,66 @@ export const SPR_RELEASED = [0,0,0,0,0,0,0,0,0,0,0,0,1.1,2.2,3.3,4.4,5.5,6.6,9.1
 // (US 415M + Japan 470M + other IEA ~600M; source: DOE, JOGMEC, IEA Oil Security)
 export const IEA_RESERVES_TOTAL = 1485;
 
+// Strait of Hormuz ship transits per day (non-Iranian AIS-visible)
+// Pre-war: ~138/day (UANI data). Mar 1-25 total: 142 transits (Lloyd's List)
+// Day 2-3: Near zero (IRGC closure). Day 4-10: 0-2/day, 150+ tankers anchored outside
+// Day 12-13: ~3/day, 21 attacks on ships by Day 13. Day 14-18: ~5/day (IRGC tollbooth)
+// Day 19: 8 (Windward/MarineTraffic). Day 20+: 5-8/day, selective passage
+// 5 nations approved: CN, RU, IN, PK, IQ. Additional: MY, TH (bilateral deals)
+// 80%+ March transits are shadow fleet (up from 15% in Feb). IRGC charges up to $2M/transit
+// Sources: Lloyd's List, Windward, UANI, MarineTraffic
+export const HORMUZ_TRANSITS = [138,0,0,1,0,1,1,1,2,1,2,3,3,5,5,5,5,5,8,6,5,7,5,5,6,5,6,7,5,6,7];
+
+// EU aggregate gas storage (% full, AGSI data)
+// Feb 28: ~42%. Mar 8: ~35%. Mar 17: 28.93% (AGSI exact). Mar 25: ~28.4%. Mar 30: ~27.5%
+// EU regulation requires 90% full by Nov 1. Last year same date: 34.47%
+// Netherlands critically low at ~5-6%. Refill season normally Mar-Apr but requires
+// LNG imports now disrupted by QatarEnergy force majeure.
+// TTF gas: ~€38/MWh pre-war → ~€55-56/MWh by Mar 30. Goldman Q2: €72, adverse €100+
+// Interpolated linearly between AGSI data points.
+export const EU_GAS_STORAGE = [42.0,41.1,40.3,39.4,38.5,37.6,36.8,35.9,35.0,34.3,33.7,33.0,32.3,31.6,31.0,30.3,29.6,28.9,28.8,28.8,28.7,28.7,28.6,28.5,28.5,28.4,28.2,28.0,27.9,27.7,27.5];
+
+// Force majeure declarations (cumulative count)
+// Day 3: QatarEnergy (all LNG, 20% global offline, ~90 cargoes)
+// Day 5: Alba (aluminum). Day 6: KPC (Kuwait oil). Day 8: Shell (selected LNG)
+// Day 10: Bapco (Bahrain refinery, 380K bpd). Day 11: Iraq SOMO (Basra)
+// Day 13: OQ Trading Oman (LNG to Bangladesh). Day 15: India (domestic gas redirect)
+// Day 19: Wave across Asian petrochemical firms (Gulf feedstock)
+// Day 25: QatarEnergy extended through May
+export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,10,10,10,10,10,10,10];
+
+// Signal-action gap tracker (cumulative count)
+// Countries simultaneously saying "remain calm / no shortage" while implementing
+// emergency measures. The editorial core of this visualization.
+// Day 7: India (Puri: "no cause of worry" → later imposed tax cuts + export levies)
+// Day 10: +UK (Starmer: "not there yet" → reviewed National Emergency Plan)
+// Day 12: +Japan ("no disruption" → largest-ever reserve release), +USA (SPR, prices rose 17%)
+// Day 14: +Pakistan ("adequate supply" → later 4-day workweek + school closures)
+// Day 23: +Slovenia ("no shortages" → army deployed), +Germany (downplays → warns of imminent crisis)
+// Day 26: +Philippines (shift to national emergency after calm messaging)
+// Day 28: +India (third "remain calm" amid visible pump lines)
+// Day 30: +Australia ("supply secure" → 500+ stations ran dry)
+// Day 31: +Japan ("remain calm" → emergency task force for medical supplies)
+export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11];
+
+// Protest / unrest escalation index (1-5 scale)
+// 1=isolated, 2=scattered protests, 3=organized demonstrations,
+// 4=mass events, 5=critical (millions mobilized / government stability at risk)
+// Day 1-7: Pakistan protests (26-35 killed). Day 8-14: India fuel protests, PH tensions.
+// Day 15-21: PH transport strike, BD military at depots, EG restrictions.
+// Day 22-25: Fuel queue confrontations TH/BD/PH, EU border fuel tourism tensions.
+// Day 26-28: PH nationwide strike. US "No Kings Day" Mar 28: 8-9M, 3300 events, 50 states.
+//   Tel Aviv anti-war protest (18 arrests). Day 29-31: Sustained. Trump 36% approval.
+export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,5,5];
+
+// Gold price ($/oz, approximate daily)
+// Pre-war: ~$3,100. Mar 28: ~$4,524 (+46%). Classic safe-haven flight.
+export const GOLD_PRICES = [3100,3200,3300,3400,3500,3600,3650,3700,3720,3750,3800,3780,3820,3880,3920,3950,4000,4100,4200,4180,4150,4200,4250,4280,4320,4380,4400,4450,4524,4500,4520];
+
+// VIX (CBOE Volatility Index, approximate daily)
+// Pre-war: ~15. Mar 28: 31.05 (+107%). Spikes on war start, South Pars strike, Houthi entry.
+export const VIX = [15,25,28,30,32,34,33,31,29,28,26,24,27,28,29,28,29,32,35,33,31,32,30,29,30,31,30,32,31,30,31];
+
 // Severity levels for map coloring
 export const SEVERITY_LEVELS = {
   0: { label: "Normal", color: "#151820" },
@@ -222,16 +282,27 @@ export function getDayStats(dayIndex: number) {
     if (severity >= 5) emergencies++;
   }
 
+  const brent = BRENT_PRICES[dayIndex];
+  const dubai = DUBAI_PRICES[dayIndex];
+
   return {
     affected,
     rationing,
     emergencies,
-    brent: BRENT_PRICES[dayIndex],
-    dubai: DUBAI_PRICES[dayIndex],
+    brent,
+    dubai,
+    spread: dubai - brent,
     hormuzFlow: HORMUZ_FLOW[dayIndex],
+    hormuzTransits: HORMUZ_TRANSITS[dayIndex],
     supplyOffline: SUPPLY_OFFLINE[dayIndex],
     sprReleased: SPR_RELEASED[dayIndex],
     sprRemaining: IEA_RESERVES_TOTAL - SPR_RELEASED[dayIndex],
+    euGasStorage: EU_GAS_STORAGE[dayIndex],
+    forceMajeures: FORCE_MAJEURES[dayIndex],
+    signalGaps: SIGNAL_ACTION_GAPS[dayIndex],
+    unrest: UNREST_INDEX[dayIndex],
+    gold: GOLD_PRICES[dayIndex],
+    vix: VIX[dayIndex],
   };
 }
 
