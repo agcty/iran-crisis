@@ -383,6 +383,10 @@ export const EVENTS: CrisisEvent[] = [
   // Day 31: G7 finance + energy ministers call
   { day: 31, country: "G7", who: "Finance + Energy ministers", type: "diplomatic", text: "\"Stand ready to take all necessary measures.\" Call on all countries to refrain from \"unjustified export restrictions on hydrocarbons.\"", gap: "Targeting CN/TH/RU/IN export bans but offering no enforcement" },
   { day: 31, country: "UK", who: "Chancellor Reeves", type: "diplomatic", text: "Warns G7 against \"unilateral trade moves\" — \"act together, not in ways that shift pressure onto partners.\" Protectionism would \"drive up costs.\"", gap: null },
+
+  // Day 31: Ethiopia + South Korea
+  { day: 31, country: "Ethiopia", who: "Government", type: "rationing", text: "Diesel \"all but disappeared\" in Addis Ababa. Civil servants sent on mandatory leave. Fuel prioritized for security and essential industries.", gap: null },
+  { day: 31, country: "South Korea", who: "Pres. Lee Jae-myung", type: "warning", text: "\"So serious I can't fall asleep.\" \"Worse than you think.\" Weighing first driving restrictions in 35 years (odd/even plates) if oil stays above $120.", gap: null },
 ];
 
 // Helper: get stats for a given day index (0-based)
