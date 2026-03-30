@@ -11,7 +11,10 @@ export const TOTAL_DAYS = DATES.length; // 31
 
 // Oil prices per day ($/barrel)
 export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,115,118,114,110,113,108,106,110,113,110,113,115,114,115];
-export const DUBAI_PRICES = [71,88,96,105,115,125,130,128,120,115,110,108,115,120,128,125,135,140,145,140,132,138,130,126,132,136,130,126,128,125,126];
+// Dubai physical crude: confirmed peak $166-170/bbl (Seeking Alpha, CNBC).
+// Pre-war $71. Spread to Brent hit ~$65 intraday Mar 18-19 (Manila Times).
+// Revised from original to reflect verified physical market dislocation.
+export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126];
 
 // European jet fuel CIF NWE ($/metric tonne, S&P Global Platts assessments)
 // Pre-war: $831/mt. Peak: $1,698/mt on Mar 16 (all-time Platts record).
@@ -110,12 +113,18 @@ export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7
 export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,5,5];
 
 // Gold price ($/oz, approximate daily)
-// Pre-war: ~$3,100. Mar 28: ~$4,524 (+46%). Classic safe-haven flight.
-export const GOLD_PRICES = [3100,3200,3300,3400,3500,3600,3650,3700,3720,3750,3800,3780,3820,3880,3920,3950,4000,4100,4200,4180,4150,4200,4250,4280,4320,4380,4400,4450,4524,4500,4520];
+// Pre-war: ~$5,278 (Feb 28). Gold hit all-time high $5,595 on Jan 28-29 2026.
+// COUNTERINTUITIVELY FELL during Iran war (~-15%), not the expected safe-haven rally.
+// Reasons: USD strength (DXY multi-year highs), forced liquidations from overleveraged
+// Jan rally positions, rising yields from oil-driven inflation fears, profit-taking.
+// Mar 28: ~$4,430-4,494. Sources: Fortune, CBS News, CNBC, Al Jazeera, Newsweek.
+export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4300,4250,4200,4180,4150,4200,4250,4300,4350,4400,4430,4450,4480];
 
 // VIX (CBOE Volatility Index, approximate daily)
-// Pre-war: ~15. Mar 28: 31.05 (+107%). Spikes on war start, South Pars strike, Houthi entry.
-export const VIX = [15,25,28,30,32,34,33,31,29,28,26,24,27,28,29,28,29,32,35,33,31,32,30,29,30,31,30,32,31,30,31];
+// Pre-war: ~17 (Feb avg 16.1, Investing.com). Mar 27 close: 31.05.
+// Confirmed high: 35.30 intraday. Confirmed low: 20.28.
+// Sources: Investing.com historical, FinancialContent, CNBC.
+export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,32,35,33,31,32,30,29,30,31,30,32,31,30,31];
 
 // Severity levels for map coloring
 export const SEVERITY_LEVELS = {
