@@ -379,6 +379,10 @@ export const EVENTS: CrisisEvent[] = [
 
   // Nepal bodies stranded — the human cost of closed airspace
   { day: 21, country: "Nepal", who: "Families", type: "emergency", text: "21+ bodies of migrant workers stranded in Gulf — flights cancelled, repatriation impossible. 1.7M Nepalis work in the Gulf; remittances = 25% of GDP.", gap: null },
+
+  // Day 31: G7 finance + energy ministers call
+  { day: 31, country: "G7", who: "Finance + Energy ministers", type: "diplomatic", text: "\"Stand ready to take all necessary measures.\" Call on all countries to refrain from \"unjustified export restrictions on hydrocarbons.\"", gap: "Targeting CN/TH/RU/IN export bans but offering no enforcement" },
+  { day: 31, country: "UK", who: "Chancellor Reeves", type: "diplomatic", text: "Warns G7 against \"unilateral trade moves\" — \"act together, not in ways that shift pressure onto partners.\" Protectionism would \"drive up costs.\"", gap: null },
 ];
 
 // Helper: get stats for a given day index (0-based)
