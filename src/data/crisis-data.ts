@@ -13,6 +13,41 @@ export const TOTAL_DAYS = DATES.length; // 31
 export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,115,118,114,110,113,108,106,110,113,110,113,115,114,115];
 export const DUBAI_PRICES = [71,88,96,105,115,125,130,128,120,115,110,108,115,120,128,125,135,140,145,140,132,138,130,126,132,136,130,126,128,125,126];
 
+// Strait of Hormuz oil flow (million barrels per day)
+// Pre-crisis baseline: 20.9 mbpd (EIA, 2025 H1 average)
+// Day 1: war starts late day, full day of normal flow
+// Day 2-4: ships in transit clear; no new entries; flow collapses
+// Day 5: Qatar force majeure on all LNG, near-total shutdown
+// Day 6+: effectively closed (~0.2 mbpd residual small-vessel traffic)
+// Day 29: Houthis enter war, even less; Day 30: Pakistan ships negotiated through
+export const HORMUZ_FLOW = [20.9,14.0,6.0,2.5,0.8,0.5,0.3,0.3,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.5,0.3];
+
+// Net global supply offline (million barrels per day)
+// = pre-crisis Hormuz exports (~20.9 mbpd) minus bypass pipeline ramp-up
+// Bypass infrastructure (sources: Bloomberg, S&P Global, EIA):
+//   Saudi Petroline (Abqaiq→Yanbu): 7 mbpd pipe capacity, ~4.5 mbpd Yanbu port
+//     loading capacity; pre-crisis ~2.5 mbpd, ramped to ~5 mbpd crude + 0.8 mbpd
+//     refined products by late March. Pipeline hit full capacity Mar 11 (Day 12).
+//   UAE ADCOP (Habshan→Fujairah): 1.5 mbpd capacity, pre-crisis 71% utilization
+//     (~1.06 mbpd); ramped to full 1.5 mbpd within days.
+//   Iraq Kirkuk-Ceyhan: resumed Sep 2025 at ~200-250 kbpd, suspended during conflict.
+// Day 29 uptick: Houthis threaten Bab al-Mandeb, some Red Sea route risk
+export const SUPPLY_OFFLINE = [0.0,8.5,14.0,16.5,17.5,17.2,17.0,16.8,16.5,16.2,16.0,15.5,15.2,15.0,14.8,14.8,14.5,14.5,14.5,14.5,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.8,14.2,14.5];
+
+// IEA emergency reserves released — cumulative (million barrels)
+// IEA announced record 400M barrel release on Day 12 (Mar 11, 2026):
+//   US: 172M over 120 days (~1.43M bbl/day, starting ~Day 19 per DOE lead time)
+//   Japan: ~80M (immediate, starting Day 13; 470M total reserves = 254 days cover)
+//   Other IEA Asia (Korea, Australia): ~23M starting Day 13
+//   Europe (Germany, France, etc.): ~97M starting ~Day 28 ("end of March")
+// Release rates: Asia ~1.1M/day, +US ~2.5M/day from Day 19, +Europe ~3.6M/day from Day 28
+// Sources: IEA collective action decision Mar 11 2026, DOE SPR data, Nippon.com
+export const SPR_RELEASED = [0,0,0,0,0,0,0,0,0,0,0,0,1.1,2.2,3.3,4.4,5.5,6.6,9.1,11.7,14.2,16.7,19.2,21.8,24.3,26.8,29.4,33.0,36.6,40.2,43.8];
+
+// Pre-crisis IEA total emergency reserves: ~1,485M barrels
+// (US 415M + Japan 470M + other IEA ~600M; source: DOE, JOGMEC, IEA Oil Security)
+export const IEA_RESERVES_TOTAL = 1485;
+
 // Severity levels for map coloring
 export const SEVERITY_LEVELS = {
   0: { label: "Normal", color: "#151820" },
@@ -193,6 +228,10 @@ export function getDayStats(dayIndex: number) {
     emergencies,
     brent: BRENT_PRICES[dayIndex],
     dubai: DUBAI_PRICES[dayIndex],
+    hormuzFlow: HORMUZ_FLOW[dayIndex],
+    supplyOffline: SUPPLY_OFFLINE[dayIndex],
+    sprReleased: SPR_RELEASED[dayIndex],
+    sprRemaining: IEA_RESERVES_TOTAL - SPR_RELEASED[dayIndex],
   };
 }
 

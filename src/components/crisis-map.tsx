@@ -7,7 +7,7 @@ import {
   Sphere,
   Marker,
 } from 'react-simple-maps';
-import { motion, AnimatePresence } from 'motion/react';
+// motion/react removed — CSS animations used instead for reliability with React 19
 import {
   DATES,
   TOTAL_DAYS,
@@ -279,11 +279,7 @@ export default function CrisisMap() {
     >
       <div className="max-w-[1440px] mx-auto px-4 py-5 pb-16">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="animate-[fadeIn_0.5s_ease]">
           <h1
             className="text-[18px] font-bold tracking-[-0.5px] text-[#ff6b35] uppercase"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
@@ -296,15 +292,10 @@ export default function CrisisMap() {
           >
             Government statements vs reality — Feb 28 to Mar 30, 2026
           </p>
-        </motion.div>
+        </div>
 
         {/* Day counter + play */}
-        <motion.div
-          className="flex items-baseline gap-3 flex-wrap mb-1.5"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.15 }}
-        >
+        <div className="flex items-baseline gap-3 flex-wrap mb-1.5">
           <span
             className="text-[42px] font-bold text-white leading-none"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
@@ -324,7 +315,7 @@ export default function CrisisMap() {
           >
             {playing ? '⏸ PAUSE' : '▶ PLAY'}
           </button>
-        </motion.div>
+        </div>
 
         {/* Timeline slider */}
         <div className="mb-4">
@@ -341,19 +332,21 @@ export default function CrisisMap() {
           />
         </div>
 
-        {/* Stats row */}
-        <motion.div
-          className="flex gap-2.5 mb-3 flex-wrap"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-        >
+        {/* Stats row 1: crisis metrics */}
+        <div className="flex gap-2.5 mb-2 flex-wrap">
           <StatBox value={stats.affected} label="Countries w/ measures" color="#ff6b35" />
           <StatBox value={stats.rationing} label="Rationing" color="#cc2a2a" />
           <StatBox value={stats.emergencies} label="Emergencies" color="#ff3366" />
           <StatBox value={'$' + stats.brent} label="Brent (paper)" color="#ff6b35" />
           <StatBox value={'$' + stats.dubai} label="Dubai (physical)" color="#ff3366" />
-        </motion.div>
+        </div>
+
+        {/* Stats row 2: supply disruption metrics */}
+        <div className="flex gap-2.5 mb-3 flex-wrap">
+          <StatBox value={stats.hormuzFlow.toFixed(1)} label="Hormuz flow (mbpd)" color="#4dd0e1" />
+          <StatBox value={stats.supplyOffline.toFixed(1)} label="Supply offline (mbpd)" color="#ef5350" />
+          <StatBox value={stats.sprReleased.toFixed(1) + 'M'} label="SPR released (of 400M bbl)" color="#ffab40" />
+        </div>
 
         {/* Legend */}
         <div
@@ -374,12 +367,7 @@ export default function CrisisMap() {
         {/* Map + sidebar layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-3">
           {/* Map */}
-          <motion.div
-            className="relative bg-[#0d1017] rounded-xl border border-[#1a1e28] overflow-hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.35, duration: 0.6 }}
-          >
+          <div className="relative bg-[#0d1017] rounded-xl border border-[#1a1e28] overflow-hidden">
             <ComposableMap
               projection="geoNaturalEarth1"
               projectionConfig={{
@@ -483,17 +471,12 @@ export default function CrisisMap() {
                 {tooltipContent}
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right sidebar: oil chart + events */}
           <div className="flex flex-col gap-3 min-h-0">
             {/* Oil price chart */}
-            <motion.div
-              className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45 }}
-            >
+            <div className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3">
               <div className="flex justify-between items-baseline mb-2">
                 <div
                   className="text-[11px] text-[#888]"
@@ -519,15 +502,10 @@ export default function CrisisMap() {
               <div>
                 <canvas ref={chartRef} />
               </div>
-            </motion.div>
+            </div>
 
             {/* Events panel */}
-            <motion.div
-              className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3 crisis-events overflow-y-auto flex-1 min-h-0"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55 }}
-            >
+            <div className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3 crisis-events overflow-y-auto flex-1 min-h-0">
               <div
                 className="text-[11px] text-[#888] mb-2"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
@@ -537,21 +515,13 @@ export default function CrisisMap() {
                   : `NO MAJOR EVENTS — ${DATES[dayIndex].toUpperCase()}`}
               </div>
               <div className="flex flex-col gap-2">
-                <AnimatePresence mode="popLayout">
-                  {events.map((event, i) => (
-                    <motion.div
-                      key={`${event.day}-${event.country}-${event.type}`}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.2, delay: i * 0.04 }}
-                    >
-                      <EventCard event={event} />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+                {events.map((event, i) => (
+                  <div key={`${event.day}-${event.country}-${event.type}`}>
+                    <EventCard event={event} />
+                  </div>
+                ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
