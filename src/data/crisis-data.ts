@@ -358,6 +358,27 @@ export const EVENTS: CrisisEvent[] = [
 
   // Day 27: Poland record diesel + VAT slash
   { day: 27, country: "Poland", who: "PM Tusk", type: "price_controls", text: "Diesel hits all-time record 8.69 PLN/L (€2.04). VAT slashed 23% → 8%, excise to EU minimum. Fuel panic reported.", gap: null },
+
+  // ── Round 3: human impact, IRGC tollbooth, Africa/global reach ──
+
+  // IRGC tollbooth — first time a nation imposes unilateral transit tolls on an international strait
+  { day: 14, country: "Iran", who: "IRGC Navy", type: "emergency", text: "First ships transit via IRGC \"tollbooth\" — pre-approved route through Iranian waters north of Larak Island. AIS disabled.", gap: null },
+  { day: 25, country: "Iran", who: "MP Boroujerdi", type: "political", text: "Confirms $2M/transit toll on IRIB: \"Collecting fees reflects Iran's strength.\" Payments accepted in Chinese yuan. Parliament drafting legislation.", gap: null },
+
+  // Nepal migrant worker — humanizes the Gulf crisis
+  { day: 8, country: "Nepal/Qatar", who: "Kuna Khuntia, 25", type: "emergency", text: "Pipe fitter from Odisha dies of heart attack in Doha during missile sounds. Father: \"He came back in a coffin.\" 21M South Asian migrants in Gulf.", gap: null },
+
+  // Thailand fishing industry collapse
+  { day: 27, country: "Thailand", who: "Samut Sakhon port", type: "rationing", text: "Half of fishing trawlers docked. \"Worse than COVID-19.\" Workers warn: \"After April 1, there may be no fish sold.\" $7B export industry at risk.", gap: null },
+
+  // Kenya / global fertilizer — Africa representation
+  { day: 28, country: "Kenya/Global", who: "PBS / farmers", type: "medical_warning", text: "\"The planting season is now. The fertilizer isn't there.\" Ethiopia imports 90%+ of nitrogen from Gulf. Kenya's 25M smallholders at risk.", gap: null },
+
+  // Qatar helium — unexpected cascading effect
+  { day: 19, country: "Qatar", who: "Helium production", type: "emergency", text: "Iran strikes helium facility. Qatar produces 1/3 of global supply. MRI machines worldwide at risk — helium needed for superconducting magnets.", gap: null },
+
+  // Nepal bodies stranded — the human cost of closed airspace
+  { day: 21, country: "Nepal", who: "Families", type: "emergency", text: "21+ bodies of migrant workers stranded in Gulf — flights cancelled, repatriation impossible. 1.7M Nepalis work in the Gulf; remittances = 25% of GDP.", gap: null },
 ];
 
 // Helper: get stats for a given day index (0-based)

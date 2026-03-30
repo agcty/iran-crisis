@@ -278,7 +278,7 @@ export default function CrisisMap() {
           '#080a0f',
       }}
     >
-      <div className="max-w-[1440px] mx-auto px-4 py-5 pb-16">
+      <div className="max-w-[1440px] mx-auto px-4 py-5 pb-28 md:pb-16">
         {/* Header */}
         <div className="animate-[fadeIn_0.5s_ease]">
           <h1
@@ -295,42 +295,42 @@ export default function CrisisMap() {
           </p>
         </div>
 
-        {/* Day counter + play */}
-        <div className="flex items-baseline gap-3 flex-wrap mb-1.5">
-          <span
-            className="text-[42px] font-bold text-white leading-none"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-          >
-            DAY {day}
-          </span>
-          <span
-            className="text-[12px] text-[#888]"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-          >
-            {DATES[dayIndex]}, 2026
-          </span>
-          <button
-            onClick={togglePlay}
-            className="bg-[#ff6b35] hover:bg-[#ff8555] text-[#0a0c10] font-bold text-[11px] px-3 py-1.5 rounded-md cursor-pointer border-none transition-colors"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-          >
-            {playing ? '⏸ PAUSE' : '▶ PLAY'}
-          </button>
-        </div>
-
-        {/* Timeline slider */}
-        <div className="mb-4">
-          <input
-            type="range"
-            min={1}
-            max={TOTAL_DAYS}
-            value={day}
-            onChange={e => {
-              setPlaying(false);
-              setDay(Number(e.target.value));
-            }}
-            className="crisis-slider w-full"
-          />
+        {/* Day counter + play + slider — fixed bottom bar on mobile */}
+        <div className="hidden md:block">
+          <div className="flex items-baseline gap-3 flex-wrap mb-1.5">
+            <span
+              className="text-[42px] font-bold text-white leading-none"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              DAY {day}
+            </span>
+            <span
+              className="text-[12px] text-[#888]"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              {DATES[dayIndex]}, 2026
+            </span>
+            <button
+              onClick={togglePlay}
+              className="bg-[#ff6b35] hover:bg-[#ff8555] text-[#0a0c10] font-bold text-[11px] px-3 py-1.5 rounded-md cursor-pointer border-none transition-colors"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              {playing ? '⏸ PAUSE' : '▶ PLAY'}
+            </button>
+          </div>
+          <div className="mb-4">
+            <input
+              type="range"
+              min={1}
+              max={TOTAL_DAYS}
+              value={day}
+              onChange={e => {
+                setPlaying(false);
+                setDay(Number(e.target.value));
+              }}
+              className="crisis-slider w-full"
+            />
+          </div>
         </div>
 
         {/* Stats row 1: crisis metrics */}
@@ -522,6 +522,45 @@ export default function CrisisMap() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Mobile fixed bottom slider */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-50 px-4 py-3 md:hidden border-t border-[#1a1a2e]"
+        style={{ background: 'linear-gradient(to top, #080a0f 80%, rgba(8,10,15,0.95))' }}
+      >
+        <div className="flex items-baseline gap-3 flex-wrap mb-1.5">
+          <span
+            className="text-[32px] font-bold text-white leading-none"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          >
+            DAY {day}
+          </span>
+          <span
+            className="text-[11px] text-[#888]"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          >
+            {DATES[dayIndex]}, 2026
+          </span>
+          <button
+            onClick={togglePlay}
+            className="bg-[#ff6b35] hover:bg-[#ff8555] text-[#0a0c10] font-bold text-[11px] px-3 py-1.5 rounded-md cursor-pointer border-none transition-colors"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          >
+            {playing ? '⏸ PAUSE' : '▶ PLAY'}
+          </button>
+        </div>
+        <input
+          type="range"
+          min={1}
+          max={TOTAL_DAYS}
+          value={day}
+          onChange={e => {
+            setPlaying(false);
+            setDay(Number(e.target.value));
+          }}
+          className="crisis-slider w-full"
+        />
       </div>
     </div>
   );
