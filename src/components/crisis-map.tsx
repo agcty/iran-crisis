@@ -38,6 +38,7 @@ const ISO_NUM_TO_ALPHA3: Record<string, string> = {
   '050': 'BGD', '156': 'CHN', '392': 'JPN', '410': 'KOR', '704': 'VNM',
   '764': 'THA', '608': 'PHL', '036': 'AUS', '643': 'RUS',
   '616': 'POL', '404': 'KEN', '566': 'NGA', '231': 'ETH',
+  '642': 'ROU', '376': 'ISR',
 };
 
 function getCountryFill(geoId: string, dayIndex: number): string {

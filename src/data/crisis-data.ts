@@ -1,5 +1,5 @@
-// Iran War Crisis Propagation — Feb 28 to Apr 1, 2026
-// Data extracted from crisis-propagation-map.html
+// Iran War Crisis Propagation — Feb 28 to Apr 1, 2026 (33 days, 40 countries, 126 events)
+// Data extracted from crisis-propagation-map.html + multi-agent validation
 
 export const DATES = [
   "Feb 28","Mar 1","Mar 2","Mar 3","Mar 4","Mar 5","Mar 6","Mar 7","Mar 8","Mar 9",
@@ -12,13 +12,16 @@ export const TOTAL_DAYS = DATES.length; // 33
 // Oil prices per day ($/barrel, settlement/close unless noted)
 // Validated: Pre-war $72.48 spot (Wikipedia). Intraday peak $119 on Mar 19 (CNBC),
 // but close that day was $108.65. Highest close: $118.35 on Mar 31 (CNBC).
-// Day 33: Brent dropped to ~$105 on hope rally (Pezeshkian peace report + Trump "2-3 weeks")
-export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,109,109,108,110,113,108,106,110,113,110,113,115,114,115,118,105];
+// Day 33: Brent opened $105.27, plunged to $98.52 intraday (briefly below $100 for first
+// time in a week), settled ~$102. War premium deflated on Trump exit rhetoric.
+// WTI ~$102.92. Dubai physical at $128.51 — $26 spread screams physical shortage.
+export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,109,109,108,110,113,108,106,110,113,110,113,115,114,115,118,102];
 // Dubai physical crude: confirmed peak $166-170/bbl (Seeking Alpha, CNBC).
 // Pre-war $71. Spread to Brent hit ~$65 intraday Mar 18-19 (Manila Times).
 // Revised from original to reflect verified physical market dislocation.
-// Day 33: Murban ~$115, Dubai physical easing with spread narrowing
-export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126,124,120];
+// Day 33: Dubai futures $128.51 (significantly above Brent — Asian premium + physical crunch).
+// UAE fuel prices up 30% for April. Brent-Dubai spread $26 = extreme dislocation.
+export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126,124,128];
 
 // European jet fuel CIF NWE ($/metric tonne, S&P Global Platts assessments)
 // Pre-war: $831/mt. Peak: $1,698/mt on Mar 16 (all-time Platts record).
@@ -27,7 +30,12 @@ export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,12
 // Jet-to-LSGO spread hit $400/mt (record). Bid-offer $30/mt wide (vs $0.50 normal).
 // By Day 31, major EU airports warning airlines "no fuel available" within 1 week.
 // Jet fuel leads diesel by 2-4 weeks (Shell CEO Sawan, CERAWeek Mar 24).
-export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1435,1501,1540,1580,1620,1660,1698,1660,1620,1580,1550,1560,1570,1580,1590,1600,1620,1650,1680,1700,1700,1690,1680];
+// Day 33: $1,710/mt confirmed (City AM, AirLive). 130% above pre-war $742.
+// Tanker Maetiga (last known UK-bound ME jet fuel cargo) arriving ~Apr 3.
+// Two ships departed New York → England — historically unprecedented reroute (Bloomberg).
+// UK imports 50% of jet fuel from ME (Kuwait 38%/4.1mt). Argus: "most exposed in Europe."
+// Kerosene stocks exhaust in ~3 months without Gulf supply. May = danger zone.
+export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1435,1501,1540,1580,1620,1660,1698,1660,1620,1580,1550,1560,1570,1580,1590,1600,1620,1650,1680,1700,1700,1710,1710];
 
 // Strait of Hormuz oil flow (million barrels per day)
 // Pre-crisis baseline: 20.9 mbpd (EIA, 2025 H1 average)
@@ -110,7 +118,9 @@ export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,1
 // Day 31: +Japan ("remain calm" → emergency task force for medical supplies)
 // Day 32: UK Ed.Sec. Phillipson "fill up as normal" while reviewing rationing powers
 // Day 33: Albanese "enjoy Easter" (400+ stations dry) + Starmer "weather the storm" (diesel £100/tank)
-export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11,12,14];
+//   + Peter Kyle "no supply chain issues at all" while last jet fuel tanker (Maetiga) en route
+//   + Romania Energy Min. Ivan "rationing not being considered" while 3 of 4 refineries offline
+export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11,12,16];
 
 // Protest / unrest escalation index (1-5 scale)
 // 1=isolated, 2=scattered protests, 3=organized demonstrations,
@@ -157,7 +167,7 @@ export type SeverityLevel = keyof typeof SEVERITY_LEVELS;
 export const COUNTRY_STATUS: Record<string, number[]> = {
   IRN: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
   USA: [1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  GBR: [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  GBR: [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4],
   FRA: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
   ESP: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
   DEU: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3],
@@ -171,7 +181,7 @@ export const COUNTRY_STATUS: Record<string, number[]> = {
   HRV: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2],
   POL: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3],
   SAU: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  ARE: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  ARE: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5],
   QAT: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
   KWT: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5],
   IRQ: [3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
@@ -188,11 +198,19 @@ export const COUNTRY_STATUS: Record<string, number[]> = {
   VNM: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,4,4,4,4,4,4,4,4,4,4,4],
   THA: [1,1,1,1,1,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
   PHL: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,5,5,5,5,5,5,5,5],
-  AUS: [1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4],
+  AUS: [1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,5],
   RUS: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3],
   KEN: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4],
   NGA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3],
   ETH: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4],
+  // Romania: crisis declared Mar 23 (Day 24). Emergency ordinance Apr 1.
+  // 3 of 4 refineries offline (Petromidia maintenance, Petrotel sanctions, Vega maintenance).
+  // Structural diesel deficit. Pump protests. Fuel tourism to Bulgaria. 90 days reserves.
+  ROU: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4],
+  // Israel: primary combatant. 24 killed, 6,239+ wounded as of Apr 1.
+  // Largest Iranian salvo Day 33 (10 BMs, cluster warheads, Passover eve).
+  // Hezbollah rockets into central Israel. Multi-front war (Lebanon, Yemen, Iran).
+  ISR: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
 };
 
 // Human-readable country names
@@ -235,6 +253,8 @@ export const COUNTRY_NAMES: Record<string, string> = {
   KEN: "Kenya",
   NGA: "Nigeria",
   ETH: "Ethiopia",
+  ROU: "Romania",
+  ISR: "Israel",
 };
 
 // Event types and their visual styles
@@ -491,6 +511,59 @@ export const EVENTS: CrisisEvent[] = [
 
   // Kuwait airport drone strike — Iran expanding attacks on Gulf civilian infrastructure
   { day: 33, country: "Kuwait", who: "Iran / KAFCO", type: "emergency", text: "Iranian drones hit fuel storage tanks at Kuwait International Airport. Large fire at KAFCO depot. No casualties. Part of escalating strikes on Gulf civilian infrastructure.", gap: null },
+
+  // ── Day 33 additions (Apr 1, research round 4) ──
+
+  // Iran's largest missile salvo on Israel — Passover eve, cluster warheads
+  { day: 33, country: "Israel", who: "Iran → IDF", type: "emergency", text: "Iran's largest salvo of war: ~10 BMs at central Israel on Passover eve. Cluster warhead hits Bnei Brak/Rosh HaAyin. 15 wounded incl. 11-year-old girl (critical). 6,239+ total wounded since Feb 28.", gap: null },
+
+  // Hezbollah rockets into central Israel during Passover seders
+  { day: 33, country: "Israel/Lebanon", who: "Hezbollah", type: "emergency", text: "2 rockets from Lebanon into central Israel during Passover seders. No injuries. Israel kills Hezbollah southern front commander Haj Youssef in Beirut strike (7 dead).", gap: null },
+
+  // UAE cumulative interceptions — most attacked non-combatant
+  { day: 33, country: "UAE", who: "Air defense", type: "emergency", text: "Intercepted 5 BMs + 35 drones today. Cumulative since Feb 28: 433 ballistic missiles, 1,977 drones, 19 cruise missiles. Fuel prices up 30% for April.", gap: null },
+
+  // UAE preparing to join war — first Gulf state
+  { day: 33, country: "UAE", who: "Government", type: "military_fuel", text: "Poised to be first Gulf state to directly join US operations. Lobbying UN Security Council for Hormuz reopening by force. Floating US seizure of Abu Musa island. Froze Iranian-linked institutions in Dubai.", gap: null },
+
+  // US/Israel strikes on Iranian steel + infrastructure
+  { day: 33, country: "Iran", who: "US/Israel strikes", type: "emergency", text: "Isfahan Mobarakeh Steel hit 2nd time. Sefid Dasht Steel struck. Qeshm Island desalination plant destroyed. Explosions in Ahvaz, Shiraz, Karaj, Kermanshah, Bandar Abbas. Drug factory hit (fentanyl/CW claim).", gap: null },
+
+  // Trump NATO withdrawal threat
+  { day: 33, country: "USA", who: "President Trump", type: "diplomatic", text: "\"Strongly considering\" pulling US from NATO — calls it \"paper tiger\" after allies refused to join war. Threatens to stop Ukraine aid unless Europe joins Hormuz coalition.", gap: null },
+
+  // Pakistan indirect talks — 15 US points, 5 Iran conditions
+  { day: 33, country: "Pakistan", who: "FM mediation", type: "diplomatic", text: "Facilitating indirect US-Iran talks. 15-point US proposal being deliberated. Iran countered with 5 conditions: war reparations, Hormuz sovereignty. No direct negotiations.", gap: null },
+
+  // Iran ceasefire denial — contradicts Trump
+  { day: 33, country: "Iran", who: "Pres. Pezeshkian", type: "diplomatic", text: "Open letter to Americans: questions whether Washington is truly 'America First' or 'proxy for Israel.' Iran denies requesting ceasefire (contradicting Trump's Truth Social claim).", gap: null },
+
+  // UK last jet fuel tanker — Maetiga
+  { day: 33, country: "UK", who: "Fuel supply", type: "warning", text: "Tanker Maetiga (Libyan-flagged, Saudi-loaded) arriving ~Apr 3 — last known UK-bound ME jet fuel cargo. No other cargoes visible. Two ships departed New York → England (unprecedented reroute).", gap: null },
+
+  // UK Peter Kyle signal-action gap
+  { day: 33, country: "UK", who: "Bus.Sec. Peter Kyle", type: "reassurance", text: "\"We have no fuel supply chain issues at this moment at all.\" Airlines UK: \"not seeing disruption.\"", gap: "Last jet fuel tanker arriving Apr 3. Argus: 'most exposed in Europe.' Industry warns 'weeks from rationing.'" },
+
+  // Romania emergency ordinance takes effect
+  { day: 33, country: "Romania", who: "PM Bolojan", type: "price_controls", text: "Emergency ordinance effective today (Apr 1 – Jun 30): commercial margin caps, diesel/crude exports require ministry approval, biofuel content reduced 8%→2%. Diesel 9.99 RON/L.", gap: null },
+
+  // Romania refinery crisis
+  { day: 33, country: "Romania", who: "Energy sector", type: "warning", text: "3 of 4 refineries offline or just restarting. Petromidia (46% capacity) restarting after March overhaul. Petrotel-Lukoil (21%) shut by US sanctions. Only Petrobrazi running = 35% of national demand.", gap: null },
+
+  // Romania signal-action gap
+  { day: 33, country: "Romania", who: "Min. Bogdan Ivan", type: "reassurance", text: "\"Rationing is not being considered. Romania has sufficient reserves.\" Reserves secured only through June.", gap: "3 of 4 refineries offline. Structural diesel deficit. Pump protests. Fuel tourism to Bulgaria." },
+
+  // Brent briefly below $100
+  { day: 33, country: "Global", who: "Oil markets", type: "warning", text: "Brent plunged to $98.52 intraday — first time below $100 in a week. War premium deflated on Trump exit talk. But Dubai physical at $128 — $26 spread = paper vs physical disconnect.", gap: null },
+
+  // Houthis — Bloomberg $140 warning
+  { day: 33, country: "Yemen", who: "Houthis / Bloomberg", type: "warning", text: "Second missile at Eilat (intercepted). Al-Bukhaiti: considering naval blockade, will target 'aggressor country' vessels. Bloomberg Economics: Houthi Red Sea attacks could drive oil to $140/bbl.", gap: null },
+
+  // UK Starmer — COBRA + Hormuz conference
+  { day: 33, country: "UK", who: "PM Starmer", type: "diplomatic", text: "Chaired emergency COBRA meeting. Diesel hit 182.77p/L — £100 for a 55L fill (first time since Dec 2022). UK drivers paying £544M extra since war began. Hosting 35-nation Hormuz conference this week.", gap: null },
+
+  // Casualty summary — Day 33
+  { day: 33, country: "Global", who: "Cumulative", type: "emergency", text: "Iran ~1,900+ killed. Israel 24 killed / 6,239 wounded. Lebanon 1,318 killed (124 children). Iraq 106. US military 13. Gulf states 27. Hormuz transits: 6/day (down from 138).", gap: null },
 ];
 
 // Helper: get stats for a given day index (0-based)
