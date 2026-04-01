@@ -103,8 +103,9 @@ export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,1
 // Day 28: +India (third "remain calm" amid visible pump lines)
 // Day 30: +Australia ("supply secure" → 500+ stations ran dry)
 // Day 31: +Japan ("remain calm" → emergency task force for medical supplies)
-// Day 32: UK Ed.Sec. Phillipson "fill up as normal" while reviewing Energy Act 1976 rationing powers
-export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11,12,12];
+// Day 32: UK Ed.Sec. Phillipson "fill up as normal" while reviewing rationing powers
+// Day 33: Albanese "enjoy Easter" (400+ stations dry) + Starmer "weather the storm" (diesel £100/tank)
+export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11,12,14];
 
 // Protest / unrest escalation index (1-5 scale)
 // 1=isolated, 2=scattered protests, 3=organized demonstrations,
@@ -165,7 +166,7 @@ export const COUNTRY_STATUS: Record<string, number[]> = {
   SAU: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
   ARE: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
   QAT: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
-  KWT: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  KWT: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5],
   IRQ: [3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
   EGY: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
   YEM: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,5,5,5],
@@ -469,6 +470,20 @@ export const EVENTS: CrisisEvent[] = [
 
   // Russia gasoline export ban takes effect
   { day: 33, country: "Russia", who: "Government", type: "export_ban", text: "Gasoline export ban now in effect (Apr 1 – Jul 31). Tightens European product market further. Austria Fuel Price Brake also takes effect today.", gap: null },
+
+  // Three national addresses in one day — unprecedented
+
+  // Albanese COVID-style national address — signal-action gap
+  { day: 33, country: "Australia", who: "PM Albanese", type: "reassurance", text: "Rare national address: \"Go about your business and your life, as normal. Enjoy your Easter.\" Halved fuel excise (26.3c/L). Asked public to use transit to save fuel.", gap: "400+ stations dry (247 NSW, 82 VIC, 77 QLD). Stage 2 of 4-point emergency." },
+
+  // Starmer address — "not our war" + signal-action gap
+  { day: 33, country: "UK", who: "PM Starmer", type: "reassurance", text: "National address: \"No matter how fierce this storm, we are well-placed to weather it. This is not our war.\" Five-point plan: fuel duty cuts to Sep, energy bills down £117.", gap: "Diesel tank now costs £100. Working on 'viable plan' to reopen Hormuz but won't send warships." },
+
+  // Trump primetime address scheduled — 9pm ET
+  { day: 33, country: "USA", who: "President Trump", type: "political", text: "Primetime address to nation at 9pm ET — \"important update on Iran.\" Earlier: \"When we feel they're put into the stone ages, we'll leave. Whether we have a deal or not.\"", gap: null },
+
+  // Kuwait airport drone strike — Iran expanding attacks on Gulf civilian infrastructure
+  { day: 33, country: "Kuwait", who: "Iran / KAFCO", type: "emergency", text: "Iranian drones hit fuel storage tanks at Kuwait International Airport. Large fire at KAFCO depot. No casualties. Part of escalating strikes on Gulf civilian infrastructure.", gap: null },
 ];
 
 // Helper: get stats for a given day index (0-based)
