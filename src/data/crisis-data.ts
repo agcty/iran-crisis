@@ -1,20 +1,22 @@
-// Iran War Crisis Propagation — Feb 28 to Mar 30, 2026
+// Iran War Crisis Propagation — Feb 28 to Apr 1, 2026
 // Data extracted from crisis-propagation-map.html
 
 export const DATES = [
   "Feb 28","Mar 1","Mar 2","Mar 3","Mar 4","Mar 5","Mar 6","Mar 7","Mar 8","Mar 9",
   "Mar 10","Mar 11","Mar 12","Mar 13","Mar 14","Mar 15","Mar 16","Mar 17","Mar 18","Mar 19",
-  "Mar 20","Mar 21","Mar 22","Mar 23","Mar 24","Mar 25","Mar 26","Mar 27","Mar 28","Mar 29","Mar 30",
+  "Mar 20","Mar 21","Mar 22","Mar 23","Mar 24","Mar 25","Mar 26","Mar 27","Mar 28","Mar 29","Mar 30","Mar 31","Apr 1",
 ] as const;
 
-export const TOTAL_DAYS = DATES.length; // 31
+export const TOTAL_DAYS = DATES.length; // 33
 
 // Oil prices per day ($/barrel)
-export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,115,118,114,110,113,108,106,110,113,110,113,115,114,115];
+// Day 33: Brent eased to ~$110 on hope rally (Pezeshkian open to peace, Trump "2-3 weeks")
+export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,115,118,114,110,113,108,106,110,113,110,113,115,114,115,113,110];
 // Dubai physical crude: confirmed peak $166-170/bbl (Seeking Alpha, CNBC).
 // Pre-war $71. Spread to Brent hit ~$65 intraday Mar 18-19 (Manila Times).
 // Revised from original to reflect verified physical market dislocation.
-export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126];
+// Day 33: Murban ~$115, Dubai physical easing with spread narrowing
+export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126,124,120];
 
 // European jet fuel CIF NWE ($/metric tonne, S&P Global Platts assessments)
 // Pre-war: $831/mt. Peak: $1,698/mt on Mar 16 (all-time Platts record).
@@ -23,7 +25,7 @@ export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,12
 // Jet-to-LSGO spread hit $400/mt (record). Bid-offer $30/mt wide (vs $0.50 normal).
 // By Day 31, major EU airports warning airlines "no fuel available" within 1 week.
 // Jet fuel leads diesel by 2-4 weeks (Shell CEO Sawan, CERAWeek Mar 24).
-export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1435,1501,1540,1580,1620,1660,1698,1660,1620,1580,1550,1560,1570,1580,1590,1600,1620,1650,1680,1700,1700];
+export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1435,1501,1540,1580,1620,1660,1698,1660,1620,1580,1550,1560,1570,1580,1590,1600,1620,1650,1680,1700,1700,1690,1680];
 
 // Strait of Hormuz oil flow (million barrels per day)
 // Pre-crisis baseline: 20.9 mbpd (EIA, 2025 H1 average)
@@ -32,7 +34,7 @@ export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1
 // Day 5: Qatar force majeure on all LNG, near-total shutdown
 // Day 6+: effectively closed (~0.2 mbpd residual small-vessel traffic)
 // Day 29: Houthis enter war, even less; Day 30: Pakistan ships negotiated through
-export const HORMUZ_FLOW = [20.9,14.0,6.0,2.5,0.8,0.5,0.3,0.3,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.5,0.3];
+export const HORMUZ_FLOW = [20.9,14.0,6.0,2.5,0.8,0.5,0.3,0.3,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.5,0.3,0.4,0.3];
 
 // Net global supply offline (million barrels per day)
 // = pre-crisis Hormuz exports (~20.9 mbpd) minus bypass pipeline ramp-up
@@ -44,7 +46,7 @@ export const HORMUZ_FLOW = [20.9,14.0,6.0,2.5,0.8,0.5,0.3,0.3,0.2,0.2,0.2,0.2,0.
 //     (~1.06 mbpd); ramped to full 1.5 mbpd within days.
 //   Iraq Kirkuk-Ceyhan: resumed Sep 2025 at ~200-250 kbpd, suspended during conflict.
 // Day 29 uptick: Houthis threaten Bab al-Mandeb, some Red Sea route risk
-export const SUPPLY_OFFLINE = [0.0,8.5,14.0,16.5,17.5,17.2,17.0,16.8,16.5,16.2,16.0,15.5,15.2,15.0,14.8,14.8,14.5,14.5,14.5,14.5,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.8,14.2,14.5];
+export const SUPPLY_OFFLINE = [0.0,8.5,14.0,16.5,17.5,17.2,17.0,16.8,16.5,16.2,16.0,15.5,15.2,15.0,14.8,14.8,14.5,14.5,14.5,14.5,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.8,14.2,14.5,14.3,14.3];
 
 // IEA emergency reserves released — cumulative (million barrels)
 // IEA announced record 400M barrel release on Day 12 (Mar 11, 2026):
@@ -54,7 +56,7 @@ export const SUPPLY_OFFLINE = [0.0,8.5,14.0,16.5,17.5,17.2,17.0,16.8,16.5,16.2,1
 //   Europe (Germany, France, etc.): ~97M starting ~Day 28 ("end of March")
 // Release rates: Asia ~1.1M/day, +US ~2.5M/day from Day 19, +Europe ~3.6M/day from Day 28
 // Sources: IEA collective action decision Mar 11 2026, DOE SPR data, Nippon.com
-export const SPR_RELEASED = [0,0,0,0,0,0,0,0,0,0,0,0,1.1,2.2,3.3,4.4,5.5,6.6,9.1,11.7,14.2,16.7,19.2,21.8,24.3,26.8,29.4,33.0,36.6,40.2,43.8];
+export const SPR_RELEASED = [0,0,0,0,0,0,0,0,0,0,0,0,1.1,2.2,3.3,4.4,5.5,6.6,9.1,11.7,14.2,16.7,19.2,21.8,24.3,26.8,29.4,33.0,36.6,40.2,43.8,47.4,51.0];
 
 // Pre-crisis IEA total emergency reserves: ~1,485M barrels
 // (US 415M + Japan 470M + other IEA ~600M; source: DOE, JOGMEC, IEA Oil Security)
@@ -68,7 +70,7 @@ export const IEA_RESERVES_TOTAL = 1485;
 // 5 nations approved: CN, RU, IN, PK, IQ. Additional: MY, TH (bilateral deals)
 // 80%+ March transits are shadow fleet (up from 15% in Feb). IRGC charges up to $2M/transit
 // Sources: Lloyd's List, Windward, UANI, MarineTraffic
-export const HORMUZ_TRANSITS = [138,0,0,1,0,1,1,1,2,1,2,3,3,5,5,5,5,5,8,6,5,7,5,5,6,5,6,7,5,6,7];
+export const HORMUZ_TRANSITS = [138,0,0,1,0,1,1,1,2,1,2,3,3,5,5,5,5,5,8,6,5,7,5,5,6,5,6,7,5,6,7,9,7];
 
 // EU aggregate gas storage (% full, AGSI data)
 // Feb 28: ~42%. Mar 8: ~35%. Mar 17: 28.93% (AGSI exact). Mar 25: ~28.4%. Mar 30: ~27.5%
@@ -77,7 +79,7 @@ export const HORMUZ_TRANSITS = [138,0,0,1,0,1,1,1,2,1,2,3,3,5,5,5,5,5,8,6,5,7,5,
 // LNG imports now disrupted by QatarEnergy force majeure.
 // TTF gas: ~€38/MWh pre-war → ~€55-56/MWh by Mar 30. Goldman Q2: €72, adverse €100+
 // Interpolated linearly between AGSI data points.
-export const EU_GAS_STORAGE = [42.0,41.1,40.3,39.4,38.5,37.6,36.8,35.9,35.0,34.3,33.7,33.0,32.3,31.6,31.0,30.3,29.6,28.9,28.8,28.8,28.7,28.7,28.6,28.5,28.5,28.4,28.2,28.0,27.9,27.7,27.5];
+export const EU_GAS_STORAGE = [42.0,41.1,40.3,39.4,38.5,37.6,36.8,35.9,35.0,34.3,33.7,33.0,32.3,31.6,31.0,30.3,29.6,28.9,28.8,28.8,28.7,28.7,28.6,28.5,28.5,28.4,28.2,28.0,27.9,27.7,27.5,27.3,27.1];
 
 // Force majeure declarations (cumulative count)
 // Day 3: QatarEnergy (all LNG, 20% global offline, ~90 cargoes)
@@ -86,7 +88,8 @@ export const EU_GAS_STORAGE = [42.0,41.1,40.3,39.4,38.5,37.6,36.8,35.9,35.0,34.3
 // Day 13: OQ Trading Oman (LNG to Bangladesh). Day 15: India (domestic gas redirect)
 // Day 19: Wave across Asian petrochemical firms (Gulf feedstock)
 // Day 25: QatarEnergy extended through May
-export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,10,10,10,10,10,10,10];
+// Day 32: QatarEnergy extends existing force majeure through mid-June (not a new declaration)
+export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10];
 
 // Signal-action gap tracker (cumulative count)
 // Countries simultaneously saying "remain calm / no shortage" while implementing
@@ -100,7 +103,8 @@ export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,1
 // Day 28: +India (third "remain calm" amid visible pump lines)
 // Day 30: +Australia ("supply secure" → 500+ stations ran dry)
 // Day 31: +Japan ("remain calm" → emergency task force for medical supplies)
-export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11];
+// Day 32: UK Ed.Sec. Phillipson "fill up as normal" while reviewing Energy Act 1976 rationing powers
+export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11,12,12];
 
 // Protest / unrest escalation index (1-5 scale)
 // 1=isolated, 2=scattered protests, 3=organized demonstrations,
@@ -110,7 +114,7 @@ export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7
 // Day 22-25: Fuel queue confrontations TH/BD/PH, EU border fuel tourism tensions.
 // Day 26-28: PH nationwide strike. US "No Kings Day" Mar 28: 8-9M, 3300 events, 50 states.
 //   Tel Aviv anti-war protest (18 arrests). Day 29-31: Sustained. Trump 36% approval.
-export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,5,5];
+export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,5,5,5,5];
 
 // Gold price ($/oz, approximate daily)
 // Pre-war: ~$5,278 (Feb 28). Gold hit all-time high $5,595 on Jan 28-29 2026.
@@ -118,13 +122,15 @@ export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5
 // Reasons: USD strength (DXY multi-year highs), forced liquidations from overleveraged
 // Jan rally positions, rising yields from oil-driven inflation fears, profit-taking.
 // Mar 28: ~$4,430-4,494. Sources: Fortune, CBS News, CNBC, Al Jazeera, Newsweek.
-export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4300,4250,4200,4180,4150,4200,4250,4300,4350,4400,4430,4450,4480];
+// Day 33: Gold UP to ~$4,700 even on risk-on day — smart money not buying the peace story
+export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4300,4250,4200,4180,4150,4200,4250,4300,4350,4400,4430,4450,4480,4560,4700];
 
 // VIX (CBOE Volatility Index, approximate daily)
 // Pre-war: ~17 (Feb avg 16.1, Investing.com). Mar 27 close: 31.05.
 // Confirmed high: 35.30 intraday. Confirmed low: 20.28.
 // Sources: Investing.com historical, FinancialContent, CNBC.
-export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,32,35,33,31,32,30,29,30,31,30,32,31,30,31];
+// Day 33: VIX crashed to ~25 on hope rally (S&P +2.91%, best day since May)
+export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,32,35,33,31,32,30,29,30,31,30,32,31,30,31,31,25];
 
 // Severity levels for map coloring
 export const SEVERITY_LEVELS = {
@@ -141,40 +147,44 @@ export type SeverityLevel = keyof typeof SEVERITY_LEVELS;
 // Country status per day (31 values each, severity 0-5)
 // Key = ISO 3166-1 alpha-3 code for react-simple-maps compatibility
 export const COUNTRY_STATUS: Record<string, number[]> = {
-  IRN: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
-  USA: [1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  GBR: [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  FRA: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3],
-  ESP: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3],
-  DEU: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3],
-  ITA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  NLD: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3],
-  NOR: [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3],
-  AUT: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  SVN: [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4],
-  SVK: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  HUN: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  HRV: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2],
-  SAU: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  ARE: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  QAT: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
-  KWT: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  IRQ: [3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  EGY: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  YEM: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,5],
-  LBN: [1,1,1,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  PAK: [1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4],
-  IND: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3],
-  LKA: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  BGD: [1,1,1,1,1,1,1,1,1,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  CHN: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  JPN: [1,1,1,1,1,1,1,1,1,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  KOR: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  VNM: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,4,4,4,4,4,4,4,4,4],
-  THA: [1,1,1,1,1,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  PHL: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,5,5,5,5,5,5],
-  AUS: [1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  RUS: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3],
+  IRN: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+  USA: [1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  GBR: [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  FRA: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  ESP: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  DEU: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3],
+  ITA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  NLD: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3],
+  NOR: [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3],
+  AUT: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  SVN: [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4],
+  SVK: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  HUN: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  HRV: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2],
+  POL: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3],
+  SAU: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  ARE: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  QAT: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+  KWT: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  IRQ: [3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  EGY: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  YEM: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,5,5,5],
+  LBN: [1,1,1,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5],
+  PAK: [1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  IND: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3],
+  LKA: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  BGD: [1,1,1,1,1,1,1,1,1,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  CHN: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  JPN: [1,1,1,1,1,1,1,1,1,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  KOR: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4],
+  VNM: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,4,4,4,4,4,4,4,4,4,4,4],
+  THA: [1,1,1,1,1,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  PHL: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,5,5,5,5,5,5,5,5],
+  AUS: [1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4],
+  RUS: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3],
+  KEN: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4],
+  NGA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3],
+  ETH: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4],
 };
 
 // Human-readable country names
@@ -213,6 +223,10 @@ export const COUNTRY_NAMES: Record<string, string> = {
   PHL: "Philippines",
   AUS: "Australia",
   RUS: "Russia",
+  POL: "Poland",
+  KEN: "Kenya",
+  NGA: "Nigeria",
+  ETH: "Ethiopia",
 };
 
 // Event types and their visual styles
@@ -387,6 +401,74 @@ export const EVENTS: CrisisEvent[] = [
   // Day 31: Ethiopia + South Korea
   { day: 31, country: "Ethiopia", who: "Government", type: "rationing", text: "Diesel \"all but disappeared\" in Addis Ababa. Civil servants sent on mandatory leave. Fuel prioritized for security and essential industries.", gap: null },
   { day: 31, country: "South Korea", who: "Pres. Lee Jae-myung", type: "warning", text: "\"So serious I can't fall asleep.\" \"Worse than you think.\" Weighing first driving restrictions in 35 years (odd/even plates) if oil stays above $120.", gap: null },
+
+  // ── Day 32 (Mar 31) events ──
+
+  // Military: Iran's missile capacity degrading but cluster bombs now in play
+  { day: 32, country: "Israel", who: "IDF / Iran", type: "emergency", text: "Iran cluster bomb warhead hits Bnei Brak/Ramat Gan. 8 injured, fires. Missile rate down to 10-15/day (from ~90 at start) — infrastructure \"severely strained.\"", gap: null },
+
+  // Escalation: Pentagon ground ops + UNIFIL casualties
+  { day: 32, country: "Lebanon", who: "UNIFIL", type: "emergency", text: "3 Indonesian peacekeepers killed in 2 separate explosions. France and Italy condemn \"grave crisis.\" 1,200+ killed in Lebanon this month incl. 124 children.", gap: null },
+  { day: 32, country: "USA", who: "Pentagon", type: "military_fuel", text: "Preparing ground raids on Kharg Island + Hormuz coastal sites. 7,700 troops arriving: Marines (USS Tripoli), 82nd Airborne. Iran fortifying Kharg.", gap: null },
+
+  // Trump April 6 deadline — major escalation risk
+  { day: 32, country: "USA", who: "President Trump", type: "political", text: "Extends deadline to April 6 for strikes on all Iranian power plants, oil wells, Kharg Island, and desalination plants. Says he's \"pretty sure\" of a deal.", gap: null },
+
+  // Diplomacy: Pakistan mediation
+  { day: 32, country: "Pakistan", who: "FM talks", type: "diplomatic", text: "Turkey, Saudi, Egypt, Pakistan FMs in Islamabad preparing \"meaningful talks.\" Iran rejected US 15-point plan; demands reparations + Hormuz sovereignty.", gap: null },
+
+  // Hormuz: Cosco transit — first major Chinese company ships through
+  { day: 32, country: "China", who: "Cosco Shipping", type: "diplomatic", text: "2 ultra-large container ships (CSCL Indian Ocean + Arctic Ocean) transit Hormuz outbound — first major Beijing-backed company vessels since war started.", gap: null },
+
+  // UK signal-action gap
+  { day: 32, country: "UK", who: "Ed.Sec. Phillipson", type: "reassurance", text: "\"Fill up as normal.\" \"Supply chains remain stable.\" Diesel up 27% to 181p/L.", gap: "Reviewing Energy Act 1976 rationing powers (£30/visit cap)" },
+
+  // QatarEnergy FM extension (not new — extends existing Day 3 declaration)
+  { day: 32, country: "Qatar", who: "QatarEnergy", type: "warning", text: "Extends existing force majeure through mid-June (was through May). Ras Laffan damage est. $20B/yr lost revenue, up to 5 years to repair.", gap: null },
+
+  // Gulf market wipeout
+  { day: 32, country: "UAE", who: "Dubai/Abu Dhabi markets", type: "warning", text: "$120 billion wiped from Dubai and Abu Dhabi stock markets since Feb 28.", gap: null },
+
+  // Humanitarian: medical supplies stuck globally
+  { day: 32, country: "Global", who: "IRC / NPR", type: "medical_warning", text: "Medical goods stuck worldwide. Somalia: 668 boxes of therapeutic food stranded in India. Sudan: $130K of pharmaceuticals stuck in Dubai. Kenya clinics cutting services.", gap: null },
+
+  // HRW child recruitment
+  { day: 32, country: "Iran", who: "HRW", type: "emergency", text: "IRGC recruiting children as young as 12 as \"Homeland Defending Combatants.\" HRW calls it potential war crime.", gap: null },
+
+  // Australia escalation
+  { day: 32, country: "Australia", who: "Min. Bowen", type: "rationing", text: "Considering petrol rationing. Only 26 days diesel, 29 days petrol remain — well below IEA 90-day minimum. Stage 2 of 4-point fuel security plan.", gap: null },
+
+  // Kenya rationing
+  { day: 32, country: "Kenya", who: "Government", type: "rationing", text: "Active fuel rationing. Nairobi stations along Langata Road ran dry. North Rift region in worse shape. Negotiating with Nigeria's Dangote refinery.", gap: null },
+
+  // Houthis — Red Sea threat
+  { day: 32, country: "Yemen", who: "Houthi leadership", type: "warning", text: "\"Closing Bab al-Mandeb is among our options.\" Would threaten Saudi Yanbu bypass — the main buffer keeping Brent below $150.", gap: null },
+
+  // ── Day 33 (Apr 1) events ──
+
+  // Iran missile hits QatarEnergy tanker — escalation: Iran now targeting Qatar directly
+  { day: 33, country: "Qatar", who: "Iran / QatarEnergy", type: "emergency", text: "Iranian cruise missile hits Aqua 1 tanker 31km north of Ras Laffan. Qatar intercepted 2 of 3 missiles. No casualties. Damage above waterline.", gap: null },
+
+  // IRGC threatens 18 US tech companies — unprecedented expansion of war to corporate targets
+  { day: 33, country: "Iran", who: "IRGC", type: "emergency", text: "Threatens Apple, Microsoft, Google, Meta, Tesla, Boeing, Nvidia, JP Morgan + 10 others. Deadline 8PM Tehran time. Employees told to evacuate within 1km of Gulf offices.", gap: null },
+
+  // Trump "go get your own oil" + war could end in 2-3 weeks
+  { day: 33, country: "USA", who: "President Trump", type: "political", text: "\"Go get your own oil.\" Tells UK and allies to secure Hormuz themselves. Says war could end in 2-3 weeks, no deal necessary. US gas hits $4/gal.", gap: null },
+
+  // Hope rally — S&P surges on peace signals (contrast with underlying escalation)
+  { day: 33, country: "USA", who: "S&P 500", type: "warning", text: "S&P 500 surges 2.91% to 6,528 — best day since May. VIX crashes to 25. Triggered by unconfirmed report Pezeshkian open to peace with guarantees.", gap: "Markets rallying while Iran hits Qatar tanker and IRGC threatens tech cos" },
+
+  // Iran FM: no negotiations happening
+  { day: 33, country: "Iran", who: "FM Araghchi", type: "diplomatic", text: "\"No negotiations are going on with Washington.\" Iran prepared for \"at least six months\" of war. Rejects US 15-point plan.", gap: null },
+
+  // China-Pakistan peace proposal
+  { day: 33, country: "China/Pakistan", who: "Joint proposal", type: "diplomatic", text: "New initiative: immediate ceasefire + reopening Hormuz + safe passage for civilian ships. Presented to both sides.", gap: null },
+
+  // Gold divergence — smart money signal
+  { day: 33, country: "Global", who: "Gold market", type: "warning", text: "Gold rises to ~$4,700 even on risk-on day when equities surge. Bond market and gold not buying the peace narrative.", gap: null },
+
+  // Russia gasoline export ban takes effect
+  { day: 33, country: "Russia", who: "Government", type: "export_ban", text: "Gasoline export ban now in effect (Apr 1 – Jul 31). Tightens European product market further. Austria Fuel Price Brake also takes effect today.", gap: null },
 ];
 
 // Helper: get stats for a given day index (0-based)
