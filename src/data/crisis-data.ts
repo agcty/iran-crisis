@@ -9,9 +9,11 @@ export const DATES = [
 
 export const TOTAL_DAYS = DATES.length; // 33
 
-// Oil prices per day ($/barrel)
-// Day 33: Brent eased to ~$110 on hope rally (Pezeshkian open to peace, Trump "2-3 weeks")
-export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,115,118,114,110,113,108,106,110,113,110,113,115,114,115,113,110];
+// Oil prices per day ($/barrel, settlement/close unless noted)
+// Validated: Pre-war $72.48 spot (Wikipedia). Intraday peak $119 on Mar 19 (CNBC),
+// but close that day was $108.65. Highest close: $118.35 on Mar 31 (CNBC).
+// Day 33: Brent dropped to ~$105 on hope rally (Pezeshkian peace report + Trump "2-3 weeks")
+export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,109,109,108,110,113,108,106,110,113,110,113,115,114,115,118,105];
 // Dubai physical crude: confirmed peak $166-170/bbl (Seeking Alpha, CNBC).
 // Pre-war $71. Spread to Brent hit ~$65 intraday Mar 18-19 (Manila Times).
 // Revised from original to reflect verified physical market dislocation.
@@ -63,13 +65,16 @@ export const SPR_RELEASED = [0,0,0,0,0,0,0,0,0,0,0,0,1.1,2.2,3.3,4.4,5.5,6.6,9.1
 export const IEA_RESERVES_TOTAL = 1485;
 
 // Strait of Hormuz ship transits per day (non-Iranian AIS-visible)
-// Pre-war: ~138/day (UANI data). Mar 1-25 total: 142 transits (Lloyd's List)
+// Pre-war: ~138/day (UANI data, validated). Kpler: 201 commodity carrier crossings Mar 1-31.
+// Note: Lloyd's List reported 142 transits Mar 1-25 which includes Iranian-flagged vessels;
+// our daily array tracks non-Iranian AIS-visible only, so totals will be lower.
 // Day 2-3: Near zero (IRGC closure). Day 4-10: 0-2/day, 150+ tankers anchored outside
 // Day 12-13: ~3/day, 21 attacks on ships by Day 13. Day 14-18: ~5/day (IRGC tollbooth)
 // Day 19: 8 (Windward/MarineTraffic). Day 20+: 5-8/day, selective passage
 // 5 nations approved: CN, RU, IN, PK, IQ. Additional: MY, TH (bilateral deals)
-// 80%+ March transits are shadow fleet (up from 15% in Feb). IRGC charges up to $2M/transit
-// Sources: Lloyd's List, Windward, UANI, MarineTraffic
+// 80%+ March transits are shadow fleet (up from 15% in Feb).
+// IRGC claims up to $2M/transit (Iranian officials via IRIB, not independently verified)
+// Sources: Lloyd's List, Windward, UANI, MarineTraffic, Kpler
 export const HORMUZ_TRANSITS = [138,0,0,1,0,1,1,1,2,1,2,3,3,5,5,5,5,5,8,6,5,7,5,5,6,5,6,7,5,6,7,9,7];
 
 // EU aggregate gas storage (% full, AGSI data)
@@ -117,21 +122,23 @@ export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7
 //   Tel Aviv anti-war protest (18 arrests). Day 29-31: Sustained. Trump 36% approval.
 export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,5,5,5,5];
 
-// Gold price ($/oz, approximate daily)
-// Pre-war: ~$5,278 (Feb 28). Gold hit all-time high $5,595 on Jan 28-29 2026.
-// COUNTERINTUITIVELY FELL during Iran war (~-15%), not the expected safe-haven rally.
+// Gold price ($/oz, approximate daily close)
+// Pre-war: $5,278 (Feb 28, confirmed StatMuse/TradingEconomics/goldprice.org).
+// Gold hit ATH $5,595 on Jan 28-29 2026.
+// COUNTERINTUITIVELY FELL during Iran war (~-17%), not the expected safe-haven rally.
 // Reasons: USD strength (DXY multi-year highs), forced liquidations from overleveraged
 // Jan rally positions, rising yields from oil-driven inflation fears, profit-taking.
-// Mar 28: ~$4,430-4,494. Sources: Fortune, CBS News, CNBC, Al Jazeera, Newsweek.
-// Day 33: Gold UP to ~$4,700 even on risk-on day — smart money not buying the peace story
-export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4300,4250,4200,4180,4150,4200,4250,4300,4350,4400,4430,4450,4480,4560,4700];
+// Validated low: ~$4,348 on Mar 23 (pricegold.net daily close), NOT $4,150.
+// Day 33: Gold UP to ~$4,700 even on risk-on day — smart money not buying peace story
+export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4350,4300,4250,4200,4200,4350,4380,4400,4430,4450,4460,4470,4480,4560,4700];
 
-// VIX (CBOE Volatility Index, approximate daily)
-// Pre-war: ~17 (Feb avg 16.1, Investing.com). Mar 27 close: 31.05.
-// Confirmed high: 35.30 intraday. Confirmed low: 20.28.
-// Sources: Investing.com historical, FinancialContent, CNBC.
+// VIX (CBOE Volatility Index, approximate daily close)
+// Pre-war: ~17 (Feb avg 16.1, Investing.com). Validated: highest close 31.05 on Mar 27.
+// Monthly intraday high: 35.30 (Investing.com) — date uncertain, NOT Mar 18 (close was 25.09).
+// Mar 18 close: 25.09. Monthly low close: 20.28.
+// Sources: Investing.com historical, FinancialContent, CNBC, FRED VIXCLS.
 // Day 33: VIX crashed to ~25 on hope rally (S&P +2.91%, best day since May)
-export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,32,35,33,31,32,30,29,30,31,30,32,31,30,31,31,25];
+export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,28,25,27,28,29,28,27,28,29,28,31,30,29,30,30,25];
 
 // Severity levels for map coloring
 export const SEVERITY_LEVELS = {
@@ -384,7 +391,7 @@ export const EVENTS: CrisisEvent[] = [
   { day: 8, country: "Nepal/Qatar", who: "Kuna Khuntia, 25", type: "emergency", text: "Pipe fitter from Odisha dies of heart attack in Doha during missile sounds. Father: \"He came back in a coffin.\" 21M South Asian migrants in Gulf.", gap: null },
 
   // Thailand fishing industry collapse
-  { day: 27, country: "Thailand", who: "Samut Sakhon port", type: "rationing", text: "Half of fishing trawlers docked. \"Worse than COVID-19.\" Workers warn: \"After April 1, there may be no fish sold.\" $7B export industry at risk.", gap: null },
+  { day: 27, country: "Thailand", who: "Samut Sakhon port", type: "rationing", text: "~40% of 9,000 fishing vessels docked; industry warns 50% imminent. \"Worse than COVID-19.\" \"After April 1, there may be no fish sold.\" $7B export industry at risk.", gap: null },
 
   // Kenya / global fertilizer — Africa representation
   { day: 28, country: "Kenya/Global", who: "PBS / farmers", type: "medical_warning", text: "\"The planting season is now. The fertilizer isn't there.\" Ethiopia imports 90%+ of nitrogen from Gulf. Kenya's 25M smallholders at risk.", gap: null },
@@ -476,8 +483,8 @@ export const EVENTS: CrisisEvent[] = [
   // Albanese COVID-style national address — signal-action gap
   { day: 33, country: "Australia", who: "PM Albanese", type: "reassurance", text: "Rare national address: \"Go about your business and your life, as normal. Enjoy your Easter.\" Halved fuel excise (26.3c/L). Asked public to use transit to save fuel.", gap: "400+ stations dry (247 NSW, 82 VIC, 77 QLD). Stage 2 of 4-point emergency." },
 
-  // Starmer address — "not our war" + signal-action gap
-  { day: 33, country: "UK", who: "PM Starmer", type: "reassurance", text: "National address: \"No matter how fierce this storm, we are well-placed to weather it. This is not our war.\" Five-point plan: fuel duty cuts to Sep, energy bills down £117.", gap: "Diesel tank now costs £100. Working on 'viable plan' to reopen Hormuz but won't send warships." },
+  // Starmer address — "not our war" but convenes 35-nation coalition + military planners
+  { day: 33, country: "UK", who: "PM Starmer", type: "diplomatic", text: "National address: \"Impact of this war will affect the future of our country.\" Convenes 35-nation coalition via Cooper. Military planners tasked with Hormuz options. \"I have to level with people — this will not be easy.\"", gap: "Says 'not our war' in same speech as ordering military planners to draw up Hormuz options" },
 
   // Trump primetime address scheduled — 9pm ET
   { day: 33, country: "USA", who: "President Trump", type: "political", text: "Primetime address to nation at 9pm ET — \"important update on Iran.\" Earlier: \"When we feel they're put into the stone ages, we'll leave. Whether we have a deal or not.\"", gap: null },
