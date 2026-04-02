@@ -515,8 +515,8 @@ export default function CrisisMap() {
                   : `NO MAJOR EVENTS — ${DATES[dayIndex].toUpperCase()}`}
               </div>
               <div className="flex flex-col gap-2">
-                {events.map((event) => (
-                  <div key={`${event.day}-${event.country}-${event.type}`}>
+                {events.map((event, i) => (
+                  <div key={`${event.day}-${i}`}>
                     <EventCard event={event} />
                   </div>
                 ))}
