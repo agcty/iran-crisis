@@ -293,7 +293,7 @@ export default function CrisisMap() {
             className="text-[11px] text-[#666] mb-4"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
-            Government statements vs reality — Feb 28 to Mar 30, 2026
+            Government statements vs reality — Feb 28 to Apr 2, 2026
           </p>
         </div>
 
@@ -515,7 +515,7 @@ export default function CrisisMap() {
                   : `NO MAJOR EVENTS — ${DATES[dayIndex].toUpperCase()}`}
               </div>
               <div className="flex flex-col gap-2">
-                {events.map((event, i) => (
+                {events.map((event) => (
                   <div key={`${event.day}-${event.country}-${event.type}`}>
                     <EventCard event={event} />
                   </div>
