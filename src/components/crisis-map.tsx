@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   ComposableMap,
   Geographies,
@@ -27,6 +27,8 @@ import {
   type CrisisEvent,
   type SeverityLevel,
 } from '../data/crisis-data';
+import { generateAllProjections, MAX_DAY, type ScenarioId, type ProjectedDay } from '../data/projections';
+import ScenarioSelector from './scenario-selector';
 
 // TopoJSON world map (50m resolution for small country coverage)
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json';
@@ -44,16 +46,17 @@ const ISO_NUM_TO_ALPHA3: Record<string, string> = {
   '642': 'ROU', '376': 'ISR',
 };
 
-function getCountryFill(geoId: string, dayIndex: number): string {
+function getCountryFill(geoId: string, dayIndex: number, projectedSeverity?: Record<string, number>): string {
   const alpha3 = ISO_NUM_TO_ALPHA3[geoId];
-  if (!alpha3 || !COUNTRY_STATUS[alpha3]) return '#151820';
-  return getSeverityColor(COUNTRY_STATUS[alpha3][dayIndex]);
+  if (!alpha3 || (!COUNTRY_STATUS[alpha3] && !projectedSeverity)) return '#151820';
+  const sev = projectedSeverity ? (projectedSeverity[alpha3] ?? 0) : (COUNTRY_STATUS[alpha3]?.[dayIndex] ?? 0);
+  return getSeverityColor(sev);
 }
 
-function getCountryInfo(geoId: string, dayIndex: number) {
+function getCountryInfo(geoId: string, dayIndex: number, projectedSeverity?: Record<string, number>) {
   const alpha3 = ISO_NUM_TO_ALPHA3[geoId];
   if (!alpha3 || !COUNTRY_NAMES[alpha3]) return null;
-  const severity = COUNTRY_STATUS[alpha3]?.[dayIndex] ?? 0;
+  const severity = projectedSeverity ? (projectedSeverity[alpha3] ?? 0) : (COUNTRY_STATUS[alpha3]?.[dayIndex] ?? 0);
   return {
     name: COUNTRY_NAMES[alpha3],
     severity,
@@ -67,22 +70,22 @@ function StatBox({
   value,
   label,
   color,
-  hero,
+  projected,
 }: {
   value: string | number;
   label: string;
   color: string;
-  hero?: boolean;
+  projected?: boolean;
 }) {
   return (
-    <div className={`bg-[#0d1017] border rounded-lg flex-1 min-w-[100px] ${hero ? 'border-[#2a2e38] px-4 py-3' : 'border-[#1a1e28] px-3 py-2.5'}`}>
+    <div className={`bg-[#0d1017] rounded-lg flex-1 min-w-[100px] px-3 py-2.5 ${projected ? 'border border-dashed border-[#2a2e38]' : 'border border-[#1a1e28]'}`}>
       <div
-        className={`font-mono font-bold leading-none ${hero ? 'text-2xl' : 'text-xl'}`}
+        className="font-mono text-xl font-bold leading-none"
         style={{ color }}
       >
         {value}
       </div>
-      <div className={`text-[#888] mt-1 leading-tight ${hero ? 'text-[11px]' : 'text-[10px]'}`}>{label}</div>
+      <div className="text-[10px] text-[#888] mt-1 leading-tight">{label}</div>
     </div>
   );
 }
@@ -92,14 +95,16 @@ function HeroStat({
   label,
   sublabel,
   color,
+  projected,
 }: {
   value: string | number;
   label: string;
   sublabel?: string;
   color: string;
+  projected?: boolean;
 }) {
   return (
-    <div className="bg-[#0d1017] border border-[#2a2e38] rounded-xl px-5 py-4 flex-1 min-w-[140px]">
+    <div className={`bg-[#0d1017] rounded-xl px-5 py-4 flex-1 min-w-[140px] ${projected ? 'border border-dashed border-[#2a2e38]' : 'border border-[#2a2e38]'}`}>
       <div
         className="font-mono text-[32px] font-bold leading-none tracking-tight"
         style={{ color }}
@@ -119,10 +124,12 @@ function FuelBar({
   country,
   label,
   daysLeft,
+  projected,
 }: {
   country: string;
   label: string;
   daysLeft: number;
+  projected?: boolean;
 }) {
   // All bars on the same absolute scale so more days = longer bar
   const pct = Math.max(0, Math.min(100, (daysLeft / FUEL_DAYS_MAX) * 100));
@@ -147,7 +154,12 @@ function FuelBar({
         />
         <div
           className={`h-full rounded-sm transition-all duration-700 ${critical ? 'animate-pulse' : ''}`}
-          style={{ width: pct + '%', background: barColor }}
+          style={{
+            width: pct + '%',
+            background: projected
+              ? `repeating-linear-gradient(90deg, ${barColor} 0px, ${barColor} 4px, transparent 4px, transparent 6px)`
+              : barColor,
+          }}
         />
       </div>
       <div
@@ -163,13 +175,15 @@ function FuelBar({
 function PumpPrice({
   code,
   dayIndex,
+  projectedPrice,
 }: {
   code: string;
   dayIndex: number;
+  projectedPrice?: number;
 }) {
   const data = PUMP_PRICES[code];
   if (!data) return null;
-  const price = data.prices[dayIndex];
+  const price = projectedPrice ?? data.prices[dayIndex];
   const pctChange = ((price - data.preWar) / data.preWar * 100);
   const aboveThreshold = price >= data.painThreshold;
 
@@ -222,6 +236,7 @@ function EventCard({ event }: { event: CrisisEvent }) {
 function drawOilChart(
   canvas: HTMLCanvasElement,
   dayIndex: number,
+  projection: import('../data/projections').ScenarioProjection | null,
 ) {
   const container = canvas.parentElement;
   if (!container) return;
@@ -244,13 +259,13 @@ function drawOilChart(
   const PAD_T = 10;
   const PAD_B = 10;
 
-  // Indexed chart: all series normalized to Day 1 = 100
+  const totalDays = MAX_DAY; // 90 days total
   const bBase = BRENT_PRICES[0];
   const dBase = DUBAI_PRICES[0];
   const jBase = JET_FUEL_PRICES[0];
 
   const mn = 85;
-  const mx = 220;
+  const mx = 320; // expanded for escalation scenario ($200+ = 278 indexed)
 
   function toIdx(val: number, base: number) {
     return (val / base) * 100;
@@ -259,13 +274,13 @@ function drawOilChart(
     return PAD_T + ((mx - idx) / (mx - mn)) * (H - PAD_T - PAD_B);
   }
   function toX(i: number) {
-    return PAD_L + (i / (TOTAL_DAYS - 1)) * (W - PAD_L - PAD_R);
+    return PAD_L + (i / (totalDays - 1)) * (W - PAD_L - PAD_R);
   }
 
   ctx.clearRect(0, 0, W, H);
 
   // Grid lines
-  const gridLevels = [100, 125, 150, 175, 200];
+  const gridLevels = [100, 150, 200, 250, 300];
   ctx.strokeStyle = '#1a1e28';
   ctx.lineWidth = 0.5;
   ctx.font = '8px JetBrains Mono, monospace';
@@ -279,46 +294,98 @@ function drawOilChart(
     ctx.fillText(lvl === 100 ? 'base' : '+' + (lvl - 100) + '%', W - PAD_R + 3, y + 3);
   }
 
+  // NOW boundary line
+  const nowX = toX(TOTAL_DAYS - 1);
+  ctx.strokeStyle = '#ff6b35';
+  ctx.lineWidth = 1;
+  ctx.globalAlpha = 0.3;
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath();
+  ctx.moveTo(nowX, 0);
+  ctx.lineTo(nowX, H);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.globalAlpha = 1;
+
+  // Projected zone background
+  if (projection) {
+    ctx.fillStyle = 'rgba(255,255,255,0.015)';
+    ctx.fillRect(nowX, 0, W - nowX, H);
+  }
+
   // Current day highlight
   const cx = toX(dayIndex);
   ctx.fillStyle = 'rgba(255, 107, 53, 0.07)';
   ctx.fillRect(cx - 4, 0, 8, H);
 
-  // Gradient fill between jet fuel and Brent (refining margin amplification)
-  if (dayIndex >= 1) {
+  // Helper: get value for any day index (real or projected)
+  function getVal(seriesKey: 'brent' | 'dubai' | 'jetFuel', i: number): number {
+    if (i < TOTAL_DAYS) {
+      if (seriesKey === 'brent') return BRENT_PRICES[i];
+      if (seriesKey === 'dubai') return DUBAI_PRICES[i];
+      return JET_FUEL_PRICES[i];
+    }
+    if (!projection) return 0;
+    const proj = projection.days[i - TOTAL_DAYS];
+    if (!proj) return 0;
+    return proj[seriesKey];
+  }
+
+  // Gradient fill between jet fuel and Brent (real data only)
+  const realEnd = Math.min(dayIndex, TOTAL_DAYS - 1);
+  if (realEnd >= 1) {
     ctx.beginPath();
-    for (let i = 0; i <= dayIndex; i++) ctx.lineTo(toX(i), toY(toIdx(JET_FUEL_PRICES[i], jBase)));
-    for (let i = dayIndex; i >= 0; i--) ctx.lineTo(toX(i), toY(toIdx(BRENT_PRICES[i], bBase)));
+    for (let i = 0; i <= realEnd; i++) ctx.lineTo(toX(i), toY(toIdx(JET_FUEL_PRICES[i], jBase)));
+    for (let i = realEnd; i >= 0; i--) ctx.lineTo(toX(i), toY(toIdx(BRENT_PRICES[i], bBase)));
     ctx.closePath();
     ctx.fillStyle = 'rgba(24, 255, 255, 0.04)';
     ctx.fill();
   }
 
-  // Draw lines: Brent (orange), Dubai (pink), Jet fuel (cyan)
-  const series: [string, number[], number][] = [
-    ['#ff6b35', BRENT_PRICES, bBase],
-    ['#ff3366', DUBAI_PRICES, dBase],
-    ['#18ffff', JET_FUEL_PRICES, jBase],
+  // Draw series
+  const seriesConfig: [string, 'brent' | 'dubai' | 'jetFuel', number][] = [
+    ['#ff6b35', 'brent', bBase],
+    ['#ff3366', 'dubai', dBase],
+    ['#18ffff', 'jetFuel', jBase],
   ];
 
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
 
-  for (const [col, arr, base] of series) {
+  for (const [col, key, base] of seriesConfig) {
+    // Real data (solid line)
     ctx.beginPath();
     ctx.strokeStyle = col;
     ctx.lineWidth = 2;
-    for (let i = 0; i <= dayIndex; i++) {
-      const x = toX(i), y = toY(toIdx(arr[i], base));
+    ctx.setLineDash([]);
+    for (let i = 0; i <= Math.min(dayIndex, TOTAL_DAYS - 1); i++) {
+      const x = toX(i), y = toY(toIdx(getVal(key, i), base));
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
     ctx.stroke();
+
+    // Projected data (dashed line)
+    if (projection && dayIndex >= TOTAL_DAYS) {
+      ctx.beginPath();
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.globalAlpha = 0.7;
+      for (let i = TOTAL_DAYS - 1; i <= dayIndex; i++) {
+        const x = toX(i), y = toY(toIdx(getVal(key, i), base));
+        i === TOTAL_DAYS - 1 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 1;
+    }
   }
 
   // Dots at current position
-  for (const [col, arr, base] of series) {
+  for (const [col, key, base] of seriesConfig) {
     const x = toX(dayIndex);
-    const y = toY(toIdx(arr[dayIndex], base));
+    const val = getVal(key, dayIndex);
+    const y = toY(toIdx(val, base));
     ctx.beginPath();
     ctx.fillStyle = col + '30';
     ctx.arc(x, y, 7, 0, Math.PI * 2);
@@ -335,21 +402,43 @@ function drawOilChart(
 export default function CrisisMap() {
   const [day, setDay] = useState(1);
   const [playing, setPlaying] = useState(false);
+  const [scenario, setScenario] = useState<ScenarioId>('grind');
   const [tooltipContent, setTooltipContent] = useState('');
   const tooltipRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLCanvasElement>(null);
   const playRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const isProjected = day > TOTAL_DAYS;
   const dayIndex = day - 1;
-  const stats = getDayStats(dayIndex);
-  const events = getEventsForDay(day);
+
+  // Generate all projections once (memoized)
+  const projections = useMemo(() => generateAllProjections(), []);
+  const activeProjection = projections[scenario];
+
+  // Unified stats: real data for days 1-35, projected for 36-90
+  const stats = isProjected
+    ? activeProjection.days[day - TOTAL_DAYS - 1]
+    : getDayStats(dayIndex);
+  const events = isProjected
+    ? [] // no real events in projection
+    : getEventsForDay(day);
+  const projectedEvents = isProjected
+    ? activeProjection.scenario.events.filter(e => e.day === day)
+    : [];
+  const displayDate = isProjected
+    ? (stats as ProjectedDay).date
+    : DATES[dayIndex];
+
+  // Confidence level for projection
+  const confidence = !isProjected ? null : day <= TOTAL_DAYS + 15 ? 'HIGH' : day <= TOTAL_DAYS + 35 ? 'MODERATE' : 'LOW';
+  const confidenceColor = confidence === 'HIGH' ? '#66bb6a' : confidence === 'MODERATE' ? '#ffab40' : '#ef5350';
 
   // Play / pause
   useEffect(() => {
     if (playing) {
       playRef.current = setInterval(() => {
         setDay(d => {
-          if (d >= TOTAL_DAYS) {
+          if (d >= MAX_DAY) {
             setPlaying(false);
             return d;
           }
@@ -364,8 +453,8 @@ export default function CrisisMap() {
 
   // Draw chart on day change or resize
   const redrawChart = useCallback(() => {
-    if (chartRef.current) drawOilChart(chartRef.current, dayIndex);
-  }, [dayIndex]);
+    if (chartRef.current) drawOilChart(chartRef.current, dayIndex, isProjected ? activeProjection : null);
+  }, [dayIndex, activeProjection, isProjected]);
 
   useEffect(() => {
     redrawChart();
@@ -377,7 +466,7 @@ export default function CrisisMap() {
     if (playing) {
       setPlaying(false);
     } else {
-      if (day >= TOTAL_DAYS) setDay(1);
+      if (day >= MAX_DAY) setDay(1);
       setPlaying(true);
     }
   }, [playing, day]);
@@ -412,10 +501,13 @@ export default function CrisisMap() {
 
         {/* Day counter + play + slider — sticky top bar on desktop */}
         <div className="hidden md:block sticky top-0 z-50 -mx-4 px-4 py-3 backdrop-blur-md" style={{ background: 'rgba(8,10,15,0.85)' }}>
-          <div className="flex items-baseline gap-3 flex-wrap mb-1.5">
+          <div className="flex items-center gap-3 flex-wrap mb-1.5">
             <span
-              className="text-[42px] font-bold text-white leading-none"
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              className="text-[42px] font-bold leading-none"
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                color: isProjected ? activeProjection.scenario.color : 'white',
+              }}
             >
               DAY {day}
             </span>
@@ -423,8 +515,24 @@ export default function CrisisMap() {
               className="text-[12px] text-[#888]"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
-              {DATES[dayIndex]}, 2026
+              {displayDate}, 2026
             </span>
+            {isProjected && (
+              <>
+                <span
+                  className="text-[9px] px-1.5 py-0.5 rounded font-mono uppercase tracking-wider"
+                  style={{ background: activeProjection.scenario.color + '15', color: activeProjection.scenario.color }}
+                >
+                  Projected
+                </span>
+                <span
+                  className="text-[9px] font-mono uppercase tracking-wider"
+                  style={{ color: confidenceColor }}
+                >
+                  {confidence} confidence
+                </span>
+              </>
+            )}
             <button
               onClick={togglePlay}
               className="bg-[#ff6b35] hover:bg-[#ff8555] text-[#0a0c10] font-bold text-[11px] px-3 py-1.5 rounded-md cursor-pointer border-none transition-colors"
@@ -432,12 +540,16 @@ export default function CrisisMap() {
             >
               {playing ? '⏸ PAUSE' : '▶ PLAY'}
             </button>
+            <div className="ml-auto">
+              <ScenarioSelector active={scenario} onChange={setScenario} enabled={isProjected} />
+            </div>
           </div>
-          <div className="mb-0">
+          {/* Slider with NOW divider */}
+          <div className="relative mb-0">
             <input
               type="range"
               min={1}
-              max={TOTAL_DAYS}
+              max={MAX_DAY}
               value={day}
               onChange={e => {
                 setPlaying(false);
@@ -445,15 +557,30 @@ export default function CrisisMap() {
               }}
               className="crisis-slider w-full"
             />
+            {/* NOW divider line */}
+            <div
+              className="absolute top-0 bottom-0 w-px pointer-events-none"
+              style={{
+                left: `${(TOTAL_DAYS / MAX_DAY) * 100}%`,
+                background: '#ff6b35',
+                opacity: 0.6,
+              }}
+            >
+              <span
+                className="absolute -top-3 -translate-x-1/2 text-[8px] font-mono text-[#ff6b35]"
+              >
+                NOW
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Hero stats — the 3 numbers that tell the whole story */}
         <div className="flex gap-3 mb-3 flex-wrap">
-          <HeroStat value={'$' + stats.brent} label="Brent crude" sublabel={'pre-war $72 · +' + Math.round((stats.brent / 72 - 1) * 100) + '%'} color="#ff6b35" />
-          <HeroStat value={stats.hormuzTransits + ' / 138'} label="Hormuz transits/day" sublabel={'-' + Math.round((1 - stats.hormuzTransits / 138) * 100) + '% from pre-war'} color="#4dd0e1" />
-          <HeroStat value={stats.signalGaps} label="Signal-action gaps" sublabel="Govts say calm while acting emergency" color="#ffd54f" />
-          <HeroStat value={stats.emergencies} label="Countries in emergency" sublabel={stats.rationing + ' rationing · ' + stats.affected + ' with measures'} color="#ff3366" />
+          <HeroStat value={'$' + stats.brent} label="Brent crude" sublabel={'pre-war $72 · +' + Math.round((stats.brent / 72 - 1) * 100) + '%'} color="#ff6b35" projected={isProjected} />
+          <HeroStat value={stats.hormuzTransits + ' / 138'} label="Hormuz transits/day" sublabel={'-' + Math.round((1 - stats.hormuzTransits / 138) * 100) + '% from pre-war'} color="#4dd0e1" projected={isProjected} />
+          <HeroStat value={stats.signalGaps} label="Signal-action gaps" sublabel="Govts say calm while acting emergency" color="#ffd54f" projected={isProjected} />
+          <HeroStat value={stats.emergencies} label="Countries in emergency" sublabel={stats.rationing + ' rationing · ' + stats.affected + ' with measures'} color="#ff3366" projected={isProjected} />
         </div>
 
         {/* Fuel depletion + pump prices side by side */}
@@ -467,15 +594,25 @@ export default function CrisisMap() {
             </div>
             <div className="flex flex-col gap-1.5">
               {Object.entries(FUEL_DAYS)
-                .sort((a, b) => a[1].days[dayIndex] - b[1].days[dayIndex])
-                .map(([code, data]) => (
-                  <FuelBar
-                    key={code}
-                    country={code}
-                    label={COUNTRY_NAMES[code] || code}
-                    daysLeft={data.days[dayIndex]}
-                  />
-                ))}
+                .sort((a, b) => {
+                  const aVal = isProjected ? ((stats as ProjectedDay).fuelDays[a[0]] ?? a[1].days[TOTAL_DAYS - 1]) : a[1].days[dayIndex];
+                  const bVal = isProjected ? ((stats as ProjectedDay).fuelDays[b[0]] ?? b[1].days[TOTAL_DAYS - 1]) : b[1].days[dayIndex];
+                  return aVal - bVal;
+                })
+                .map(([code, data]) => {
+                  const daysLeft = isProjected
+                    ? ((stats as ProjectedDay).fuelDays[code] ?? data.days[TOTAL_DAYS - 1])
+                    : data.days[dayIndex];
+                  return (
+                    <FuelBar
+                      key={code}
+                      country={code}
+                      label={COUNTRY_NAMES[code] || code}
+                      daysLeft={daysLeft}
+                      projected={isProjected}
+                    />
+                  );
+                })}
             </div>
           </div>
 
@@ -492,7 +629,7 @@ export default function CrisisMap() {
             </div>
             <div className="flex flex-col gap-1.5">
               {Object.entries(PUMP_PRICES).map(([code]) => (
-                <PumpPrice key={code} code={code} dayIndex={dayIndex} />
+                <PumpPrice key={code} code={code} dayIndex={dayIndex} projectedPrice={isProjected ? (stats as ProjectedDay).pumpPrices[code] : undefined} />
               ))}
             </div>
           </div>
@@ -500,17 +637,17 @@ export default function CrisisMap() {
 
         {/* Secondary stats — two compact rows */}
         <div className="flex gap-2 mb-2 flex-wrap">
-          <StatBox value={'$' + stats.dubai} label="Dubai physical" color="#ff3366" />
-          <StatBox value={'$' + stats.spread} label="Paper-physical spread" color={stats.spread >= 20 ? '#ef5350' : stats.spread >= 10 ? '#ffab40' : '#66bb6a'} />
-          <StatBox value={stats.supplyOffline.toFixed(1)} label="Supply offline (mbpd)" color="#ef5350" />
-          <StatBox value={stats.sprReleased.toFixed(1) + 'M'} label="SPR released" color="#ffab40" />
-          <StatBox value={stats.euGasStorage.toFixed(1) + '%'} label="EU gas storage" color="#26c6da" />
+          <StatBox value={'$' + stats.dubai} label="Dubai physical" color="#ff3366" projected={isProjected} />
+          <StatBox value={'$' + stats.spread} label="Paper-physical spread" color={stats.spread >= 20 ? '#ef5350' : stats.spread >= 10 ? '#ffab40' : '#66bb6a'} projected={isProjected} />
+          <StatBox value={stats.supplyOffline.toFixed(1)} label="Supply offline (mbpd)" color="#ef5350" projected={isProjected} />
+          <StatBox value={stats.sprReleased.toFixed(1) + 'M'} label="SPR released" color="#ffab40" projected={isProjected} />
+          <StatBox value={stats.euGasStorage.toFixed(1) + '%'} label="EU gas storage" color="#26c6da" projected={isProjected} />
         </div>
         <div className="flex gap-2 mb-3 flex-wrap">
-          <StatBox value={'$' + stats.gold.toLocaleString()} label="Gold ($/oz)" color="#ffd740" />
-          <StatBox value={stats.vix.toFixed(1)} label="VIX" color="#e57373" />
-          <StatBox value={stats.forceMajeures} label="Force majeures" color="#ff8a65" />
-          <StatBox value={stats.unrest + '/5'} label="Unrest index" color={['#66bb6a','#66bb6a','#ffab40','#ff9800','#ef5350','#d32f2f'][stats.unrest]} />
+          <StatBox value={'$' + stats.gold.toLocaleString()} label="Gold ($/oz)" color="#ffd740" projected={isProjected} />
+          <StatBox value={stats.vix.toFixed(1)} label="VIX" color="#e57373" projected={isProjected} />
+          <StatBox value={stats.forceMajeures} label="Force majeures" color="#ff8a65" projected={isProjected} />
+          <StatBox value={stats.unrest + '/5'} label="Unrest index" color={['#66bb6a','#66bb6a','#ffab40','#ff9800','#ef5350','#d32f2f'][stats.unrest]} projected={isProjected} />
         </div>
 
         {/* Legend */}
@@ -551,8 +688,9 @@ export default function CrisisMap() {
             <Geographies geography={GEO_URL}>
               {({ geographies }: { geographies: any[] }) =>
                 geographies.map(geo => {
-                  const fill = getCountryFill(geo.id, dayIndex);
-                  const info = getCountryInfo(geo.id, dayIndex);
+                  const projSev = isProjected ? (stats as ProjectedDay).countrySeverity : undefined;
+                  const fill = getCountryFill(geo.id, dayIndex, projSev);
+                  const info = getCountryInfo(geo.id, dayIndex, projSev);
                   return (
                     <Geography
                       key={geo.rsmKey}
@@ -654,21 +792,46 @@ export default function CrisisMap() {
           </div>
 
           {/* Events panel — horizontal cards */}
-          <div className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3">
+          <div className={`bg-[#0d1017] rounded-xl p-3 ${isProjected ? 'border border-dashed border-[#2a2e38]' : 'border border-[#1a1e28]'}`}>
             <div
               className="text-[11px] text-[#888] mb-2"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
-              {events.length > 0
-                ? `EVENTS — ${DATES[dayIndex].toUpperCase()}`
-                : `NO MAJOR EVENTS — ${DATES[dayIndex].toUpperCase()}`}
+              {isProjected
+                ? `SCENARIO ${activeProjection.scenario.shortLabel}: ${activeProjection.scenario.label.toUpperCase()} — ${displayDate.toUpperCase()}`
+                : events.length > 0
+                  ? `EVENTS — ${DATES[dayIndex].toUpperCase()}`
+                  : `NO MAJOR EVENTS — ${DATES[dayIndex].toUpperCase()}`}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
-              {events.map((event, i) => (
+              {!isProjected && events.map((event, i) => (
                 <div key={`${event.day}-${i}`}>
                   <EventCard event={event} />
                 </div>
               ))}
+              {isProjected && projectedEvents.map((event, i) => (
+                <div
+                  key={`proj-${event.day}-${i}`}
+                  className="p-3 rounded-lg border-l-[3px] border-dashed text-[12px] leading-[1.5] bg-[#1a1a1a]"
+                  style={{ borderColor: activeProjection.scenario.color + '80' }}
+                >
+                  <div className="font-mono text-[11px] font-bold uppercase tracking-[0.5px] text-white/90">
+                    {event.country}
+                  </div>
+                  <div
+                    className="font-mono text-[10px] mt-0.5"
+                    style={{ color: activeProjection.scenario.color }}
+                  >
+                    Scenario {activeProjection.scenario.shortLabel} · Projected
+                  </div>
+                  <div className="mt-1 text-white/75">{event.text}</div>
+                </div>
+              ))}
+              {isProjected && projectedEvents.length === 0 && (
+                <div className="text-[11px] text-[#555] italic col-span-full">
+                  No scenario events for this day. Drag slider to see key projected milestones.
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -690,8 +853,13 @@ export default function CrisisMap() {
             className="text-[11px] text-[#888]"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
-            {DATES[dayIndex]}, 2026
+            {displayDate}, 2026
           </span>
+          {isProjected && (
+            <span className="text-[8px] px-1 py-0.5 rounded font-mono uppercase" style={{ background: activeProjection.scenario.color + '15', color: activeProjection.scenario.color }}>
+              {activeProjection.scenario.shortLabel}
+            </span>
+          )}
           <button
             onClick={togglePlay}
             className="bg-[#ff6b35] hover:bg-[#ff8555] text-[#0a0c10] font-bold text-[11px] px-3 py-1.5 rounded-md cursor-pointer border-none transition-colors"
@@ -700,10 +868,15 @@ export default function CrisisMap() {
             {playing ? '⏸ PAUSE' : '▶ PLAY'}
           </button>
         </div>
+        {isProjected && (
+          <div className="mb-1.5">
+            <ScenarioSelector active={scenario} onChange={setScenario} enabled={true} />
+          </div>
+        )}
         <input
           type="range"
           min={1}
-          max={TOTAL_DAYS}
+          max={MAX_DAY}
           value={day}
           onChange={e => {
             setPlaying(false);
