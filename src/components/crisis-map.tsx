@@ -835,6 +835,22 @@ export default function CrisisMap() {
             </div>
           </div>
         </div>
+
+        {/* Projection disclaimer */}
+        {isProjected && (
+          <div className="mt-3 bg-[#0d1017] border border-dashed border-[#2a2e38] rounded-lg px-4 py-3 text-[11px] text-[#666] leading-relaxed" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <span className="text-[#888] font-bold">Model limitations.</span>{' '}
+            This projection models energy supply, fuel reserves, and prices under scenario assumptions.
+            It does not capture second-order economic consequences — airline bankruptcies, unemployment cascades,
+            corporate failures, food price spikes from fertilizer shortages, political instability, or social unrest —
+            which would compound these effects significantly. At jet fuel +150%, most airlines cannot survive.
+            At $140+ Brent, industrial shutdowns cascade through chemical, glass, and steel sectors.
+            The real-world outcome is likely worse than what the energy model alone shows.{' '}
+            <a href="https://github.com/agcty/iran-crisis/blob/main/METHODOLOGY.md" target="_blank" className="text-[#ff6b35] hover:underline">
+              Full methodology
+            </a>
+          </div>
+        )}
       </div>
 
       {/* Mobile fixed bottom slider */}
