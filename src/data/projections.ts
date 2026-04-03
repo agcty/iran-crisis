@@ -357,10 +357,13 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
       }
 
       // Supply recovery: Hormuz reopening restores imports, reducing net drain
-      // Iran's tollbooth is SELECTIVE: approved nations (PAK, IND, CHN, THA, MYS, RUS, KOR via swap)
-      // get disproportionate access. Western nations get almost nothing until full reopening.
+      // Iran's tollbooth is SELECTIVE: approved nations get disproportionate access.
+      // In ceasefire, access multipliers normalize toward 1.0 as the tollbooth dissolves.
       const globalHormuzBenefit = hormuzTransits / 138; // 0-1
-      const countryAccess = HORMUZ_ACCESS_MULTIPLIER[code] ?? 1.0;
+      const baseAccess = HORMUZ_ACCESS_MULTIPLIER[code] ?? 1.0;
+      // In ceasefire, access normalizes proportionally to Hormuz reopening (tollbooth dissolves)
+      const accessNormalization = scenario.hormuzReopenStartDay ? globalHormuzBenefit : 0;
+      const countryAccess = baseAccess + (1.0 - baseAccess) * accessNormalization;
       const hormuzBenefit = Math.min(1, globalHormuzBenefit * countryAccess);
       const baseBurn = inferBaseBurn(code, data);
 
