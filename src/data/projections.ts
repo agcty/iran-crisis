@@ -363,8 +363,11 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
       const hormuzBenefit = Math.min(1, globalHormuzBenefit * countryAccess);
       const baseBurn = inferBaseBurn(code, data);
 
-      // Consumption = base demand reduced by rationing and price elasticity
-      const consumption = baseBurn * rationingFactor * priceElasticity;
+      // European supply chain stress: accelerates depletion as pre-closure inventories deplete
+      const euStress = EU_SUPPLY_STRESS_COUNTRIES.has(code) ? getEuSupplyStress(absDay, scenario.id) : 1.0;
+
+      // Consumption = base demand reduced by rationing and price elasticity, amplified by supply stress
+      const consumption = baseBurn * rationingFactor * priceElasticity * euStress;
       // Resupply = proportion of normal supply restored via Hormuz
       // Damped by 0.7 to account for damaged infrastructure (refineries, ports, insurance)
       const resupply = baseBurn * hormuzBenefit * 0.7;
@@ -510,14 +513,41 @@ const HORMUZ_ACCESS_MULTIPLIER: Record<string, number> = {
   PHL: 3.0,   // Added to approved list Day 35.
   IDN: 2.0,   // Non-aligned, some access but no formal deal
   USA: 0.2,   // Combatant — almost zero direct Hormuz access
-  GBR: 0.3,   // Aligned with US but not combatant; minimal access
-  DEU: 0.5,   // EU neutral; some indirect access via intermediaries
-  FRA: 0.5,   // EU neutral; first French ship exited Day 35
-  ITA: 0.5,   // EU neutral
-  AUT: 0.5,   // Landlocked, depends on EU supply chains
-  ESP: 0.5,   // Barred US aircraft — slightly better positioned
-  AUS: 0.3,   // US ally, isolated, minimal Hormuz access
+  GBR: 0.15,  // "Expected to be worst hit major economy" (Shell CEO). 50% jet fuel from ME.
+  DEU: 0.3,   // Neutral but losing bidding war. 5:1 tanker ratio heads East not West.
+  FRA: 0.3,   // EU neutral; first French ship exited Day 35 but it's symbolic.
+  ITA: 0.35,  // Libya/Algeria pipelines help. Qatar was 30% of gas — that's gone.
+  AUT: 0.25,  // Landlocked, depends entirely on German/Italian refinery output.
+  ESP: 0.4,   // Americas-sourced crude (Mexico, Nigeria). 60% renewables buffer. Best positioned in EU.
+  AUS: 0.2,   // US ally, isolated, minimal Hormuz access
 };
+
+// European supply chain stress: Europe's crisis isn't about reserves draining linearly —
+// it's about the inflow of refined products (diesel, jet fuel) collapsing as:
+// 1. Last pre-closure cargoes are consumed (~4 weeks transit = Day ~32 arrival, consumed by Day ~47)
+// 2. Asian buyers outbid Europe for every non-Gulf barrel (5:1 tanker ratio eastward)
+// 3. Russia gasoline export ban (Apr 1) removes another source
+// 4. Refinery closures (Shell Wesseling, BP Scholven, Grangemouth) reduce domestic capacity
+//
+// Shell CEO Sawan: "Europe by April." Germany's Reiche: "end of April." IEA: "April will be 2x worse."
+// Timeline: Day ~42-47 price shock, Day ~55-62 stations dry at scale, Day ~65-70 formal rationing.
+//
+// This stress factor accelerates burn rate for European countries starting around Day 42.
+// It's a multiplier on top of the base burn that models the supply chain cliff.
+const EU_SUPPLY_STRESS_COUNTRIES = new Set(['GBR', 'DEU', 'FRA', 'ITA', 'AUT', 'ESP', 'NLD', 'POL']);
+
+function getEuSupplyStress(absDay: number, scenarioId: ScenarioId): number {
+  if (scenarioId === 'ceasefire' && absDay > 55) return 1.0; // stress eases after Hormuz reopens
+  // Stress ramps up as pre-closure inventories deplete
+  // Day 35: stress=1.0 (no additional stress yet — cargoes still arriving)
+  // Day 42-47: stress=1.3-1.5 (last cargoes consumed, price shock begins)
+  // Day 55-62: stress=1.8-2.0 (stations dry, bidding war intensifies)
+  // Day 70+: stress=2.0-2.5 (full supply chain breakdown)
+  if (absDay <= 42) return 1.0;
+  if (absDay <= 55) return 1.0 + (absDay - 42) * 0.05; // 1.0 → 1.65
+  if (absDay <= 70) return 1.65 + (absDay - 55) * 0.04; // 1.65 → 2.25
+  return Math.min(2.5, 2.25 + (absDay - 70) * 0.01); // 2.25 → 2.5 cap
+}
 
 const BASE_BURN_RATES: Record<string, number> = {
   PAK: 1.2,   // ~26 days pre-war, high dependency, minimal domestic production
