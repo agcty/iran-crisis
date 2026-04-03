@@ -384,7 +384,7 @@ export default function CrisisMap() {
 
   return (
     <div
-      className="min-h-screen text-[#e0e0e0] overflow-x-hidden"
+      className="min-h-screen text-[#e0e0e0] overflow-x-clip"
       style={{
         fontFamily: "'DM Sans', sans-serif",
         background:
@@ -410,8 +410,8 @@ export default function CrisisMap() {
           </p>
         </div>
 
-        {/* Day counter + play + slider — fixed bottom bar on mobile */}
-        <div className="hidden md:block">
+        {/* Day counter + play + slider — sticky top bar on desktop */}
+        <div className="hidden md:block sticky top-0 z-50 -mx-4 px-4 py-3 backdrop-blur-md" style={{ background: 'rgba(8,10,15,0.85)' }}>
           <div className="flex items-baseline gap-3 flex-wrap mb-1.5">
             <span
               className="text-[42px] font-bold text-white leading-none"
@@ -433,7 +433,7 @@ export default function CrisisMap() {
               {playing ? '⏸ PAUSE' : '▶ PLAY'}
             </button>
           </div>
-          <div className="mb-4">
+          <div className="mb-0">
             <input
               type="range"
               min={1}
@@ -529,149 +529,146 @@ export default function CrisisMap() {
           ))}
         </div>
 
-        {/* Map + sidebar layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-3">
-          {/* Map */}
-          <div className="relative bg-[#0d1017] rounded-xl border border-[#1a1e28] overflow-hidden">
-            <ComposableMap
-              projection="geoNaturalEarth1"
-              projectionConfig={{
-                rotate: [-20, 0, 0],
-                scale: 155,
-              }}
-              width={900}
-              height={460}
-              style={{ width: '100%', height: 'auto', display: 'block' }}
-            >
-              <Sphere
-                id="sphere"
-                fill="transparent"
-                stroke="#111520"
-                strokeWidth={0.5}
-              />
-              <Graticule stroke="#111520" strokeWidth={0.3} />
-              <Geographies geography={GEO_URL}>
-                {({ geographies }: { geographies: any[] }) =>
-                  geographies.map(geo => {
-                    const fill = getCountryFill(geo.id, dayIndex);
-                    const info = getCountryInfo(geo.id, dayIndex);
-                    return (
-                      <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        onMouseEnter={() => {
-                          if (info) setTooltipContent(`${info.name} — ${info.label}`);
-                        }}
-                        onMouseMove={(e: React.MouseEvent) => {
-                          if (tooltipRef.current) {
-                            tooltipRef.current.style.left = e.clientX + 14 + 'px';
-                            tooltipRef.current.style.top = e.clientY - 14 + 'px';
-                          }
-                        }}
-                        onMouseLeave={() => setTooltipContent('')}
-                        style={{
-                          default: {
-                            fill,
-                            stroke: '#1a1e28',
-                            strokeWidth: 0.4,
-                            outline: 'none',
-                            transition: 'fill 0.45s ease',
-                          },
-                          hover: {
-                            fill,
-                            stroke: '#ff6b35',
-                            strokeWidth: 1,
-                            outline: 'none',
-                            filter: 'brightness(1.4)',
-                            cursor: 'pointer',
-                          },
-                          pressed: { outline: 'none' },
-                        }}
-                      />
-                    );
-                  })
-                }
-              </Geographies>
+        {/* Map — full width */}
+        <div className="relative bg-[#0d1017] rounded-xl border border-[#1a1e28] overflow-hidden mb-3">
+          <ComposableMap
+            projection="geoNaturalEarth1"
+            projectionConfig={{
+              rotate: [-20, 0, 0],
+              scale: 155,
+            }}
+            width={900}
+            height={460}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          >
+            <Sphere
+              id="sphere"
+              fill="transparent"
+              stroke="#111520"
+              strokeWidth={0.5}
+            />
+            <Graticule stroke="#111520" strokeWidth={0.3} />
+            <Geographies geography={GEO_URL}>
+              {({ geographies }: { geographies: any[] }) =>
+                geographies.map(geo => {
+                  const fill = getCountryFill(geo.id, dayIndex);
+                  const info = getCountryInfo(geo.id, dayIndex);
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      onMouseEnter={() => {
+                        if (info) setTooltipContent(`${info.name} — ${info.label}`);
+                      }}
+                      onMouseMove={(e: React.MouseEvent) => {
+                        if (tooltipRef.current) {
+                          tooltipRef.current.style.left = e.clientX + 14 + 'px';
+                          tooltipRef.current.style.top = e.clientY - 14 + 'px';
+                        }
+                      }}
+                      onMouseLeave={() => setTooltipContent('')}
+                      style={{
+                        default: {
+                          fill,
+                          stroke: '#1a1e28',
+                          strokeWidth: 0.4,
+                          outline: 'none',
+                          transition: 'fill 0.45s ease',
+                        },
+                        hover: {
+                          fill,
+                          stroke: '#ff6b35',
+                          strokeWidth: 1,
+                          outline: 'none',
+                          filter: 'brightness(1.4)',
+                          cursor: 'pointer',
+                        },
+                        pressed: { outline: 'none' },
+                      }}
+                    />
+                  );
+                })
+              }
+            </Geographies>
 
-              {/* Strait of Hormuz indicator */}
-              <Marker coordinates={[56.3, 26.6]}>
-                <circle r={5} fill="#ff3366" opacity={0.7}>
-                  <animate
-                    attributeName="r"
-                    values="4;7;4"
-                    dur="2s"
-                    repeatCount="indefinite"
-                  />
-                  <animate
-                    attributeName="opacity"
-                    values="0.7;0.3;0.7"
-                    dur="2s"
-                    repeatCount="indefinite"
-                  />
-                </circle>
-                <circle r={2.5} fill="#ff3366" />
-                <text
-                  y={-10}
-                  textAnchor="middle"
-                  fill="#ff3366"
-                  fontSize={6}
-                  fontFamily="JetBrains Mono, monospace"
-                  fontWeight={700}
-                >
-                  HORMUZ CLOSED
-                </text>
-              </Marker>
-            </ComposableMap>
-
-            {/* Tooltip */}
-            <div
-              ref={tooltipRef}
-              className="fixed pointer-events-none z-50 transition-opacity duration-100"
-              style={{ opacity: tooltipContent ? 1 : 0 }}
-            >
-              <div
-                className="bg-[#181c24] border border-[#2a2e38] text-[11px] text-white/90 px-2.5 py-1.5 rounded-md shadow-lg whitespace-nowrap"
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            {/* Strait of Hormuz indicator */}
+            <Marker coordinates={[56.3, 26.6]}>
+              <circle r={5} fill="#ff3366" opacity={0.7}>
+                <animate
+                  attributeName="r"
+                  values="4;7;4"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="opacity"
+                  values="0.7;0.3;0.7"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+              </circle>
+              <circle r={2.5} fill="#ff3366" />
+              <text
+                y={-10}
+                textAnchor="middle"
+                fill="#ff3366"
+                fontSize={6}
+                fontFamily="JetBrains Mono, monospace"
+                fontWeight={700}
               >
-                {tooltipContent}
+                HORMUZ CLOSED
+              </text>
+            </Marker>
+          </ComposableMap>
+
+          {/* Tooltip */}
+          <div
+            ref={tooltipRef}
+            className="fixed pointer-events-none z-50 transition-opacity duration-100"
+            style={{ opacity: tooltipContent ? 1 : 0 }}
+          >
+            <div
+              className="bg-[#181c24] border border-[#2a2e38] text-[11px] text-white/90 px-2.5 py-1.5 rounded-md shadow-lg whitespace-nowrap"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              {tooltipContent}
+            </div>
+          </div>
+        </div>
+
+        {/* Energy chart + Events grid — below map */}
+        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-3">
+          {/* Oil price chart */}
+          <div className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3">
+            <div className="mb-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              <div className="text-[10px] text-[#666] mb-1">ENERGY PRICES (indexed, Day 1 = 100)</div>
+              <div className="flex gap-2 flex-wrap text-[11px] font-bold">
+                <span className="text-[#ff6b35]">Brent ${stats.brent}</span>
+                <span className="text-[#ff3366]">Dubai ${stats.dubai}</span>
+                <span className="text-[#18ffff]">Jet ${stats.jetFuel.toLocaleString()}/mt {stats.jetFuelChange > 0 ? '+' : ''}{stats.jetFuelChange}%</span>
               </div>
+            </div>
+            <div>
+              <canvas ref={chartRef} />
             </div>
           </div>
 
-          {/* Right sidebar: oil chart + events */}
-          <div className="flex flex-col gap-3 min-h-0">
-            {/* Oil price chart */}
-            <div className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3">
-              <div className="mb-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                <div className="text-[10px] text-[#666] mb-1">ENERGY PRICES (indexed, Day 1 = 100)</div>
-                <div className="flex gap-2 flex-wrap text-[11px] font-bold">
-                  <span className="text-[#ff6b35]">Brent ${stats.brent}</span>
-                  <span className="text-[#ff3366]">Dubai ${stats.dubai}</span>
-                  <span className="text-[#18ffff]">Jet ${stats.jetFuel.toLocaleString()}/mt {stats.jetFuelChange > 0 ? '+' : ''}{stats.jetFuelChange}%</span>
-                </div>
-              </div>
-              <div>
-                <canvas ref={chartRef} />
-              </div>
+          {/* Events panel — horizontal cards */}
+          <div className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3">
+            <div
+              className="text-[11px] text-[#888] mb-2"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
+              {events.length > 0
+                ? `EVENTS — ${DATES[dayIndex].toUpperCase()}`
+                : `NO MAJOR EVENTS — ${DATES[dayIndex].toUpperCase()}`}
             </div>
-
-            {/* Events panel */}
-            <div className="bg-[#0d1017] rounded-xl border border-[#1a1e28] p-3 crisis-events overflow-y-auto flex-1 min-h-0">
-              <div
-                className="text-[11px] text-[#888] mb-2"
-                style={{ fontFamily: "'JetBrains Mono', monospace" }}
-              >
-                {events.length > 0
-                  ? `EVENTS — ${DATES[dayIndex].toUpperCase()}`
-                  : `NO MAJOR EVENTS — ${DATES[dayIndex].toUpperCase()}`}
-              </div>
-              <div className="flex flex-col gap-2">
-                {events.map((event, i) => (
-                  <div key={`${event.day}-${i}`}>
-                    <EventCard event={event} />
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+              {events.map((event, i) => (
+                <div key={`${event.day}-${i}`}>
+                  <EventCard event={event} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
