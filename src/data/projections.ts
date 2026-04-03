@@ -302,25 +302,27 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
     // Hormuz flow (mbpd) scales with transits
     const hormuzFlow = (hormuzTransits / 138) * 20.9;
 
-    // ── 2. Oil prices (exponential mean-reversion + noise) ──
-    const t = projDay + 1;
-    const decay = Math.exp(-t / scenario.brentTauDays);
+    // ── 2. Oil prices (incremental exponential mean-reversion + noise) ──
+    // Single-step decay: each day decays from previous value by one day's worth
+    const brentDecay = Math.exp(-1 / scenario.brentTauDays);
     const noise = (seededRandom(absDay * 7 + scenario.id.charCodeAt(0)) - 0.5) * 0.03;
-    const brent = Math.round(scenario.brentTarget + (prevBrent - scenario.brentTarget) * decay * (1 + noise));
+    const brent = Math.round(scenario.brentTarget + (prevBrent - scenario.brentTarget) * brentDecay * (1 + noise));
 
-    const spreadDay35 = prevDubai - prevBrent;
-    const spreadDecay = Math.exp(-t / (scenario.brentTauDays * 0.7));
-    const dubaiSpread = scenario.dubaiSpreadTarget + (spreadDay35 - scenario.dubaiSpreadTarget) * spreadDecay;
+    const prevSpread = prevDubai - prevBrent;
+    const spreadDecay = Math.exp(-1 / (scenario.brentTauDays * 0.7));
+    const dubaiSpread = scenario.dubaiSpreadTarget + (prevSpread - scenario.dubaiSpreadTarget) * spreadDecay;
     const dubai = Math.round(brent + dubaiSpread);
 
     const jetFuel = Math.round(brent * scenario.jetFuelBrentRatio);
 
     // ── 3. SPR ──
+    // IEA coordinated release capped at ~400M bbl (not total reserves of 1485M)
+    const IEA_RELEASE_CAP = 400;
     let sprReleased: number;
     if (scenario.sprStopDay && absDay > scenario.sprStopDay) {
       sprReleased = prevSpr;
     } else {
-      sprReleased = Math.min(IEA_RESERVES_TOTAL, prevSpr + scenario.sprRateMbpd);
+      sprReleased = Math.min(IEA_RELEASE_CAP, prevSpr + scenario.sprRateMbpd);
     }
 
     // ── 4. Supply offline ──
@@ -353,16 +355,21 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
         rationingFactor = Math.max(0.1, rationingFactor); // never fully zero
       }
 
-      // Supply recovery factor: how much Hormuz reopening helps this country
-      // Countries closer to Gulf (PAK, IND, KOR, JPN) benefit more from Hormuz
+      // Supply recovery: Hormuz reopening restores imports, reducing net drain
+      // When supply exceeds rationed demand, reserves rebuild
       const hormuzBenefit = hormuzTransits / 138; // 0-1
-      const supplyRecovery = hormuzBenefit * 0.5; // up to 50% burn reduction from restored supply
-
-      // Daily burn rate
       const baseBurn = inferBaseBurn(code, data);
-      const effectiveBurn = baseBurn * rationingFactor * priceElasticity * (1 - supplyRecovery);
 
-      fuelDays[code] = Math.max(0, Math.round((prev - effectiveBurn) * 10) / 10);
+      // Consumption = base demand reduced by rationing and price elasticity
+      const consumption = baseBurn * rationingFactor * priceElasticity;
+      // Resupply = proportion of normal supply restored via Hormuz
+      const resupply = baseBurn * hormuzBenefit;
+      // Net burn: positive = draining, negative = refilling
+      const effectiveBurn = consumption - resupply;
+
+      // Cap at [0, preWar] — can't go negative or exceed pre-war levels
+      const newFuel = prev - effectiveBurn;
+      fuelDays[code] = Math.max(0, Math.min(data.preWar, Math.round(newFuel * 10) / 10));
       prevFuelDays[code] = fuelDays[code];
     }
 
@@ -395,12 +402,12 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
     // ── 9. Derived metrics ──
     // Gold: inversely correlated with ceasefire hopes, positively with escalation
     const goldTarget = scenario.id === 'ceasefire' ? 4400 : scenario.id === 'escalation' ? 5500 : 4900;
-    const goldDecay = Math.exp(-t / 30);
+    const goldDecay = Math.exp(-1 / 30); // single-step decay, tau=30 days
     const gold = Math.round(goldTarget + (prevGold - goldTarget) * goldDecay);
 
     // VIX: mean-reverts toward scenario-specific level
     const vixTarget = scenario.id === 'ceasefire' ? 18 : scenario.id === 'escalation' ? 40 : 28;
-    const vixDecay = Math.exp(-t / 15);
+    const vixDecay = Math.exp(-1 / 15); // single-step decay, tau=15 days
     const vixNoise = (seededRandom(absDay * 13 + 7) - 0.5) * 3;
     const vixVal = Math.round((vixTarget + (prevVix - vixTarget) * vixDecay + vixNoise) * 10) / 10;
 
