@@ -693,9 +693,10 @@ export const FUEL_DAYS: Record<string, { preWar: number; days: number[] }> = {
   // Austria: pre-war ~90 days. First stations ran dry Day 14. Fuel Price Brake law Day 26.
   // Price increase rule (3x/week Mon/Wed/Fri at noon) from Apr 1.
   AUT: { preWar: 90, days: [90,89,88,87,86,85,84,83,82,81,80,79,78,77,76,75,74,73,73,72,72,71,71,70,70,70,70,70,70,70,70,70,70,70,70] },
-  // Spain: pre-war ~90 days. €5B energy package Day 20. Lowest pump prices of big-3 EU
-  // (lower fuel taxes). Barred US aircraft from airspace Day 34. 60% renewables buffer.
-  ESP: { preWar: 90, days: [90,89,88,88,87,86,86,85,84,84,83,82,82,81,81,80,80,79,79,78,78,78,77,77,77,77,77,76,76,76,76,76,76,76,76] },
+  // Spain: pre-war 92 days (legal obligation, CORES 42d + industry 50d). €5B energy package Day 20.
+  // Net exporter of refined products. 56% renewables + 19% nuclear. Americas-heavy crude (36%+).
+  // Best-positioned large EU economy. No reported shortages as of Apr 3.
+  ESP: { preWar: 92, days: [92,91,90,90,89,88,88,87,86,86,85,84,84,83,83,82,82,81,81,80,80,80,79,79,79,79,79,78,78,78,78,78,78,78,78] },
 };
 
 // ── Pump prices (what people actually pay at the station) ──
