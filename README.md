@@ -1,69 +1,42 @@
-# React + TypeScript + Vite
+# Iran War Crisis Propagation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interactive visualization tracking the 2026 Iran crisis — day-by-day timeline, severity map, commodity prices, and event log from February 28 onward.
 
-Currently, two official plugins are available:
+The US and Israel launched Operation Epic Fury on February 28, 2026, killing Supreme Leader Khamenei. Iran retaliated with missiles and drones on Israel and Gulf states and closed the Strait of Hormuz. This dashboard tracks how the crisis propagated across countries, markets, and daily life.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## What it tracks
 
-## Expanding the ESLint configuration
+- **Crisis map** — Country-by-country severity (0-5 scale) on a world map, updated daily
+- **Oil & energy prices** — Brent, Dubai physical, jet fuel (CIF NWE), EU gas storage
+- **Strait of Hormuz** — Daily vessel transits, oil flow (mbpd), supply offline
+- **Strategic reserves** — IEA SPR releases (cumulative million barrels)
+- **Market indicators** — Gold, VIX
+- **Events** — Structured log of government statements, military actions, diplomatic moves, and the gap between what leaders say and what they do
+- **Scenario projections** — Three forward-looking scenarios (ceasefire, grind, escalation) modeled from Day 36-90
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Signal-action gaps
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+A core editorial theme. The dashboard highlights instances where governments say "remain calm" or "no shortages" while simultaneously implementing emergency measures — rationing fuel, releasing reserves, or banning exports.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Data sources
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+All data is sourced from Reuters, AP, Bloomberg, CNBC, Al Jazeera, BBC, FT, WSJ, IEA, OPEC, EIA, S&P Global Platts, AGSI, and other verifiable sources. See [SOURCES.md](SOURCES.md) for full attribution. Projection methodology is documented in [METHODOLOGY.md](METHODOLOGY.md).
+
+## Tech stack
+
+- React 19 + TypeScript
+- Vite 8
+- Tailwind CSS 4
+- react-simple-maps (TopoJSON)
+- Cloudflare Workers (deployment)
+
+## Development
+
+```bash
+bun install
+bun run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## License
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+MIT
