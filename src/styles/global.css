@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+/* Timeline range slider */
+.crisis-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  background: linear-gradient(90deg, #1a3a1a, #3a3a1a 30%, #4a2a1a 60%, #6a1a1a);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.crisis-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #ff6b35;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid #0a0c10;
+  box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+}
+
+.crisis-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #ff6b35;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid #0a0c10;
+  box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+}
+
+/* Events panel scrollbar */
+.crisis-events::-webkit-scrollbar {
+  width: 4px;
+}
+
+.crisis-events::-webkit-scrollbar-track {
+  background: #0d1017;
+}
+
+.crisis-events::-webkit-scrollbar-thumb {
+  background: #2a2e38;
+  border-radius: 2px;
+}
