@@ -383,6 +383,22 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
     }
 
     // ── 8. Country severity ──
+    // Per-country caps: beneficiary nations don't escalate to crisis
+    // Per-country floors: war-zone countries don't de-escalate to normal
+    const SEVERITY_CAPS: Record<string, number> = {
+      RUS: 2, // net beneficiary ($151B extra revenue)
+      CHN: 4, // major domestic producer, massive reserves
+      SAU: 4, // profiting from bypass pipeline, but still under missile threat
+    };
+    const SEVERITY_FLOORS: Record<string, number> = {
+      IRN: 4, // country being bombed, infrastructure destroyed
+      ISR: 3, // active combatant, casualties
+      QAT: 3, // LNG infrastructure physically damaged (3-5yr repair)
+      YEM: 4, // active combatant (Houthis)
+      LBN: 3, // 1,300+ killed, Hezbollah active
+      IRQ: 3, // 70% Basra production cut, fiscal crisis
+    };
+
     const countrySeverity: Record<string, number> = {};
     for (const [code, prev] of Object.entries(prevSeverity)) {
       let sev = prev;
@@ -396,13 +412,20 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
       if (countryFuel !== undefined && countryFuel <= 5 && sev < 5) sev = 5;
       else if (countryFuel !== undefined && countryFuel <= 15 && sev < 4) sev = 4;
 
+      // Apply per-country caps and floors
+      const cap = SEVERITY_CAPS[code];
+      if (cap !== undefined && sev > cap) sev = cap;
+      const floor = SEVERITY_FLOORS[code];
+      if (floor !== undefined && sev < floor) sev = floor;
+
       countrySeverity[code] = sev;
       prevSeverity[code] = sev;
     }
 
     // ── 9. Derived metrics ──
-    // Gold: inversely correlated with ceasefire hopes, positively with escalation
-    const goldTarget = scenario.id === 'ceasefire' ? 4400 : scenario.id === 'escalation' ? 5500 : 4900;
+    // Gold: recovers toward pre-war in ceasefire (USD weakens, liquidation unwinds),
+    // surges in escalation (safe haven). Pre-war was $5,278.
+    const goldTarget = scenario.id === 'ceasefire' ? 5100 : scenario.id === 'escalation' ? 5500 : 4900;
     const goldDecay = Math.exp(-1 / 30); // single-step decay, tau=30 days
     const gold = Math.round(goldTarget + (prevGold - goldTarget) * goldDecay);
 
@@ -444,7 +467,7 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
       vix: vixVal,
       forceMajeures: FORCE_MAJEURES[d35], // holds
       signalGaps: SIGNAL_ACTION_GAPS[d35], // holds
-      unrest: Math.min(5, UNREST_INDEX[d35] + (scenario.severityTrend === 'escalate' ? Math.floor(projDay / 15) : scenario.severityTrend === 'deescalate' ? -Math.floor(projDay / 15) : 0)),
+      unrest: Math.max(0, Math.min(5, UNREST_INDEX[d35] + (scenario.severityTrend === 'escalate' ? Math.floor(projDay / 15) : scenario.severityTrend === 'deescalate' ? -Math.floor(projDay / 15) : 0))),
       affected,
       rationing,
       emergencies,
