@@ -225,8 +225,8 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
       { day: 42, country: 'Yemen', text: 'Houthis declare Bab al-Mandeb blockade. Red Sea shipping halted.' },
       { day: 48, country: 'Iran', text: 'Iran retaliates against Saudi Abqaiq. 5M bpd processing offline.' },
       { day: 55, country: 'EU', text: 'Formal fuel rationing across Europe. Driving bans in Germany, France.' },
-      { day: 65, country: 'Global', text: 'Brent passes $180. IEA declares "unprecedented energy emergency."' },
-      { day: 80, country: 'USA', text: 'US gas above $7/gal. Recession deepens. Calls for withdrawal intensify.' },
+      { day: 73, country: 'Global', text: 'Brent passes $180. IEA declares "unprecedented energy emergency."' },
+      { day: 85, country: 'USA', text: 'US gas above $6.50/gal. Recession deepens. Calls for withdrawal intensify.' },
     ],
   },
 };
@@ -363,7 +363,8 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
       // Consumption = base demand reduced by rationing and price elasticity
       const consumption = baseBurn * rationingFactor * priceElasticity;
       // Resupply = proportion of normal supply restored via Hormuz
-      const resupply = baseBurn * hormuzBenefit;
+      // Damped by 0.7 to account for damaged infrastructure (refineries, ports, insurance)
+      const resupply = baseBurn * hormuzBenefit * 0.7;
       // Net burn: positive = draining, negative = refilling
       const effectiveBurn = consumption - resupply;
 
