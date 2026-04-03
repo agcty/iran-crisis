@@ -120,9 +120,10 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     hormuzFloorTransits: 12,
     hormuzCeilingTransits: 130, // not quite pre-war due to lingering risk
 
-    brentTarget: 82,
+    brentTarget: 95,  // infrastructure damage premium: Qatar LNG 3-5yr repair, 15K+ targets hit,
+                       // insurance elevated for months. Pre-war $72 world gone for years.
     brentTauDays: 20,
-    dubaiSpreadTarget: 4,
+    dubaiSpreadTarget: 6, // wider than pre-war due to lingering physical market stress
     jetFuelBrentRatio: 15.5, // $/mt per $/bbl (jet ~15.5x brent in $/mt terms)
 
     bypassSupplyMbpd: 4.5, // Yanbu port bottleneck limits to ~4.0-4.5 despite 7 mbpd pipeline (Argus)
@@ -160,9 +161,9 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     hormuzFloorTransits: 12,
     hormuzCeilingTransits: 20, // tollbooth slowly expands
 
-    brentTarget: 135,
+    brentTarget: 140,  // sustained partial-disruption + cargo diversion premium
     brentTauDays: 35,
-    dubaiSpreadTarget: 18,
+    dubaiSpreadTarget: 22, // Asian premium widens as bidding war intensifies
     jetFuelBrentRatio: 16.5,
 
     bypassSupplyMbpd: 4.5, // Yanbu port bottleneck (Argus: pipeline 7 mbpd, port ~4.5 effective)
@@ -381,11 +382,24 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
     }
 
     // ── 7. Pump prices ──
+    // Two components: (1) Brent passthrough (commodity cost), (2) scarcity premium
+    // When a country approaches fuel depletion, prices decouple from Brent and spike
+    // due to panic buying, hoarding, black market, and physical unavailability.
     const pumpPricesDay: Record<string, number> = {};
     for (const [code, data] of Object.entries(PUMP_PRICES)) {
       const passthrough = pumpPassthrough[code] || 1;
       const brentRatio = brent / BRENT_PRICES[0] - 1;
-      pumpPricesDay[code] = Math.round(data.preWar * (1 + passthrough * brentRatio) * 100) / 100;
+      let price = data.preWar * (1 + passthrough * brentRatio);
+
+      // Scarcity premium: kicks in when country's fuel reserves drop below 20 days
+      const countryFuel = fuelDays[code];
+      if (countryFuel !== undefined && countryFuel < 20) {
+        // Scarcity multiplier: 1.0 at 20 days, 1.5 at 10 days, 2.5 at 3 days, 3.0 at 0 days
+        const scarcity = 1 + Math.max(0, (20 - countryFuel) / 20) * 2.0;
+        price *= scarcity;
+      }
+
+      pumpPricesDay[code] = Math.round(price * 100) / 100;
     }
 
     // ── 8. Country severity ──
