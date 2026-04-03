@@ -18,6 +18,7 @@ export const TOTAL_DAYS = DATES.length; // 35
 // Day 34: Brent surged 7.4% to $108.62 after Trump "stone ages" speech. WTI +6.9% to $107.05.
 // Hope rally completely reversed. Macquarie: 40% chance of $200 if war lasts to June.
 // Day 35: Brent ~$110. First Western European ship exits Hormuz but escalation dominates.
+// Brent surged ~60-64% in March (CNBC end-of-month) — largest monthly gain since 1988.
 // Goldman forecasts $110 April avg. SocGen warns $150 if disruptions persist.
 export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,109,109,108,110,113,108,106,110,113,110,113,115,114,115,118,102,109,110];
 // Dubai physical crude: confirmed peak $166-170/bbl (Seeking Alpha, CNBC).
@@ -26,8 +27,8 @@ export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106
 // Day 33: Dubai futures $128.51 (significantly above Brent — Asian premium + physical crunch).
 // UAE fuel prices up 30% for April. Brent-Dubai spread $26 = extreme dislocation.
 // Day 34: Dubai physical likely ~$135+ as Asian markets react to speech. KOSPI -4%.
-// Day 35: Dubai physical ~$138 as Asian premium persists. Brent-Dubai spread still ~$28.
-export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126,124,128,135,138];
+// Day 35: Dubai physical ~$130 (reported $128.52 Apr 2, Fortune). Brent-Dubai spread ~$20.
+export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126,124,128,135,130];
 
 // European jet fuel CIF NWE ($/metric tonne, S&P Global Platts assessments)
 // Pre-war: $831/mt. Peak: $1,698/mt on Mar 16 (all-time Platts record).
@@ -158,9 +159,9 @@ export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5
 // Validated low: ~$4,348 on Mar 23 (pricegold.net daily close), NOT $4,150.
 // Day 33: Gold UP to ~$4,700 even on risk-on day — smart money not buying peace story
 // Day 34: Gold likely higher as escalation confirmed — safe haven bid returns
-// Day 35: Gold ~$4,800. Safe haven bid strengthening as April 6 deadline looms.
-// Smart money still not buying peace narrative — divergence from equities continues.
-export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4350,4300,4250,4200,4200,4350,4380,4400,4430,4450,4460,4470,4480,4560,4700,4750,4800];
+// Day 35: Gold ~$4,690 (Fortune Apr 2: $4,675, spot Apr 3: $4,690.53).
+// Still below pre-war $5,278 — counterintuitive war discount persists (USD strength, liquidations).
+export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4350,4300,4250,4200,4200,4350,4380,4400,4430,4450,4460,4470,4480,4560,4700,4750,4690];
 
 // VIX (CBOE Volatility Index, approximate daily close)
 // Pre-war: ~17 (Feb avg 16.1, Investing.com). Validated: highest close 31.05 on Mar 27.
@@ -169,8 +170,9 @@ export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,47
 // Sources: Investing.com historical, FinancialContent, CNBC, FRED VIXCLS.
 // Day 33: VIX crashed to ~25 on hope rally (S&P +2.91%, best day since May)
 // Day 34: VIX spikes back as hope rally reverses. Futures -1%+, Asian markets hammered.
-// Day 35: VIX ~30. Elevated fear with 3 days to April 6 deadline. No peace channel visible.
-export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,28,25,27,28,29,28,27,28,29,28,31,30,29,30,30,25,29,30];
+// Day 35: VIX ~25. CBOE actual close 23.87 Apr 2. Not as elevated as expected — markets
+// pricing in escalation as baseline rather than shock. Range 23.87-27.89 on Apr 2.
+export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,28,25,27,28,29,28,27,28,29,28,31,30,29,30,30,25,29,25];
 
 // Severity levels for map coloring
 export const SEVERITY_LEVELS = {
@@ -206,14 +208,16 @@ export const COUNTRY_STATUS: Record<string, number[]> = {
   ARE: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5],
   QAT: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
   KWT: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5],
-  IRQ: [3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  // Iraq: 70% Basra production cut, oil port suspended, tanker attacks, fiscal collapse by mid-May
+  IRQ: [3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5],
   EGY: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
   YEM: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,5,5,5,5,5],
   LBN: [1,1,1,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5],
   PAK: [1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
   IND: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3],
   LKA: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  BGD: [1,1,1,1,1,1,1,1,1,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  // Bangladesh: reserves ~9-14 days, pumps running dry, fuel violence, only 3 of 14 Apr shipments
+  BGD: [1,1,1,1,1,1,1,1,1,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5],
   CHN: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
   JPN: [1,1,1,1,1,1,1,1,1,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
   KOR: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4],
@@ -221,9 +225,11 @@ export const COUNTRY_STATUS: Record<string, number[]> = {
   THA: [1,1,1,1,1,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
   PHL: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,5,5,5,5,5,5,5,5,5,5],
   AUS: [1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,5,5,5],
-  RUS: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3],
+  // Russia: net beneficiary of crisis ($45-151B extra revenue), sanctions eased. Not in emergency.
+  RUS: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2],
   KEN: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4],
-  NGA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3],
+  // Nigeria: 65% price surge, station sales collapsed 90%, de facto supply breakdown
+  NGA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,4,4,4,4,4,4],
   ETH: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,4,4],
   // Romania: crisis declared Mar 23 (Day 24). Emergency ordinance Apr 1.
   // 3 of 4 refineries offline (Petromidia maintenance, Petrotel sanctions, Vega maintenance).
@@ -277,6 +283,7 @@ export const COUNTRY_NAMES: Record<string, string> = {
   ETH: "Ethiopia",
   ROU: "Romania",
   ISR: "Israel",
+  IDN: "Indonesia",
 };
 
 // Event types and their visual styles
@@ -645,6 +652,112 @@ export const EVENTS: CrisisEvent[] = [
   // Oil market summary
   { day: 35, country: "Global", who: "Markets", type: "warning", text: "Brent ~$110, Dubai physical ~$138. Brent's 55% March surge = largest monthly gain since 1988. Goldman: $110 April avg. SocGen: $150 if disruptions persist. Macquarie: $200 if war lasts to June.", gap: null },
 ];
+
+// ── Fuel days remaining (strategic reserves / days of supply) ──
+// How many days each country can sustain consumption from stored fuel.
+// Pre-war baselines from IEA, DOE, JOGMEC, national energy agencies.
+// Day 35 values from DropThe.org, parliamentary disclosures, S&P Global.
+// Depletion modeled: linear drawdown + step-downs at SPR release points.
+// SPR releases (Day 12-13) deplete strategic reserves while supplying the market.
+
+export const FUEL_DAYS: Record<string, { preWar: number; days: number[] }> = {
+  // Pakistan: pre-war ~26 days (sources report 24-28 days). No SPR. 4-day workweek from Day 10.
+  // Hormuz deal Day 30 (20 ships through) improved supply. Not as dire as initially feared.
+  // Verified: Dawn, Al Jazeera — 21 days diesel, 27 days petrol mid-March.
+  PAK: { preWar: 26, days: [26,25,25,24,24,23,23,22,22,21,21,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,21,21,21,21,21] },
+  // Indonesia: pre-war ~24 days (govt data 20-28 range). Not IEA member. Heavy Gulf dependency.
+  // Verified: govt target was 90 days ($22B cost) — far from achieved.
+  IDN: { preWar: 24, days: [24,24,23,23,23,22,22,22,21,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22] },
+  // India: pre-war ~40 days. SPR release small (~3 days). Domestic production helps.
+  IND: { preWar: 40, days: [40,39,39,38,38,37,37,36,36,35,35,34,33,33,32,32,31,31,30,30,29,29,28,28,28,27,27,27,26,26,26,25,25,25,25] },
+  // Australia: pre-war ~53 days (already below IEA 90-day). Released ~800M litres Day 13.
+  AUS: { preWar: 53, days: [53,52,51,50,49,48,47,46,45,44,43,42,38,37,37,36,36,35,35,34,34,33,33,32,32,31,31,30,30,29,29,28,28,27,27] },
+  // UK: pre-war ~90 days. European SPR release Day 28. Jet fuel critical.
+  GBR: { preWar: 90, days: [90,89,87,86,84,83,81,80,78,77,75,74,72,71,69,68,66,65,63,62,60,59,57,56,54,53,51,48,47,46,45,43,42,40,39] },
+  // South Korea: pre-war ~208 days. Massive SPR release Day 12 (22.46M bbl).
+  KOR: { preWar: 208, days: [208,205,202,199,196,193,190,187,184,181,178,175,82,80,78,76,74,72,70,68,66,65,63,61,60,58,57,55,54,53,52,51,50,49,49] },
+  // Italy: pre-war ~90 days. European SPR release Day 28.
+  ITA: { preWar: 90, days: [90,89,87,86,84,83,81,80,78,77,75,74,72,71,69,68,66,65,63,62,61,60,59,58,57,56,55,54,54,53,53,55,55,54,54] },
+  // France: pre-war ~90 days. European SPR release Day 28. Some nuclear buffer.
+  FRA: { preWar: 90, days: [90,89,88,87,86,85,84,83,82,81,80,79,78,78,77,76,75,75,74,73,73,72,72,71,71,70,70,70,70,70,70,70,70,70,70] },
+  // Germany: pre-war ~90 days. Minister warns shortages end of April.
+  DEU: { preWar: 90, days: [90,89,88,88,87,86,86,85,84,84,83,82,82,81,81,80,80,79,79,78,78,78,77,77,77,77,77,76,76,76,76,76,76,76,76] },
+  // Japan: pre-war 254 days. Released 80M bbl Day 12 (record). Still above IEA 90-day.
+  JPN: { preWar: 254, days: [254,252,249,247,244,242,239,237,234,232,229,227,142,140,139,137,136,134,133,131,130,129,128,127,126,126,125,125,125,124,124,124,124,124,124] },
+  // USA: pre-war ~125 days (net imports basis, 415M bbl SPR / ~3.3M bbl/day net imports).
+  // SPR drawdown of 172M bbl over 120 days started Day 19. Post-drawdown: ~243M bbl = ~73 days.
+  // Verified: CBS, Axios. Note: 415M barrels ≠ 400 days.
+  USA: { preWar: 125, days: [125,124,123,122,121,120,119,118,117,116,115,114,113,112,111,110,109,108,105,102,99,96,94,92,90,88,86,84,82,80,79,78,77,76,75] },
+  // Philippines: pre-war ~57 days. National emergency declared Day 26.
+  PHL: { preWar: 57, days: [57,56,56,55,54,54,53,52,52,51,50,50,49,49,48,48,47,47,46,46,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45] },
+  // Austria: pre-war ~90 days. First stations ran dry Day 14. Fuel Price Brake law Day 26.
+  // Price increase rule (3x/week Mon/Wed/Fri at noon) from Apr 1.
+  AUT: { preWar: 90, days: [90,89,88,87,86,85,84,83,82,81,80,79,78,77,76,75,74,73,73,72,72,71,71,70,70,70,70,70,70,70,70,70,70,70,70] },
+  // Spain: pre-war ~90 days. €5B energy package Day 20. Lowest pump prices of big-3 EU
+  // (lower fuel taxes). Barred US aircraft from airspace Day 34. 60% renewables buffer.
+  ESP: { preWar: 90, days: [90,89,88,88,87,86,86,85,84,84,83,82,82,81,81,80,80,79,79,78,78,78,77,77,77,77,77,76,76,76,76,76,76,76,76] },
+};
+
+// ── Pump prices (what people actually pay at the station) ──
+// Pre-war baselines from GlobalPetrolPrices.com, EIA, EU Weekly Oil Bulletin.
+// Current prices from AAA, ADAC, RAC, national fuel price trackers.
+// Prices modeled: sharp initial spike (panic + supply shock), then gradual climb.
+
+export interface PumpPriceData {
+  label: string;
+  currency: string;
+  unit: string;
+  preWar: number;
+  prices: number[];
+  painThreshold: number;   // price at which behavior changes significantly
+  painNote: string;        // what happens at the pain threshold
+}
+
+export const PUMP_PRICES: Record<string, PumpPriceData> = {
+  // Germany diesel: ADAC data. Pre-war €1.74/L. Record €2.33 surpassing Mar 2022.
+  // New rule from Apr 1: stations may only raise prices once per day.
+  DEU: { label: "Germany", currency: "€", unit: "/L diesel", preWar: 1.74,
+    painThreshold: 2.00, painNote: "Commuters spend >15% of income on fuel",
+    prices: [1.74,1.78,1.82,1.87,1.92,1.96,2.00,2.02,2.04,2.06,2.08,2.10,2.12,2.14,2.16,2.17,2.19,2.18,2.17,2.18,2.20,2.22,2.19,2.18,2.21,2.23,2.21,2.24,2.26,2.25,2.27,2.30,2.22,2.29,2.33] },
+  // UK diesel: RAC/heycar data. Pre-war ~143p/L. Hit 186p/L.
+  // £100 for a 55L fill = first time since Dec 2022.
+  GBR: { label: "UK", currency: "p", unit: "/L diesel", preWar: 143,
+    painThreshold: 170, painNote: "£100 fill-up; lowest-income drivers priced out",
+    prices: [143,147,150,154,158,161,164,163,162,161,160,159,161,163,166,165,168,167,166,168,170,172,170,169,172,174,172,176,178,177,179,183,176,182,186] },
+  // US regular: AAA/EIA. Pre-war $2.98/gal. $4.08 national avg.
+  // AAA: $4/gal = 59% of Americans change driving habits. $5 = 75% adjust lifestyle.
+  USA: { label: "US", currency: "$", unit: "/gal", preWar: 2.98,
+    painThreshold: 4.00, painNote: "59% of Americans change driving habits (AAA)",
+    prices: [2.98,3.08,3.18,3.30,3.42,3.50,3.58,3.56,3.54,3.52,3.48,3.46,3.50,3.54,3.58,3.56,3.60,3.58,3.56,3.58,3.62,3.68,3.62,3.60,3.66,3.70,3.66,3.72,3.78,3.76,3.80,3.88,3.76,3.92,4.08] },
+  // Australia: AIP/Petrolmate. Pre-war A$1.77/L (AIP week ending Feb 22). Excise cut Day 33.
+  // Verified: AIP national avg A$1.73-1.77 pre-war. Sydney avg A$2.38 Apr 3 (Petrolmate).
+  AUS: { label: "Australia", currency: "A$", unit: "/L", preWar: 1.77,
+    painThreshold: 2.20, painNote: "Regional/rural drivers can't afford to commute",
+    prices: [1.77,1.82,1.88,1.94,2.00,2.04,2.08,2.07,2.06,2.04,2.02,2.01,2.04,2.07,2.10,2.09,2.12,2.11,2.10,2.12,2.16,2.20,2.17,2.16,2.20,2.24,2.20,2.27,2.32,2.30,2.34,2.42,2.32,2.36,2.38] },
+  // France diesel: prix-carburant.eu. Pre-war €1.65/L. €2.26/L.
+  // TotalEnergies voluntary cap at own stations through Apr 7.
+  FRA: { label: "France", currency: "€", unit: "/L diesel", preWar: 1.65,
+    painThreshold: 2.00, painNote: "Gilets jaunes threshold was €1.50 in 2018",
+    prices: [1.65,1.69,1.73,1.78,1.83,1.87,1.91,1.90,1.89,1.88,1.86,1.85,1.88,1.90,1.93,1.92,1.95,1.94,1.93,1.95,1.98,2.01,1.98,1.97,2.00,2.03,2.00,2.05,2.10,2.08,2.12,2.20,2.10,2.20,2.26] },
+  // India (Delhi): Goodreturns. Pre-war ₹87/L. ₹94.77/L. Government absorbing some.
+  IND: { label: "India", currency: "₹", unit: "/L", preWar: 87.0,
+    painThreshold: 100, painNote: "Auto-rickshaw drivers can't cover costs",
+    prices: [87.0,87.5,88.0,88.5,89.0,89.5,90.0,90.0,90.0,90.0,90.5,90.5,91.0,91.0,91.5,91.5,92.0,92.0,92.0,92.5,92.5,93.0,93.0,93.0,93.5,93.5,93.5,94.0,94.0,94.0,94.0,94.5,94.77,94.77,94.77] },
+  // Austria: Fuel Price Brake law (Day 26, ~10c/L relief). Prices restricted 3x/week from Apr 1.
+  // Pre-war €1.65/L diesel. Stations ran dry Day 14. Peak ~€2.25 before brake, ~€2.18 after.
+  // Verified: ÖAMTC data. Brake reduces margin + 5c/L tax cut, not an absolute cap.
+  AUT: { label: "Austria", currency: "€", unit: "/L diesel", preWar: 1.65,
+    painThreshold: 2.00, painNote: "Stations ran dry Day 14; panic buying",
+    prices: [1.65,1.70,1.75,1.80,1.86,1.91,1.95,1.94,1.93,1.92,1.91,1.90,1.92,1.94,1.97,1.96,1.99,1.98,1.97,1.99,2.02,2.05,2.03,2.02,2.06,2.10,2.15,2.20,2.25,2.24,2.22,2.20,2.18,2.18,2.18] },
+  // Spain: Infobae. Pre-war ~€1.41/L diesel. €1.81/L. Lowest of big-3 EU (lower taxes).
+  // €5B package Day 20: VAT to 10%, 20c/L subsidy. 60% renewables = stable electricity.
+  ESP: { label: "Spain", currency: "€", unit: "/L diesel", preWar: 1.41,
+    painThreshold: 1.70, painNote: "Transport strikes threatened; rural areas hardest hit",
+    prices: [1.41,1.44,1.47,1.50,1.54,1.57,1.60,1.59,1.58,1.57,1.56,1.55,1.57,1.58,1.60,1.59,1.62,1.61,1.60,1.62,1.65,1.68,1.66,1.65,1.69,1.72,1.70,1.75,1.80,1.78,1.82,1.86,1.80,1.85,1.88] },
+};
+
+// IEA 90-day minimum standard
+export const IEA_90_DAY_STANDARD = 90;
 
 // Helper: get stats for a given day index (0-based)
 export function getDayStats(dayIndex: number) {

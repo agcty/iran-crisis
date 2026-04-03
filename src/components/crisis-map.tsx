@@ -18,6 +18,9 @@ import {
   COUNTRY_NAMES,
   SEVERITY_LEVELS,
   EVENT_TYPES,
+  FUEL_DAYS,
+  PUMP_PRICES,
+  IEA_90_DAY_STANDARD,
   getDayStats,
   getEventsForDay,
   getSeverityColor,
@@ -64,20 +67,130 @@ function StatBox({
   value,
   label,
   color,
+  hero,
 }: {
   value: string | number;
   label: string;
   color: string;
+  hero?: boolean;
 }) {
   return (
-    <div className="bg-[#0d1017] border border-[#1a1e28] rounded-lg px-3 py-2.5 flex-1 min-w-[100px]">
+    <div className={`bg-[#0d1017] border rounded-lg flex-1 min-w-[100px] ${hero ? 'border-[#2a2e38] px-4 py-3' : 'border-[#1a1e28] px-3 py-2.5'}`}>
       <div
-        className="font-mono text-xl font-bold leading-none"
+        className={`font-mono font-bold leading-none ${hero ? 'text-2xl' : 'text-xl'}`}
         style={{ color }}
       >
         {value}
       </div>
-      <div className="text-[10px] text-[#888] mt-1 leading-tight">{label}</div>
+      <div className={`text-[#888] mt-1 leading-tight ${hero ? 'text-[11px]' : 'text-[10px]'}`}>{label}</div>
+    </div>
+  );
+}
+
+function HeroStat({
+  value,
+  label,
+  sublabel,
+  color,
+}: {
+  value: string | number;
+  label: string;
+  sublabel?: string;
+  color: string;
+}) {
+  return (
+    <div className="bg-[#0d1017] border border-[#2a2e38] rounded-xl px-5 py-4 flex-1 min-w-[140px]">
+      <div
+        className="font-mono text-[32px] font-bold leading-none tracking-tight"
+        style={{ color }}
+      >
+        {value}
+      </div>
+      <div className="text-[11px] text-[#aaa] mt-1.5 leading-tight font-medium">{label}</div>
+      {sublabel && <div className="text-[9px] text-[#555] mt-0.5 leading-tight">{sublabel}</div>}
+    </div>
+  );
+}
+
+// Max days across all countries (for absolute scale)
+const FUEL_DAYS_MAX = Math.max(...Object.values(FUEL_DAYS).map(d => d.preWar));
+
+function FuelBar({
+  country,
+  label,
+  daysLeft,
+}: {
+  country: string;
+  label: string;
+  daysLeft: number;
+}) {
+  // All bars on the same absolute scale so more days = longer bar
+  const pct = Math.max(0, Math.min(100, (daysLeft / FUEL_DAYS_MAX) * 100));
+  const iea90pct = (IEA_90_DAY_STANDARD / FUEL_DAYS_MAX) * 100;
+  const barColor =
+    daysLeft <= 7 ? '#ff1744' :
+    daysLeft <= 30 ? '#ef5350' :
+    daysLeft <= 60 ? '#ff9800' :
+    daysLeft <= 90 ? '#ffab40' :
+    '#66bb6a';
+  const critical = daysLeft <= 7;
+
+  return (
+    <div className="flex items-center gap-2 text-[10px] font-mono">
+      <div className="w-[52px] text-[#888] text-right shrink-0 truncate" title={label}>{country}</div>
+      <div className="flex-1 h-[14px] bg-[#0a0c12] rounded-sm border border-[#1a1e28] relative overflow-hidden">
+        {/* IEA 90-day marker */}
+        <div
+          className="absolute top-0 bottom-0 w-px bg-[#444] z-10"
+          style={{ left: iea90pct + '%' }}
+          title="IEA 90-day minimum"
+        />
+        <div
+          className={`h-full rounded-sm transition-all duration-700 ${critical ? 'animate-pulse' : ''}`}
+          style={{ width: pct + '%', background: barColor }}
+        />
+      </div>
+      <div
+        className="w-[38px] text-right font-bold shrink-0"
+        style={{ color: barColor }}
+      >
+        {daysLeft}d
+      </div>
+    </div>
+  );
+}
+
+function PumpPrice({
+  code,
+  dayIndex,
+}: {
+  code: string;
+  dayIndex: number;
+}) {
+  const data = PUMP_PRICES[code];
+  if (!data) return null;
+  const price = data.prices[dayIndex];
+  const pctChange = ((price - data.preWar) / data.preWar * 100);
+  const aboveThreshold = price >= data.painThreshold;
+
+  return (
+    <div
+      className={`flex items-baseline gap-1.5 text-[11px] font-mono px-2.5 py-1.5 rounded-md ${aboveThreshold ? 'bg-[#2a0a0a] border border-[#5a1a1a]' : 'bg-[#0d1017] border border-[#1a1e28]'}`}
+      title={aboveThreshold
+        ? `⚠ Above pain threshold (${data.currency}${data.painThreshold}${data.unit}): ${data.painNote}`
+        : `Pain threshold: ${data.currency}${data.painThreshold}${data.unit} — ${data.painNote}`}
+    >
+      <span className="text-[#888] text-[10px]">{data.label}</span>
+      <span
+        className="font-bold text-[13px]"
+        style={{ color: aboveThreshold ? '#ff4444' : '#e0e0e0' }}
+      >
+        {data.currency}{price.toFixed(2)}{data.unit}
+      </span>
+      <span className="text-[#ef5350] text-[9px]">+{pctChange.toFixed(0)}%</span>
+      {aboveThreshold && (
+        <span className="text-[#ff6b35] text-[8px]">&#9888;</span>
+      )}
     </div>
   );
 }
@@ -293,7 +406,7 @@ export default function CrisisMap() {
             className="text-[11px] text-[#666] mb-4"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
-            Government statements vs reality — Feb 28 to Apr 2, 2026
+            Government statements vs reality — Feb 28 to Apr 3, 2026
           </p>
         </div>
 
@@ -335,30 +448,68 @@ export default function CrisisMap() {
           </div>
         </div>
 
-        {/* Stats row 1: crisis metrics */}
-        <div className="flex gap-2.5 mb-2 flex-wrap">
-          <StatBox value={'$' + stats.brent} label="Brent (paper)" color="#ff6b35" />
-          <StatBox value={'$' + stats.dubai} label="Dubai (physical)" color="#ff3366" />
+        {/* Hero stats — the 3 numbers that tell the whole story */}
+        <div className="flex gap-3 mb-3 flex-wrap">
+          <HeroStat value={'$' + stats.brent} label="Brent crude" sublabel={'pre-war $72 · +' + Math.round((stats.brent / 72 - 1) * 100) + '%'} color="#ff6b35" />
+          <HeroStat value={stats.hormuzTransits + ' / 138'} label="Hormuz transits/day" sublabel={'-' + Math.round((1 - stats.hormuzTransits / 138) * 100) + '% from pre-war'} color="#4dd0e1" />
+          <HeroStat value={stats.signalGaps} label="Signal-action gaps" sublabel="Govts say calm while acting emergency" color="#ffd54f" />
+          <HeroStat value={stats.emergencies} label="Countries in emergency" sublabel={stats.rationing + ' rationing · ' + stats.affected + ' with measures'} color="#ff3366" />
+        </div>
+
+        {/* Fuel depletion + pump prices side by side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
+          {/* Fuel days remaining — the countdown clocks */}
+          <div className="bg-[#0d1017] border border-[#1a1e28] rounded-lg px-3 py-3">
+            <div className="text-[10px] text-[#888] font-mono uppercase tracking-wider mb-2">
+              Fuel Reserves — Days Remaining
+              <span className="text-[#444] ml-2">|</span>
+              <span className="text-[#444] ml-2">line = IEA 90-day minimum</span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              {Object.entries(FUEL_DAYS)
+                .sort((a, b) => a[1].days[dayIndex] - b[1].days[dayIndex])
+                .map(([code, data]) => (
+                  <FuelBar
+                    key={code}
+                    country={code}
+                    label={COUNTRY_NAMES[code] || code}
+                    daysLeft={data.days[dayIndex]}
+                  />
+                ))}
+            </div>
+          </div>
+
+          {/* Pump prices — what people actually pay */}
+          <div className="bg-[#0d1017] border border-[#1a1e28] rounded-lg px-3 py-3">
+            <div
+              className="text-[10px] text-[#888] font-mono uppercase tracking-wider mb-2"
+              title="Pain threshold = the price point where surveys/research show a majority of people significantly change driving behavior, cut spending, or can no longer afford to commute. Based on AAA surveys, national transport studies, and historical precedents (e.g. France's Gilets Jaunes at €1.53/L in 2018). Hover each row for country-specific details."
+            >
+              Pump Prices — What People Pay
+              <span className="text-[#444] ml-2">|</span>
+              <span className="text-[#ff6b35] ml-2 cursor-help">&#9888;</span>
+              <span className="text-[#555] ml-1 cursor-help">= above pain threshold</span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              {Object.entries(PUMP_PRICES).map(([code]) => (
+                <PumpPrice key={code} code={code} dayIndex={dayIndex} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Secondary stats — two compact rows */}
+        <div className="flex gap-2 mb-2 flex-wrap">
+          <StatBox value={'$' + stats.dubai} label="Dubai physical" color="#ff3366" />
           <StatBox value={'$' + stats.spread} label="Paper-physical spread" color={stats.spread >= 20 ? '#ef5350' : stats.spread >= 10 ? '#ffab40' : '#66bb6a'} />
+          <StatBox value={stats.supplyOffline.toFixed(1)} label="Supply offline (mbpd)" color="#ef5350" />
+          <StatBox value={stats.sprReleased.toFixed(1) + 'M'} label="SPR released" color="#ffab40" />
+          <StatBox value={stats.euGasStorage.toFixed(1) + '%'} label="EU gas storage" color="#26c6da" />
+        </div>
+        <div className="flex gap-2 mb-3 flex-wrap">
           <StatBox value={'$' + stats.gold.toLocaleString()} label="Gold ($/oz)" color="#ffd740" />
           <StatBox value={stats.vix.toFixed(1)} label="VIX" color="#e57373" />
-        </div>
-
-        {/* Stats row 2: supply */}
-        <div className="flex gap-2.5 mb-2 flex-wrap">
-          <StatBox value={stats.hormuzTransits} label="Hormuz transits/day" color="#4dd0e1" />
-          <StatBox value={stats.supplyOffline.toFixed(1)} label="Supply offline (mbpd)" color="#ef5350" />
-          <StatBox value={stats.euGasStorage.toFixed(1) + '%'} label="EU gas storage" color="#26c6da" />
-          <StatBox value={stats.sprReleased.toFixed(1) + 'M'} label="SPR released (of 400M)" color="#ffab40" />
           <StatBox value={stats.forceMajeures} label="Force majeures" color="#ff8a65" />
-        </div>
-
-        {/* Stats row 3: impact */}
-        <div className="flex gap-2.5 mb-3 flex-wrap">
-          <StatBox value={stats.affected} label="Countries w/ measures" color="#ff6b35" />
-          <StatBox value={stats.rationing} label="Rationing" color="#cc2a2a" />
-          <StatBox value={stats.emergencies} label="Emergencies" color="#ff3366" />
-          <StatBox value={stats.signalGaps} label="Signal-action gaps" color="#ffd54f" />
           <StatBox value={stats.unrest + '/5'} label="Unrest index" color={['#66bb6a','#66bb6a','#ffab40','#ff9800','#ef5350','#d32f2f'][stats.unrest]} />
         </div>
 
