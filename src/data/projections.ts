@@ -125,7 +125,7 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     dubaiSpreadTarget: 4,
     jetFuelBrentRatio: 15.5, // $/mt per $/bbl (jet ~15.5x brent in $/mt terms)
 
-    bypassSupplyMbpd: 6.5,
+    bypassSupplyMbpd: 4.5, // Yanbu port bottleneck limits to ~4.0-4.5 despite 7 mbpd pipeline (Argus)
     sprRateMbpd: 3.6,
     sprStopDay: 60,
     rationingMultiplier: 0.7,
@@ -142,8 +142,8 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     events: [
       { day: 38, country: 'Global', text: 'Ceasefire agreement signed. Hormuz demining operations begin.' },
       { day: 45, country: 'IEA', text: 'SPR release rate reduced as crisis eases. Markets stabilizing.' },
-      { day: 55, country: 'Qatar', text: 'Force majeure partially lifted. First LNG cargoes resume.' },
-      { day: 65, country: 'Global shipping', text: 'Hormuz transits above 100/day. Insurance premiums falling.' },
+      { day: 55, country: 'Qatar', text: 'Hormuz-related force majeure lifted. But Ras Laffan LNG damage (17% capacity) needs 3-5 years to repair.' },
+      { day: 65, country: 'Global shipping', text: 'Hormuz transits above 100/day. Insurance premiums falling. Mine clearance ongoing.' },
     ],
   },
 
@@ -165,7 +165,7 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     dubaiSpreadTarget: 18,
     jetFuelBrentRatio: 16.5,
 
-    bypassSupplyMbpd: 6.5,
+    bypassSupplyMbpd: 4.5, // Yanbu port bottleneck (Argus: pipeline 7 mbpd, port ~4.5 effective)
     sprRateMbpd: 3.6,
     sprStopDay: 80,
     rationingMultiplier: 0.6,
@@ -206,7 +206,7 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     dubaiSpreadTarget: 50,
     jetFuelBrentRatio: 18.0,
 
-    bypassSupplyMbpd: 4.0, // Yanbu threatened by Houthis
+    bypassSupplyMbpd: 3.0, // Yanbu port ~4.5 normal, but Houthi threats to Red Sea tankers reduce to ~3.0
     sprRateMbpd: 4.4, // max drawdown rate
     sprStopDay: 70, // countries start hoarding
     rationingMultiplier: 0.5,
@@ -336,7 +336,8 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
 
     // ── 6. Fuel days per country ──
     const fuelDays: Record<string, number> = {};
-    const priceElasticity = 1 - 0.07 * ((brent - 72) / 72);
+    // Short-run demand elasticity -0.06 (literature: -0.024 to -0.077, SocGen/Fed central: -0.05)
+    const priceElasticity = 1 - 0.06 * ((brent - 72) / 72);
 
     for (const [code, data] of Object.entries(FUEL_DAYS)) {
       const prev = prevFuelDays[code];
