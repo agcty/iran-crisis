@@ -356,8 +356,11 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
       }
 
       // Supply recovery: Hormuz reopening restores imports, reducing net drain
-      // When supply exceeds rationed demand, reserves rebuild
-      const hormuzBenefit = hormuzTransits / 138; // 0-1
+      // Iran's tollbooth is SELECTIVE: approved nations (PAK, IND, CHN, THA, MYS, RUS, KOR via swap)
+      // get disproportionate access. Western nations get almost nothing until full reopening.
+      const globalHormuzBenefit = hormuzTransits / 138; // 0-1
+      const countryAccess = HORMUZ_ACCESS_MULTIPLIER[code] ?? 1.0;
+      const hormuzBenefit = Math.min(1, globalHormuzBenefit * countryAccess);
       const baseBurn = inferBaseBurn(code, data);
 
       // Consumption = base demand reduced by rationing and price elasticity
@@ -492,6 +495,30 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
 // Countries with large reserves burn faster in absolute terms because they consume more.
 // These rates represent "unrationed" daily consumption as a fraction of total reserves.
 // Source: EIA, IEA country profiles, national energy agency data.
+// Hormuz access multiplier: Iran's selective passage ("tollbooth") favors approved nations.
+// Multiplier applied to global hormuzBenefit to get country-specific supply recovery.
+// >1 = gets more than fair share (approved list), <1 = gets less (Western nations blocked).
+// Source: UANI shipping data — 80%+ of March transits are shadow fleet / approved nations.
+// Approved list: China, Russia, India, Pakistan, Iraq, Malaysia, Thailand, Philippines.
+const HORMUZ_ACCESS_MULTIPLIER: Record<string, number> = {
+  PAK: 5.0,   // Iran deal Day 30: 20 ships allowed through. Strong bilateral.
+  IND: 4.0,   // Major buyer, negotiated passage. ~25% of Hormuz oil goes to India.
+  CHN: 6.0,   // Largest buyer. China negotiating safe passage for all tankers. Yuan payments.
+  KOR: 2.5,   // 20M barrel swap program, some tanker access
+  JPN: 1.5,   // IEA ally but pragmatic — some access via intermediaries
+  THA: 4.0,   // Added to approved list Day 29. Bilateral deal with Iran.
+  PHL: 3.0,   // Added to approved list Day 35.
+  IDN: 2.0,   // Non-aligned, some access but no formal deal
+  USA: 0.2,   // Combatant — almost zero direct Hormuz access
+  GBR: 0.3,   // Aligned with US but not combatant; minimal access
+  DEU: 0.5,   // EU neutral; some indirect access via intermediaries
+  FRA: 0.5,   // EU neutral; first French ship exited Day 35
+  ITA: 0.5,   // EU neutral
+  AUT: 0.5,   // Landlocked, depends on EU supply chains
+  ESP: 0.5,   // Barred US aircraft — slightly better positioned
+  AUS: 0.3,   // US ally, isolated, minimal Hormuz access
+};
+
 const BASE_BURN_RATES: Record<string, number> = {
   PAK: 1.2,   // ~26 days pre-war, high dependency, minimal domestic production
   IDN: 1.0,   // ~24 days, large population, import dependent
