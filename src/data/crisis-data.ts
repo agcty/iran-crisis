@@ -1,13 +1,13 @@
-// Iran War Crisis Propagation — Feb 28 to Apr 3, 2026 (35 days, 40 countries)
+// Iran War Crisis Propagation — Feb 28 to Apr 6, 2026 (38 days, 40 countries)
 // Data extracted from crisis-propagation-map.html + multi-agent validation
 
 export const DATES = [
   "Feb 28","Mar 1","Mar 2","Mar 3","Mar 4","Mar 5","Mar 6","Mar 7","Mar 8","Mar 9",
   "Mar 10","Mar 11","Mar 12","Mar 13","Mar 14","Mar 15","Mar 16","Mar 17","Mar 18","Mar 19",
-  "Mar 20","Mar 21","Mar 22","Mar 23","Mar 24","Mar 25","Mar 26","Mar 27","Mar 28","Mar 29","Mar 30","Mar 31","Apr 1","Apr 2","Apr 3",
+  "Mar 20","Mar 21","Mar 22","Mar 23","Mar 24","Mar 25","Mar 26","Mar 27","Mar 28","Mar 29","Mar 30","Mar 31","Apr 1","Apr 2","Apr 3","Apr 4","Apr 5","Apr 6",
 ] as const;
 
-export const TOTAL_DAYS = DATES.length; // 35
+export const TOTAL_DAYS = DATES.length; // 38
 
 // Oil prices per day ($/barrel, settlement/close unless noted)
 // Validated: Pre-war $72.48 spot (Wikipedia). Intraday peak $119 on Mar 19 (CNBC),
@@ -20,7 +20,15 @@ export const TOTAL_DAYS = DATES.length; // 35
 // Day 35: Brent ~$110. First Western European ship exits Hormuz but escalation dominates.
 // Brent surged ~60-64% in March (CNBC end-of-month) — largest monthly gain since 1988.
 // Goldman forecasts $110 April avg. SocGen warns $150 if disruptions persist.
-export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,109,109,108,110,113,108,106,110,113,110,113,115,114,115,118,102,109,110];
+// Day 36: Markets closed (Good Friday + Saturday). Brent futures ~$109 (ICE, Investing.com).
+// Range 99.08-109.74. Trump 48hr ultimatum looms — Apr 6 deadline for strikes on power grid.
+// Confirmed Day 35 actual: Brent ~$109.03 (projected $110, delta -$1). Projection accurate.
+// Day 37: Markets closed (Easter Saturday). Brent futures ~$109.24 (oilpriceapi.com live).
+// April 6 deadline 24hrs away — expect gap-up Monday if strikes happen.
+// Day 38: Markets reopen. Brent $111.25 at 9AM ET (Fortune), down $2.78 from prior session.
+// First time above $110 on ICE since Mar 30. Pakistan ceasefire proposal caps upside but
+// Trump "Power Plant Day" Tuesday threat caps downside. Iran adds Iraq to Hormuz exemption.
+export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106,110,108,112,109,109,108,110,113,108,106,110,113,110,113,115,114,115,118,102,109,110,109,109,111];
 // Dubai physical crude: confirmed peak $166-170/bbl (Seeking Alpha, CNBC).
 // Pre-war $71. Spread to Brent hit ~$65 intraday Mar 18-19 (Manila Times).
 // Revised from original to reflect verified physical market dislocation.
@@ -28,7 +36,12 @@ export const BRENT_PRICES = [72,85,92,98,105,110,115,112,108,105,100,100,103,106
 // UAE fuel prices up 30% for April. Brent-Dubai spread $26 = extreme dislocation.
 // Day 34: Dubai physical likely ~$135+ as Asian markets react to speech. KOSPI -4%.
 // Day 35: Dubai physical ~$130 (reported $128.52 Apr 2, Fortune). Brent-Dubai spread ~$20.
-export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126,124,128,135,130];
+// Day 36: Dubai physical ~$132. Platts futures 117.25, but physical premium persists.
+// Murban stabilised ~$115 (GulfNews). UAE fuel up 30% for April. Brent-Dubai spread ~$23.
+// Day 37: ~$132 (weekend, similar to Day 36). Kuwait strikes on KPC HQ may widen spread.
+// Day 38: Dubai physical ~$130 (oilpriceapi.com $128.52 Apr 4). Iraq added to Hormuz exemption
+// eases Asian physical premium slightly. Brent-Dubai spread ~$19 — still extreme dislocation.
+export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,128,140,135,150,158,166,155,140,150,138,132,140,145,138,130,128,125,126,124,128,135,130,132,132,130];
 
 // European jet fuel CIF NWE ($/metric tonne, S&P Global Platts assessments)
 // Pre-war: $831/mt. Peak: $1,698/mt on Mar 16 (all-time Platts record).
@@ -45,7 +58,12 @@ export const DUBAI_PRICES = [71,88,96,105,115,130,140,138,125,118,112,110,120,12
 // Day 34: Jet fuel likely pushed higher on escalation fears. Maetiga arrives ~Apr 3.
 // Day 35: Maetiga arrives UK — last known ME jet fuel cargo. Jet CIF NWE ~$1,740/mt.
 // UK "most exposed in Europe" (Argus). Industry warns weeks from rationing.
-export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1435,1501,1540,1580,1620,1660,1698,1660,1620,1580,1550,1560,1570,1580,1590,1600,1620,1650,1680,1700,1700,1710,1710,1730,1740];
+// Day 36: Jet CIF NWE ~$1,750/mt. No replacement cargoes visible on AIS after Maetiga.
+// Mahshahr petrochemical zone struck — further tightens refined product supply.
+// Day 37: ~$1,755. Kuwait KPC fire + Mahshahr casualties (5 dead, 170 wounded) = supply pressure.
+// Day 38: ~$1,760/mt. IATA global avg $195.19/bbl (Apr 3). No replacement cargoes for UK after
+// Maetiga. Kuwait KPC fire + Mahshahr zone damage tightens refined product supply further.
+export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1435,1501,1540,1580,1620,1660,1698,1660,1620,1580,1550,1560,1570,1580,1590,1600,1620,1650,1680,1700,1700,1710,1710,1730,1740,1750,1755,1760];
 
 // Strait of Hormuz oil flow (million barrels per day)
 // Pre-crisis baseline: 20.9 mbpd (EIA, 2025 H1 average)
@@ -55,7 +73,13 @@ export const JET_FUEL_PRICES = [831,870,935,1000,1100,1150,1200,1250,1300,1370,1
 // Day 6+: effectively closed (~0.2 mbpd residual small-vessel traffic)
 // Day 29: Houthis enter war, even less; Day 30: Pakistan ships negotiated through
 // Day 35: ~12 transits (UANI) but flow still minimal. French ship exits = symbolic, not volume.
-export const HORMUZ_FLOW = [20.9,14.0,6.0,2.5,0.8,0.5,0.3,0.3,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.5,0.3,0.4,0.3,0.3,0.4];
+// Day 36: ~13 transits (Bloomberg: highest weekly avg since war began). 10 exiting, 3 entering.
+// LPG carriers + Saudi/UAE crude tankers (Dhalkut 2M bbl Saudi, Habrut 2M bbl UAE, Sohar LNG).
+// Actual oil flow up slightly — real cargo moving, not just empties. ~0.6 mbpd estimated.
+// Day 37: ~0.6 mbpd. Continued trickle. ~150 total transits since Mar 1 (vs ~5,000 normal).
+// Day 38: ~0.7 mbpd. Iran adds Iraq to exemption list (alongside CN, RU, IN, PK, MY, TH).
+// Turkish-owned Ocean Thunder transits today (Al Jazeera). Weekly transits highest since war.
+export const HORMUZ_FLOW = [20.9,14.0,6.0,2.5,0.8,0.5,0.3,0.3,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.5,0.3,0.4,0.3,0.3,0.4,0.6,0.6,0.7];
 
 // Net global supply offline (million barrels per day)
 // = pre-crisis Hormuz exports (~20.9 mbpd) minus bypass pipeline ramp-up
@@ -67,7 +91,11 @@ export const HORMUZ_FLOW = [20.9,14.0,6.0,2.5,0.8,0.5,0.3,0.3,0.2,0.2,0.2,0.2,0.
 //     (~1.06 mbpd); ramped to full 1.5 mbpd within days.
 //   Iraq Kirkuk-Ceyhan: resumed Sep 2025 at ~200-250 kbpd, suspended during conflict.
 // Day 29 uptick: Houthis threaten Bab al-Mandeb, some Red Sea route risk
-export const SUPPLY_OFFLINE = [0.0,8.5,14.0,16.5,17.5,17.2,17.0,16.8,16.5,16.2,16.0,15.5,15.2,15.0,14.8,14.8,14.5,14.5,14.5,14.5,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.8,14.2,14.5,14.3,14.3,14.3,14.2];
+// Day 36: Slightly improved with more Hormuz transits, but Mahshahr petrochemical strike offsets.
+// Day 37: ~14.0. Kuwait KPC damage + 2 power units knocked out, but Hormuz transits holding.
+// Day 38: ~13.8. Iraq added to Hormuz exemption helps marginally. IEA Birol: 12 mbpd lost (CNBC).
+// Pipeline bypass at capacity (~5.5 mbpd). Iraq output collapsed 4.3→1.2 mbpd.
+export const SUPPLY_OFFLINE = [0.0,8.5,14.0,16.5,17.5,17.2,17.0,16.8,16.5,16.2,16.0,15.5,15.2,15.0,14.8,14.8,14.5,14.5,14.5,14.5,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.4,14.8,14.2,14.5,14.3,14.3,14.3,14.2,14.0,14.0,13.8];
 
 // IEA emergency reserves released — cumulative (million barrels)
 // IEA announced record 400M barrel release on Day 12 (Mar 11, 2026):
@@ -78,7 +106,11 @@ export const SUPPLY_OFFLINE = [0.0,8.5,14.0,16.5,17.5,17.2,17.0,16.8,16.5,16.2,1
 // Release rates: Asia ~1.1M/day, +US ~2.5M/day from Day 19, +Europe ~3.6M/day from Day 28
 // Sources: IEA collective action decision Mar 11 2026, DOE SPR data, Nippon.com
 // Day 35: ~3.6M/day release rate continues (US+Japan+Europe all contributing)
-export const SPR_RELEASED = [0,0,0,0,0,0,0,0,0,0,0,0,1.1,2.2,3.3,4.4,5.5,6.6,9.1,11.7,14.2,16.7,19.2,21.8,24.3,26.8,29.4,33.0,36.6,40.2,43.8,47.4,51.0,54.6,58.2];
+// Day 36: +3.6M = 61.8M cumulative. IEA considering second coordinated release (CNBC Apr 1).
+// Day 37: +3.6M = 65.4M cumulative (~4.4% of IEA total 1,485M reserves deployed).
+// Day 38: +3.6M = 69.0M cumulative. DOE issued additional 10M bbl exchange Apr 1. US release
+// rate ~1.43M/day. IEA considering second coordinated release if war extends past April.
+export const SPR_RELEASED = [0,0,0,0,0,0,0,0,0,0,0,0,1.1,2.2,3.3,4.4,5.5,6.6,9.1,11.7,14.2,16.7,19.2,21.8,24.3,26.8,29.4,33.0,36.6,40.2,43.8,47.4,51.0,54.6,58.2,61.8,65.4,69.0];
 
 // Pre-crisis IEA total emergency reserves: ~1,485M barrels
 // (US 415M + Japan 470M + other IEA ~600M; source: DOE, JOGMEC, IEA Oil Security)
@@ -97,7 +129,15 @@ export const IEA_RESERVES_TOTAL = 1485;
 // Sources: Lloyd's List, Windward, UANI, MarineTraffic, Kpler
 // Day 35: ~12 transits (UANI Apr 2 data). French container ship exits — first Western European
 // vessel since war began. Philippines added to selective passage list.
-export const HORMUZ_TRANSITS = [138,0,0,1,0,1,1,1,2,1,2,3,3,5,5,5,5,5,8,6,5,7,5,5,6,5,6,7,5,6,7,9,7,6,12];
+// Day 36: 13 transits (Bloomberg Apr 4: "weekly transits reach highest since war began").
+// 10 exiting Gulf, 3 entering. Led by LPG carriers incl. India-bound + Iranian-affiliated.
+// IRGC claims drone attack on MSC Ishyka (Liberia-flagged, allegedly Israel-linked) — unverified.
+// Day 37: ~14 transits. Weekly trend highest since war began. ~150 total since Mar 1 (UANI).
+// Still 90%+ below pre-war 138/day. CBS: most transits are Iranian-linked shadow fleet.
+// Day 38: ~15 transits. Iraq added to exemption list (Al Jazeera). 53 transits last week =
+// highest since war (up from 36 prior week). Turkish vessel Ocean Thunder crosses.
+// 7 nations now exempt: CN, RU, IN, PK, MY, TH, IQ. ~80%+ shadow fleet.
+export const HORMUZ_TRANSITS = [138,0,0,1,0,1,1,1,2,1,2,3,3,5,5,5,5,5,8,6,5,7,5,5,6,5,6,7,5,6,7,9,7,6,12,13,14,15];
 
 // EU aggregate gas storage (% full, AGSI data)
 // Feb 28: ~42%. Mar 8: ~35%. Mar 17: 28.93% (AGSI exact). Mar 25: ~28.4%. Mar 30: ~27.5%
@@ -107,7 +147,13 @@ export const HORMUZ_TRANSITS = [138,0,0,1,0,1,1,1,2,1,2,3,3,5,5,5,5,5,8,6,5,7,5,
 // TTF gas: ~€38/MWh pre-war → ~€55-56/MWh by Mar 30. Goldman Q2: €72, adverse €100+
 // Interpolated linearly between AGSI data points.
 // Day 35: Continuing decline ~0.2%/day. QatarEnergy FM extended to mid-June. No LNG restocking.
-export const EU_GAS_STORAGE = [42.0,41.1,40.3,39.4,38.5,37.6,36.8,35.9,35.0,34.3,33.7,33.0,32.3,31.6,31.0,30.3,29.6,28.9,28.8,28.8,28.7,28.7,28.6,28.5,28.5,28.4,28.2,28.0,27.9,27.7,27.5,27.3,27.1,26.9,26.7];
+// Day 36: ~26.5%. TTF at €49.95/MWh (oilpriceapi.com). Injection season should have started
+// by now but QatarEnergy FM + Hormuz closure prevents LNG restocking. EU 90% by Nov 1 target
+// looks impossible. Netherlands critically low. Goldman Q2: €72, adverse: €100+.
+// Day 37: ~26.3%. Continuing ~0.2%/day decline. Should be injecting by now — instead depleting.
+// Day 38: ~26.1%. Lowest for this time of year since 2022 (10yr avg 58%). Netherlands critically
+// low. QatarEnergy FM extended through mid-June = no LNG restocking. EU 90% by Nov 1 impossible.
+export const EU_GAS_STORAGE = [42.0,41.1,40.3,39.4,38.5,37.6,36.8,35.9,35.0,34.3,33.7,33.0,32.3,31.6,31.0,30.3,29.6,28.9,28.8,28.8,28.7,28.7,28.6,28.5,28.5,28.4,28.2,28.0,27.9,27.7,27.5,27.3,27.1,26.9,26.7,26.5,26.3,26.1];
 
 // Force majeure declarations (cumulative count)
 // Day 3: QatarEnergy (all LNG, 20% global offline, ~90 cargoes)
@@ -117,7 +163,10 @@ export const EU_GAS_STORAGE = [42.0,41.1,40.3,39.4,38.5,37.6,36.8,35.9,35.0,34.3
 // Day 19: Wave across Asian petrochemical firms (Gulf feedstock)
 // Day 25: QatarEnergy extended through May
 // Day 32: QatarEnergy extends existing force majeure through mid-June (not a new declaration)
-export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10];
+// Day 36: No new force majeure declarations. Holding at 10.
+// Day 37: Holding at 10. Kuwait KPC fire may trigger new FM but not declared yet.
+// Day 38: Holding at 10. No new FM declarations confirmed. KPC HQ fire ongoing but no formal FM.
+export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10];
 
 // Signal-action gap tracker (cumulative count)
 // Countries simultaneously saying "remain calm / no shortage" while implementing
@@ -137,7 +186,16 @@ export const FORCE_MAJEURES = [0,0,1,1,2,3,3,4,4,5,6,6,7,7,8,8,8,8,9,9,9,9,9,9,1
 //   + Romania Energy Min. Ivan "rationing not being considered" while 3 of 4 refineries offline
 // Day 34: Trump "nearing completion" + "stone ages" in same speech = gap 17
 // Day 35: No major new signal-action gap identified today. Holding at 17.
-export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11,12,16,17,17];
+// Day 36: Trump "48 hours to make a deal" while simultaneously searching for downed pilot
+// and preparing strikes on nuclear/energy sites — gap between "deal" rhetoric and escalation.
+// Iran rejects 48hr ceasefire while claiming to allow "essential goods" through Hormuz. +1 = 18.
+// Day 37: Trump celebrates WSO rescue ("most daring in US history") while Apr 6 power grid
+// strike deadline is 24hrs away. Framing victory while preparing massive civilian escalation.
+// Holding at 18 — this is escalation rhetoric, not the classic "remain calm" pattern.
+// Day 38: +India FM Sitharaman: "no lockdown, no fuel shortage" — calls rumors "irresponsible
+// and harmful" while police deployed at fuel stations and Saudi cut India's April crude to 23M bbl
+// (from 25-28M). Classic signal-action gap. +1 = 19.
+export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7,7,7,8,8,9,9,10,11,12,16,17,17,18,18,19];
 
 // Protest / unrest escalation index (1-5 scale)
 // 1=isolated, 2=scattered protests, 3=organized demonstrations,
@@ -148,7 +206,12 @@ export const SIGNAL_ACTION_GAPS = [0,0,0,0,0,0,1,1,1,2,2,4,4,5,5,5,5,5,5,5,5,5,7
 // Day 26-28: PH nationwide strike. US "No Kings Day" Mar 28: 8-9M, 3300 events, 50 states.
 //   Tel Aviv anti-war protest (18 arrests). Day 29-31: Sustained. Trump 36% approval.
 // Day 35: Sustained at 5. Evacuation of US troops/families from ME bases. Protests continue.
-export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,5,5,5,5,5,5];
+// Day 36: Sustained at 5. Easter weekend + Australia petrol shortages. Pakistan free transit.
+// 78% of Jewish Israelis still support war (Al Jazeera). Iran 2,076 killed / 26,500 wounded.
+// Day 37: Sustained at 5. Easter weekend + fuel shortages. US gas $4.10/gal (+37% since Feb 28).
+// Day 38: Sustained at 5. Philippines transport strike (thousands over diesel prices). India
+// nationwide protests resuming. Sri Lanka 15L/week cap. Myanmar alternate-day driving rule.
+export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5];
 
 // Gold price ($/oz, approximate daily close)
 // Pre-war: $5,278 (Feb 28, confirmed StatMuse/TradingEconomics/goldprice.org).
@@ -161,7 +224,16 @@ export const UNREST_INDEX = [1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,5
 // Day 34: Gold likely higher as escalation confirmed — safe haven bid returns
 // Day 35: Gold ~$4,690 (Fortune Apr 2: $4,675, spot Apr 3: $4,690.53).
 // Still below pre-war $5,278 — counterintuitive war discount persists (USD strength, liquidations).
-export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4350,4300,4250,4200,4200,4350,4380,4400,4430,4450,4460,4470,4480,4560,4700,4750,4690];
+// Day 36: Gold ~$4,680 (markets closed, carry from Apr 3 close of $4,677, USAGOLD).
+// Confirmed Day 35: $4,677 (projected $4,690, delta -$13). Down 1.72% on Apr 3 as
+// USD strengthened on Trump escalation + higher rate expectations from oil-driven inflation.
+// JP Morgan year-end target $6,300. Deutsche Bank $6,000.
+// Day 37: Gold ~$4,703 (TradingEconomics, +0.49% on weekend trading). Safe-haven bid returning
+// as Apr 6 deadline looms. Still below pre-war $5,278 (-11%).
+// Day 38: Gold $4,672 at 9:05AM ET (Fortune). Down from $5,097 a month ago. Up 56.7% YoY.
+// Safe-haven bid weakened by USD strength + ceasefire talk — but still elevated vs baseline.
+// JP Morgan year-end target $6,300. Still -11.5% below pre-war $5,278.
+export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,4700,4650,4600,4550,4500,4480,4450,4380,4350,4300,4250,4200,4200,4350,4380,4400,4430,4450,4460,4470,4480,4560,4700,4750,4690,4680,4703,4672];
 
 // VIX (CBOE Volatility Index, approximate daily close)
 // Pre-war: ~17 (Feb avg 16.1, Investing.com). Validated: highest close 31.05 on Mar 27.
@@ -172,7 +244,14 @@ export const GOLD_PRICES = [5278,5400,5350,5250,5150,5050,4950,4900,4850,4780,47
 // Day 34: VIX spikes back as hope rally reverses. Futures -1%+, Asian markets hammered.
 // Day 35: VIX ~25. CBOE actual close 23.87 Apr 2. Not as elevated as expected — markets
 // pricing in escalation as baseline rather than shock. Range 23.87-27.89 on Apr 2.
-export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,28,25,27,28,29,28,27,28,29,28,31,30,29,30,30,25,29,25];
+// Day 36: Markets closed (Good Friday + Saturday). VIX carry at ~24 (CBOE close 23.87 Apr 2).
+// Confirmed Day 35 actual: VIX 23.87 (projected 25, delta -1.13). Markets less fearful than
+// expected — treating war as baseline. Apr 6 deadline may spike VIX Monday.
+// Day 37: VIX ~24 (markets closed Easter Saturday, carry from CBOE 23.87 close Apr 2).
+// Day 38: VIX 24.54 (FinancialContent). Significant decline from mid-March >30 highs.
+// "Muscat Protocol" Oman-brokered Green Channel agreement reduces volatility premium.
+// Still ~40% above long-term 12-18 baseline. Tuesday deadline may spike VIX again.
+export const VIX = [17,25,28,30,32,34,33,31,29,28,25,22,20,25,28,27,29,28,25,27,28,29,28,27,28,29,28,31,30,29,30,30,25,29,25,24,24,25];
 
 // Severity levels for map coloring
 export const SEVERITY_LEVELS = {
@@ -189,56 +268,56 @@ export type SeverityLevel = keyof typeof SEVERITY_LEVELS;
 // Country status per day (31 values each, severity 0-5)
 // Key = ISO 3166-1 alpha-3 code for react-simple-maps compatibility
 export const COUNTRY_STATUS: Record<string, number[]> = {
-  IRN: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
-  USA: [1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  GBR: [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4],
-  FRA: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  ESP: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  DEU: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3],
-  ITA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  NLD: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  NOR: [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3],
-  AUT: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  SVN: [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  SVK: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  HUN: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  HRV: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-  POL: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3],
-  SAU: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  ARE: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5],
-  QAT: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
-  KWT: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5],
+  IRN: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+  USA: [1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  GBR: [1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4],
+  FRA: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  ESP: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  DEU: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  ITA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  NLD: [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  NOR: [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3],
+  AUT: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  SVN: [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  SVK: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  HUN: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  HRV: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+  POL: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3],
+  SAU: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  ARE: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5],
+  QAT: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+  KWT: [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5],
   // Iraq: 70% Basra production cut, oil port suspended, tanker attacks, fiscal collapse by mid-May
-  IRQ: [3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5],
-  EGY: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  YEM: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,5,5,5,5,5],
-  LBN: [1,1,1,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5],
-  PAK: [1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  IND: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3],
-  LKA: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  IRQ: [3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5],
+  EGY: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  YEM: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,5,5,5,5,5,5,5,5],
+  LBN: [1,1,1,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5],
+  PAK: [1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  IND: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  LKA: [1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
   // Bangladesh: reserves ~9-14 days, pumps running dry, fuel violence, only 3 of 14 Apr shipments
-  BGD: [1,1,1,1,1,1,1,1,1,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5],
-  CHN: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  JPN: [1,1,1,1,1,1,1,1,1,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-  KOR: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4],
-  VNM: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  THA: [1,1,1,1,1,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  PHL: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,5,5,5,5,5,5,5,5,5,5],
-  AUS: [1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,5,5,5],
+  BGD: [1,1,1,1,1,1,1,1,1,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5],
+  CHN: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  JPN: [1,1,1,1,1,1,1,1,1,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+  KOR: [1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4],
+  VNM: [1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  THA: [1,1,1,1,1,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+  PHL: [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,5,5,5,5,5,5,5,5,5,5,5,5,5],
+  AUS: [1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,5,5,5,5,5,5],
   // Russia: net beneficiary of crisis ($45-151B extra revenue), sanctions eased. Not in emergency.
-  RUS: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2],
-  KEN: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4],
+  RUS: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2],
+  KEN: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4],
   // Nigeria: 65% price surge, station sales collapsed 90%, de facto supply breakdown
-  NGA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,4,4,4,4,4,4],
-  ETH: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,4,4],
+  NGA: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,4,4,4,4,4,4,4,4,4],
+  ETH: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4],
   // Romania: crisis declared Mar 23 (Day 24). Emergency ordinance Apr 1.
   // 3 of 4 refineries offline (Petromidia maintenance, Petrotel sanctions, Vega maintenance).
   // Structural diesel deficit. Pump protests. Fuel tourism to Bulgaria. 90 days reserves.
-  ROU: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4],
+  ROU: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4],
   // Israel: primary combatant. 24 killed, 6,239+ wounded as of Apr 1.
   // Largest Iranian salvo Day 33 (10 BMs, cluster warheads, Passover eve).
   // Hezbollah rockets into central Israel. Multi-front war (Lebanon, Yemen, Iran).
-  ISR: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+  ISR: [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],
 };
 
 // Human-readable country names
@@ -651,6 +730,112 @@ export const EVENTS: CrisisEvent[] = [
 
   // Oil market summary
   { day: 35, country: "Global", who: "Markets", type: "warning", text: "Brent ~$110, Dubai physical ~$138. Brent's 55% March surge = largest monthly gain since 1988. Goldman: $110 April avg. SocGen: $150 if disruptions persist. Macquarie: $200 if war lasts to June.", gap: null },
+
+  // ── Day 36 (Apr 4) events ──
+  // Sources: CNN, Al Jazeera, NPR, CNBC, Bloomberg, Washington Times, Irish Times, Tom's Hardware
+
+  // Trump 48-hour ultimatum — deadline now April 6
+  { day: 36, country: "USA", who: "President Trump", type: "political", text: "Truth Social: \"48 hours before all Hell will reign down on them.\" Threatens to strike every Iranian power plant, oil well, and desalination facility if Hormuz not reopened by April 6 8PM ET.", gap: "Offers 'deal' while simultaneously preparing strikes on civilian infrastructure" },
+
+  // Bushehr nuclear plant strike — near-miss on nuclear facility
+  { day: 36, country: "Iran", who: "US/Israel strikes", type: "emergency", text: "Auxiliary building at Bushehr Nuclear Power Plant struck — 1 security staff killed. Rosatom evacuating ~200 Russian staff. IAEA: no radiation increase. Iran FM Araghchi warns fallout could \"end life in GCC capitals.\"", gap: null },
+
+  // Mahshahr petrochemical zone struck — widening industrial targeting
+  { day: 36, country: "Iran", who: "US/Israel strikes", type: "emergency", text: "Mahshahr Special Petrochemical Zone hit. Growing range of Iranian industries targeted: steel plants, cement factories, petrochemical complexes. War entering 6th week.", gap: null },
+
+  // F-15 search continues — US losses mounting
+  { day: 36, country: "USA", who: "US military", type: "emergency", text: "Search continues for WSO from F-15E Strike Eagle downed Apr 3 over Kohgiluyeh province. Pilot rescued. A-10 Warthog also downed near Strait (pilot rescued). 2 Black Hawks hit by small arms fire during SAR.", gap: null },
+
+  // Iran's new air defense claim — contradicts US claims
+  { day: 36, country: "Iran", who: "Military officials", type: "military_fuel", text: "Iran claims \"new advanced defence system\" downed F-15 and A-10 — contradicts earlier US assertions that Iranian air defenses had been destroyed.", gap: null },
+
+  // IRGC ship attack — Hormuz still contested
+  { day: 36, country: "Iran", who: "IRGC Navy", type: "emergency", text: "IRGC claims drone attack on container ship MSC Ishyka (Liberia-flagged, allegedly Israel-linked) in Strait of Hormuz. Attack not independently verified.", gap: null },
+
+  // Oracle Dubai drone debris — tech companies as targets
+  { day: 36, country: "UAE", who: "Iran / IRGC", type: "emergency", text: "Intercepted drone debris hits Oracle office building facade in Dubai. No injuries. IRGC retaliation for strike that injured ex-FM Kharazi and killed his wife. UAE rejects Iran's claims of direct hit.", gap: null },
+
+  // Regional strikes — Bahrain, Kuwait hit again
+  { day: 36, country: "Kuwait", who: "Iran strikes", type: "emergency", text: "Oil refinery and desalination plant hit by missile and drone strikes. Ongoing pattern of Gulf civilian infrastructure targeting.", gap: null },
+  { day: 36, country: "Israel", who: "Iran", type: "emergency", text: "Iranian missile strike sparks fire at Negev industrial site. Bahrain: 4 injured in Sitra from intercepted drone shrapnel. Abu Dhabi: 1 Egyptian worker killed at gas facility from debris.", gap: null },
+
+  // Iran rejects ceasefire — diplomacy stalled
+  { day: 36, country: "Iran", who: "Fars News / Pezeshkian", type: "diplomatic", text: "Iran rejects US 48-hour ceasefire proposal (unconfirmed by US). Pezeshkian: Trump's 'stone age' threat is admission of intent to commit \"massive war crime.\" No negotiations channel visible.", gap: null },
+
+  // Pakistan free public transit — managing crisis
+  { day: 36, country: "Pakistan", who: "Government", type: "price_controls", text: "Announces free public transit nationwide for one month to reduce fuel consumption. Schools still closed. 4-day workweek continues.", gap: null },
+
+  // Hormuz weekly high — glimmer of trade resuming
+  { day: 36, country: "Global shipping", who: "Bloomberg", type: "diplomatic", text: "13 ships transit Hormuz — weekly rolling average reaches highest since war began (Bloomberg). LPG carriers + Saudi/UAE crude tankers. Still 90%+ below pre-war 138/day.", gap: null },
+
+  // Casualty and cost summary
+  { day: 36, country: "Global", who: "Al Jazeera / UN", type: "emergency", text: "Iran: 2,076 killed, 26,500 wounded. UN Food Price Index +2.4% in March. Israel's multi-front war cost: est. $112B. 78% of Jewish Israelis still support war. Australia faces Easter petrol shortages.", gap: null },
+
+  // ── Day 37 (Apr 5) events ──
+  // Sources: Al Jazeera, CBS News, CNN, NPR, PBS, The National, Washington Examiner
+
+  // WSO rescued — CIA commando raid inside Iran
+  { day: 37, country: "USA", who: "President Trump", type: "political", text: "\"WE GOT HIM!\" — F-15E WSO rescued by CIA-led commando raid inside Iran. Dozens of special forces, several dozen warplanes/helicopters. 2 transport planes demolished to prevent capture. Extraction to Kuwait.", gap: null },
+
+  // Iran rejects Trump ultimatum — "gates of hell"
+  { day: 37, country: "Iran", who: "Gen. Abdollahi", type: "emergency", text: "Rejects Trump's 48hr ultimatum as \"helpless, nervous, unbalanced and stupid.\" Warns: \"The gates of hell will be opened upon you\" if infrastructure attacks continue. April 6 deadline now <24hrs away.", gap: null },
+
+  // Kuwait — KPC HQ, Ministries Complex, power/desalination plants hit
+  { day: 37, country: "Kuwait", who: "Iran / drones", type: "emergency", text: "Iranian drones hit Kuwait Petroleum Corp HQ (Shuwaikh complex, fire + evacuation), Ministries Complex (significant damage), 2 power/desalination plants (2 power units knocked out). Emergency plans activated.", gap: null },
+
+  // UAE — massive interception day
+  { day: 37, country: "UAE", who: "Air defense", type: "emergency", text: "UAE air defenses engaged 23 ballistic missiles and 56 drones in preceding 24 hours. Bahrain reports 8 drone attacks. Sustained barrage continues across Gulf states.", gap: null },
+
+  // Mahshahr casualties confirmed
+  { day: 37, country: "Iran", who: "Health Ministry", type: "emergency", text: "Mahshahr Petrochemical Zone attacks: 5 killed, 170 wounded confirmed. 30+ universities struck since war began, including Laser/Plasma Research Institute at Shahid Beheshti University.", gap: null },
+
+  // US gas at $4.10 — confirmed CBS
+  { day: 37, country: "USA", who: "CBS / AAA", type: "warning", text: "US gas national average $4.10/gallon — up 37% since Feb 28. 365 US service members wounded, 13 killed. Easter weekend travel disrupted by fuel costs and availability.", gap: null },
+
+  // Pakistan free public transit
+  { day: 37, country: "Pakistan", who: "Government", type: "price_controls", text: "Free public transit continues nationwide. Schools remain closed. 4-day workweek in effect. Managing fuel consumption through demand destruction rather than rationing.", gap: null },
+
+  // April 6 deadline — final countdown
+  { day: 37, country: "USA", who: "White House", type: "warning", text: "April 6 deadline (8PM ET) now <24 hours away. No ceasefire channel. Iran rejected 48hr ceasefire proposal. Trump: power grid strikes if Hormuz not reopened. Markets closed — volatility deferred to Monday.", gap: null },
+
+  // ── Day 38 (Apr 6) events ──
+  // Sources: Axios, CNBC, CNN, Al Jazeera, Fortune, FinancialContent, CFR, Time
+
+  // Pakistan-brokered ceasefire proposal — 45-day ceasefire
+  { day: 38, country: "Pakistan", who: "Army chief / FM", type: "diplomatic", text: "Pakistan army chief in contact \"all night\" with VP Vance, envoy Witkoff, and Iran FM Araghchi brokering 45-day ceasefire. Most significant mediation effort since war began.", gap: null },
+
+  // Iran rejects ceasefire, sends 10-point counter-proposal
+  { day: 38, country: "Iran", who: "Government", type: "diplomatic", text: "Rejects Pakistan-brokered 45-day ceasefire — says it would allow adversaries to regroup. Sends 10-point counter-proposal: safe passage protocol for Hormuz, reconstruction fund, sanctions lifting.", gap: null },
+
+  // Trump shifts deadline to Tuesday — "Power Plant Day, and Bridge Day"
+  { day: 38, country: "USA", who: "President Trump", type: "political", text: "Calls Pakistan proposal \"significant\" but \"not good enough.\" Sets new deadline: 8PM ET Tuesday April 7 for Iran to reopen Strait. Truth Social: \"Tuesday will be Power Plant Day, and Bridge Day.\"", gap: "Calls ceasefire proposal 'significant' while simultaneously threatening to destroy civilian power plants and bridges" },
+
+  // Iran adds Iraq to Hormuz exemption list
+  { day: 38, country: "Iran", who: "IRGC Navy", type: "diplomatic", text: "Iraq added to Hormuz selective passage exemption list. 7 nations now exempt: China, Russia, India, Pakistan, Malaysia, Thailand, Iraq. Turkish vessel Ocean Thunder also transits.", gap: null },
+
+  // India signal-action gap — FM Sitharaman
+  { day: 38, country: "India", who: "FM Sitharaman", type: "reassurance", text: "\"No lockdown, no fuel shortage\" — dismisses rumors as \"irresponsible and harmful.\" Urges public to \"remain calm.\"", gap: "Police deployed at fuel stations. Saudi cut India's April crude to 23M bbl (from 25-28M). Nationwide protests resuming." },
+
+  // South Korea — "save every drop"
+  { day: 38, country: "South Korea", who: "Pres. Lee Jae-myung", type: "warning", text: "Urges citizens to \"save every drop of fuel.\" Imposes fuel price cap + fuel tax cut. Delays coal plant shutdowns to preserve energy supply.", gap: null },
+
+  // Philippines transport strike
+  { day: 38, country: "Philippines", who: "Transport workers", type: "emergency", text: "Thousands of transport workers strike over diesel prices under declared energy emergency. DOE Sec. Garin: \"There is no crisis in terms of supply\" — while country under energy emergency.", gap: "'No crisis in terms of supply' while country is under a declared national energy emergency" },
+
+  // Sri Lanka tightens rationing
+  { day: 38, country: "Sri Lanka", who: "Government", type: "rationing", text: "Fuel rationing tightened: private motorists 15 litres/week, motorcyclists 5 litres. 4-day workweek continues. One of Asia's most restrictive fuel regimes.", gap: null },
+
+  // Myanmar QR fuel rationing
+  { day: 38, country: "Global", who: "Myanmar govt", type: "rationing", text: "Myanmar introduces alternate-day driving rule with QR code-monitored fuel rationing. Indonesia caps fuel at 50L/car/day, sends civil servants to WFH. Nepal only half-filling gas cylinders.", gap: null },
+
+  // VIX retreats — Muscat Protocol
+  { day: 38, country: "Global", who: "Markets", type: "warning", text: "VIX retreats to 24.54 — lowest since mid-March. \"Muscat Protocol\" (Oman-brokered Green Channel) reduces volatility premium. Brent $111.25. Markets pricing in war as baseline, not shock.", gap: null },
+
+  // Iran internet blackout — 38 consecutive days
+  { day: 38, country: "Iran", who: "NetBlocks", type: "emergency", text: "Iran's internet blackout reaches 38th consecutive day. Heavy water facility rendered inoperable. At least 2,076 killed since Feb 28 (Iranian Health Ministry). 30+ universities struck.", gap: null },
+
+  // Saudi Arabia slashes April exports
+  { day: 38, country: "Saudi Arabia", who: "Saudi Aramco", type: "warning", text: "Slashed April crude exports to fight domestic shortages. India allocation cut to 23M bbl (from 25-28M normal). Prioritizing domestic consumption and Yanbu bypass pipeline at full capacity.", gap: null },
 ];
 
 // ── Fuel days remaining (strategic reserves / days of supply) ──
@@ -664,39 +849,39 @@ export const FUEL_DAYS: Record<string, { preWar: number; days: number[] }> = {
   // Pakistan: pre-war ~26 days (sources report 24-28 days). No SPR. 4-day workweek from Day 10.
   // Hormuz deal Day 30 (20 ships through) improved supply. Not as dire as initially feared.
   // Verified: Dawn, Al Jazeera — 21 days diesel, 27 days petrol mid-March.
-  PAK: { preWar: 26, days: [26,25,25,24,24,23,23,22,22,21,21,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,21,21,21,21,21] },
+  PAK: { preWar: 26, days: [26,25,25,24,24,23,23,22,22,21,21,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21] },
   // Indonesia: pre-war ~24 days (govt data 20-28 range). Not IEA member. Heavy Gulf dependency.
   // Verified: govt target was 90 days ($22B cost) — far from achieved.
-  IDN: { preWar: 24, days: [24,24,23,23,23,22,22,22,21,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22] },
+  IDN: { preWar: 24, days: [24,24,23,23,23,22,22,22,21,21,21,21,21,21,21,21,21,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22] },
   // India: pre-war ~40 days. SPR release small (~3 days). Domestic production helps.
-  IND: { preWar: 40, days: [40,39,39,38,38,37,37,36,36,35,35,34,33,33,32,32,31,31,30,30,29,29,28,28,28,27,27,27,26,26,26,25,25,25,25] },
+  IND: { preWar: 40, days: [40,39,39,38,38,37,37,36,36,35,35,34,33,33,32,32,31,31,30,30,29,29,28,28,28,27,27,27,26,26,26,25,25,25,25,24,24,23] },
   // Australia: pre-war ~53 days (already below IEA 90-day). Released ~800M litres Day 13.
-  AUS: { preWar: 53, days: [53,52,51,50,49,48,47,46,45,44,43,42,38,37,37,36,36,35,35,34,34,33,33,32,32,31,31,30,30,29,29,28,28,27,27] },
+  AUS: { preWar: 53, days: [53,52,51,50,49,48,47,46,45,44,43,42,38,37,37,36,36,35,35,34,34,33,33,32,32,31,31,30,30,29,29,28,28,27,27,26,25,24] },
   // UK: pre-war ~90 days. European SPR release Day 28. Jet fuel critical.
-  GBR: { preWar: 90, days: [90,89,87,86,84,83,81,80,78,77,75,74,72,71,69,68,66,65,63,62,60,59,57,56,54,53,51,48,47,46,45,43,42,40,39] },
+  GBR: { preWar: 90, days: [90,89,87,86,84,83,81,80,78,77,75,74,72,71,69,68,66,65,63,62,60,59,57,56,54,53,51,48,47,46,45,43,42,40,39,38,37,36] },
   // South Korea: pre-war ~208 days. Massive SPR release Day 12 (22.46M bbl).
-  KOR: { preWar: 208, days: [208,205,202,199,196,193,190,187,184,181,178,175,82,80,78,76,74,72,70,68,66,65,63,61,60,58,57,55,54,53,52,51,50,49,49] },
+  KOR: { preWar: 208, days: [208,205,202,199,196,193,190,187,184,181,178,175,82,80,78,76,74,72,70,68,66,65,63,61,60,58,57,55,54,53,52,51,50,49,49,48,47,46] },
   // Italy: pre-war ~90 days. European SPR release Day 28.
-  ITA: { preWar: 90, days: [90,89,87,86,84,83,81,80,78,77,75,74,72,71,69,68,66,65,63,62,61,60,59,58,57,56,55,54,54,53,53,55,55,54,54] },
+  ITA: { preWar: 90, days: [90,89,87,86,84,83,81,80,78,77,75,74,72,71,69,68,66,65,63,62,61,60,59,58,57,56,55,54,54,53,53,55,55,54,54,53,52,51] },
   // France: pre-war ~90 days. European SPR release Day 28. Some nuclear buffer.
-  FRA: { preWar: 90, days: [90,89,88,87,86,85,84,83,82,81,80,79,78,78,77,76,75,75,74,73,73,72,72,71,71,70,70,70,70,70,70,70,70,70,70] },
+  FRA: { preWar: 90, days: [90,89,88,87,86,85,84,83,82,81,80,79,78,78,77,76,75,75,74,73,73,72,72,71,71,70,70,70,70,70,70,70,70,70,70,69,69,68] },
   // Germany: pre-war ~90 days. Minister warns shortages end of April.
-  DEU: { preWar: 90, days: [90,89,88,88,87,86,86,85,84,84,83,82,82,81,81,80,80,79,79,78,78,78,77,77,77,77,77,76,76,76,76,76,76,76,76] },
+  DEU: { preWar: 90, days: [90,89,88,88,87,86,86,85,84,84,83,82,82,81,81,80,80,79,79,78,78,78,77,77,77,77,77,76,76,76,76,76,76,76,76,75,75,74] },
   // Japan: pre-war 254 days. Released 80M bbl Day 12 (record). Still above IEA 90-day.
-  JPN: { preWar: 254, days: [254,252,249,247,244,242,239,237,234,232,229,227,142,140,139,137,136,134,133,131,130,129,128,127,126,126,125,125,125,124,124,124,124,124,124] },
+  JPN: { preWar: 254, days: [254,252,249,247,244,242,239,237,234,232,229,227,142,140,139,137,136,134,133,131,130,129,128,127,126,126,125,125,125,124,124,124,124,124,124,123,122,121] },
   // USA: pre-war ~125 days (net imports basis, 415M bbl SPR / ~3.3M bbl/day net imports).
   // SPR drawdown of 172M bbl over 120 days started Day 19. Post-drawdown: ~243M bbl = ~73 days.
   // Verified: CBS, Axios. Note: 415M barrels ≠ 400 days.
-  USA: { preWar: 125, days: [125,124,123,122,121,120,119,118,117,116,115,114,113,112,111,110,109,108,105,102,99,96,94,92,90,88,86,84,82,80,79,78,77,76,75] },
+  USA: { preWar: 125, days: [125,124,123,122,121,120,119,118,117,116,115,114,113,112,111,110,109,108,105,102,99,96,94,92,90,88,86,84,82,80,79,78,77,76,75,74,73,72] },
   // Philippines: pre-war ~57 days. National emergency declared Day 26.
-  PHL: { preWar: 57, days: [57,56,56,55,54,54,53,52,52,51,50,50,49,49,48,48,47,47,46,46,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45] },
+  PHL: { preWar: 57, days: [57,56,56,55,54,54,53,52,52,51,50,50,49,49,48,48,47,47,46,46,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45] },
   // Austria: pre-war ~90 days. First stations ran dry Day 14. Fuel Price Brake law Day 26.
   // Price increase rule (3x/week Mon/Wed/Fri at noon) from Apr 1.
-  AUT: { preWar: 90, days: [90,89,88,87,86,85,84,83,82,81,80,79,78,77,76,75,74,73,73,72,72,71,71,70,70,70,70,70,70,70,70,70,70,70,70] },
+  AUT: { preWar: 90, days: [90,89,88,87,86,85,84,83,82,81,80,79,78,77,76,75,74,73,73,72,72,71,71,70,70,70,70,70,70,70,70,70,70,70,70,69,69,68] },
   // Spain: pre-war 92 days (legal obligation, CORES 42d + industry 50d). €5B energy package Day 20.
   // Net exporter of refined products. 56% renewables + 19% nuclear. Americas-heavy crude (36%+).
   // Best-positioned large EU economy. No reported shortages as of Apr 3.
-  ESP: { preWar: 92, days: [92,91,90,90,89,88,88,87,86,86,85,84,84,83,83,82,82,81,81,80,80,80,79,79,79,79,79,78,78,78,78,78,78,78,78] },
+  ESP: { preWar: 92, days: [92,91,90,90,89,88,88,87,86,86,85,84,84,83,83,82,82,81,81,80,80,80,79,79,79,79,79,78,78,78,78,78,78,78,78,78,78,77] },
 };
 
 // ── Pump prices (what people actually pay at the station) ──
@@ -719,42 +904,42 @@ export const PUMP_PRICES: Record<string, PumpPriceData> = {
   // New rule from Apr 1: stations may only raise prices once per day.
   DEU: { label: "Germany", currency: "€", unit: "/L diesel", preWar: 1.74,
     painThreshold: 2.00, painNote: "Commuters spend >15% of income on fuel",
-    prices: [1.74,1.78,1.82,1.87,1.92,1.96,2.00,2.02,2.04,2.06,2.08,2.10,2.12,2.14,2.16,2.17,2.19,2.18,2.17,2.18,2.20,2.22,2.19,2.18,2.21,2.23,2.21,2.24,2.26,2.25,2.27,2.30,2.22,2.29,2.33] },
+    prices: [1.74,1.78,1.82,1.87,1.92,1.96,2.00,2.02,2.04,2.06,2.08,2.10,2.12,2.14,2.16,2.17,2.19,2.18,2.17,2.18,2.20,2.22,2.19,2.18,2.21,2.23,2.21,2.24,2.26,2.25,2.27,2.30,2.22,2.29,2.33,2.35,2.35,2.36] },
   // UK diesel: RAC/heycar data. Pre-war ~143p/L. Hit 186p/L.
   // £100 for a 55L fill = first time since Dec 2022.
   GBR: { label: "UK", currency: "p", unit: "/L diesel", preWar: 143,
     painThreshold: 170, painNote: "£100 fill-up; lowest-income drivers priced out",
-    prices: [143,147,150,154,158,161,164,163,162,161,160,159,161,163,166,165,168,167,166,168,170,172,170,169,172,174,172,176,178,177,179,183,176,182,186] },
+    prices: [143,147,150,154,158,161,164,163,162,161,160,159,161,163,166,165,168,167,166,168,170,172,170,169,172,174,172,176,178,177,179,183,176,182,186,188,188,189] },
   // US regular: AAA/EIA. Pre-war $2.98/gal. $4.08 national avg.
   // AAA: $4/gal = 59% of Americans change driving habits. $5 = 75% adjust lifestyle.
   USA: { label: "US", currency: "$", unit: "/gal", preWar: 2.98,
     painThreshold: 4.00, painNote: "59% of Americans change driving habits (AAA)",
-    prices: [2.98,3.08,3.18,3.30,3.42,3.50,3.58,3.56,3.54,3.52,3.48,3.46,3.50,3.54,3.58,3.56,3.60,3.58,3.56,3.58,3.62,3.68,3.62,3.60,3.66,3.70,3.66,3.72,3.78,3.76,3.80,3.88,3.76,3.92,4.08] },
+    prices: [2.98,3.08,3.18,3.30,3.42,3.50,3.58,3.56,3.54,3.52,3.48,3.46,3.50,3.54,3.58,3.56,3.60,3.58,3.56,3.58,3.62,3.68,3.62,3.60,3.66,3.70,3.66,3.72,3.78,3.76,3.80,3.88,3.76,3.92,4.08,4.12,4.10,4.12] },
   // Australia: AIP/Petrolmate. Pre-war A$1.77/L (AIP week ending Feb 22). Excise cut Day 33.
   // Verified: AIP national avg A$1.73-1.77 pre-war. Sydney avg A$2.38 Apr 3 (Petrolmate).
   AUS: { label: "Australia", currency: "A$", unit: "/L", preWar: 1.77,
     painThreshold: 2.20, painNote: "Regional/rural drivers can't afford to commute",
-    prices: [1.77,1.82,1.88,1.94,2.00,2.04,2.08,2.07,2.06,2.04,2.02,2.01,2.04,2.07,2.10,2.09,2.12,2.11,2.10,2.12,2.16,2.20,2.17,2.16,2.20,2.24,2.20,2.27,2.32,2.30,2.34,2.42,2.32,2.36,2.38] },
+    prices: [1.77,1.82,1.88,1.94,2.00,2.04,2.08,2.07,2.06,2.04,2.02,2.01,2.04,2.07,2.10,2.09,2.12,2.11,2.10,2.12,2.16,2.20,2.17,2.16,2.20,2.24,2.20,2.27,2.32,2.30,2.34,2.42,2.32,2.36,2.38,2.40,2.42,2.44] },
   // France diesel: prix-carburant.eu. Pre-war €1.65/L. €2.26/L.
   // TotalEnergies voluntary cap at own stations through Apr 7.
   FRA: { label: "France", currency: "€", unit: "/L diesel", preWar: 1.65,
     painThreshold: 2.00, painNote: "Gilets jaunes threshold was €1.50 in 2018",
-    prices: [1.65,1.69,1.73,1.78,1.83,1.87,1.91,1.90,1.89,1.88,1.86,1.85,1.88,1.90,1.93,1.92,1.95,1.94,1.93,1.95,1.98,2.01,1.98,1.97,2.00,2.03,2.00,2.05,2.10,2.08,2.12,2.20,2.10,2.20,2.26] },
+    prices: [1.65,1.69,1.73,1.78,1.83,1.87,1.91,1.90,1.89,1.88,1.86,1.85,1.88,1.90,1.93,1.92,1.95,1.94,1.93,1.95,1.98,2.01,1.98,1.97,2.00,2.03,2.00,2.05,2.10,2.08,2.12,2.20,2.10,2.20,2.26,2.28,2.28,2.30] },
   // India (Delhi): Goodreturns. Pre-war ₹87/L. ₹94.77/L. Government absorbing some.
   IND: { label: "India", currency: "₹", unit: "/L", preWar: 87.0,
     painThreshold: 100, painNote: "Auto-rickshaw drivers can't cover costs",
-    prices: [87.0,87.5,88.0,88.5,89.0,89.5,90.0,90.0,90.0,90.0,90.5,90.5,91.0,91.0,91.5,91.5,92.0,92.0,92.0,92.5,92.5,93.0,93.0,93.0,93.5,93.5,93.5,94.0,94.0,94.0,94.0,94.5,94.77,94.77,94.77] },
+    prices: [87.0,87.5,88.0,88.5,89.0,89.5,90.0,90.0,90.0,90.0,90.5,90.5,91.0,91.0,91.5,91.5,92.0,92.0,92.0,92.5,92.5,93.0,93.0,93.0,93.5,93.5,93.5,94.0,94.0,94.0,94.0,94.5,94.77,94.77,94.77,94.77,94.77,94.77] },
   // Austria: Fuel Price Brake law (Day 26, ~10c/L relief). Prices restricted 3x/week from Apr 1.
   // Pre-war €1.65/L diesel. Stations ran dry Day 14. Peak ~€2.25 before brake, ~€2.18 after.
   // Verified: ÖAMTC data. Brake reduces margin + 5c/L tax cut, not an absolute cap.
   AUT: { label: "Austria", currency: "€", unit: "/L diesel", preWar: 1.65,
     painThreshold: 2.00, painNote: "Stations ran dry Day 14; panic buying",
-    prices: [1.65,1.70,1.75,1.80,1.86,1.91,1.95,1.94,1.93,1.92,1.91,1.90,1.92,1.94,1.97,1.96,1.99,1.98,1.97,1.99,2.02,2.05,2.03,2.02,2.06,2.10,2.15,2.20,2.25,2.24,2.22,2.20,2.18,2.18,2.18] },
+    prices: [1.65,1.70,1.75,1.80,1.86,1.91,1.95,1.94,1.93,1.92,1.91,1.90,1.92,1.94,1.97,1.96,1.99,1.98,1.97,1.99,2.02,2.05,2.03,2.02,2.06,2.10,2.15,2.20,2.25,2.24,2.22,2.20,2.18,2.18,2.18,2.18,2.18,2.18] },
   // Spain: Infobae. Pre-war ~€1.41/L diesel. €1.81/L. Lowest of big-3 EU (lower taxes).
   // €5B package Day 20: VAT to 10%, 20c/L subsidy. 60% renewables = stable electricity.
   ESP: { label: "Spain", currency: "€", unit: "/L diesel", preWar: 1.41,
     painThreshold: 1.70, painNote: "Transport strikes threatened; rural areas hardest hit",
-    prices: [1.41,1.44,1.47,1.50,1.54,1.57,1.60,1.59,1.58,1.57,1.56,1.55,1.57,1.58,1.60,1.59,1.62,1.61,1.60,1.62,1.65,1.68,1.66,1.65,1.69,1.72,1.70,1.75,1.80,1.78,1.82,1.86,1.80,1.85,1.88] },
+    prices: [1.41,1.44,1.47,1.50,1.54,1.57,1.60,1.59,1.58,1.57,1.56,1.55,1.57,1.58,1.60,1.59,1.62,1.61,1.60,1.62,1.65,1.68,1.66,1.65,1.69,1.72,1.70,1.75,1.80,1.78,1.82,1.86,1.80,1.85,1.88,1.89,1.89,1.90] },
 };
 
 // IEA 90-day minimum standard
