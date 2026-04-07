@@ -14,7 +14,7 @@ export default function ScenarioSelector({
   return (
     <div
       className={`flex gap-0.5 bg-[#0d1017] rounded-lg p-0.5 border border-[#1a1e28] transition-opacity ${enabled ? '' : 'opacity-30 pointer-events-none'}`}
-      title={enabled ? undefined : 'Drag past Day 35 to explore projections'}
+      title={enabled ? undefined : 'Drag past real data to explore projections'}
     >
       {SCENARIO_ORDER.map(id => {
         const s = SCENARIOS[id];

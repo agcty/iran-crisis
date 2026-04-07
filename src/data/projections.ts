@@ -1,5 +1,5 @@
 // Projection engine for Iran crisis scenarios
-// Generates Days 36-90 from Day 35 real data + scenario parameters
+// Generates Days 40-94 from Day 39 real data + scenario parameters
 // Uses forward Euler simulation with feedback loops for fuel depletion
 
 import {
@@ -111,40 +111,40 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     id: 'ceasefire',
     label: 'Ceasefire',
     shortLabel: 'A',
-    description: 'Deal by April 6. Hormuz reopens gradually over 2-4 weeks.',
+    description: 'Pakistan-brokered deal succeeds after Tuesday deadline drama. Hormuz reopens over 3-5 weeks.',
     color: '#66bb6a',
-    probability: 0.12,
+    probability: 0.05, // April 6 deadline passed, Iran rejected proposal, human chains = defiance
 
-    hormuzReopenStartDay: 40,
-    hormuzReopenFullDay: 58,
+    hormuzReopenStartDay: 48, // deal takes ~9 days from now (post-deadline negotiation)
+    hormuzReopenFullDay: 68,
     hormuzFloorTransits: 12,
-    hormuzCeilingTransits: 130, // not quite pre-war due to lingering risk
+    hormuzCeilingTransits: 120, // lower ceiling — 13,000+ targets hit, infrastructure heavily damaged
 
-    brentTarget: 95,  // infrastructure damage premium: Qatar LNG 3-5yr repair, 15K+ targets hit,
-                       // insurance elevated for months. Pre-war $72 world gone for years.
-    brentTauDays: 20,
-    dubaiSpreadTarget: 6, // wider than pre-war due to lingering physical market stress
+    brentTarget: 100,  // infrastructure damage premium: 13,000+ targets hit, Qatar LNG 3-5yr repair,
+                        // Yellowcake/petrochemical destruction, insurance elevated for years.
+    brentTauDays: 25,
+    dubaiSpreadTarget: 8, // wider than pre-war due to lingering physical market stress + damaged ports
     jetFuelBrentRatio: 15.5, // $/mt per $/bbl (jet ~15.5x brent in $/mt terms)
 
     bypassSupplyMbpd: 4.5, // Yanbu port bottleneck limits to ~4.0-4.5 despite 7 mbpd pipeline (Argus)
     sprRateMbpd: 3.6,
-    sprStopDay: 60,
+    sprStopDay: 65,
     rationingMultiplier: 0.7,
     rationingThresholdDays: 30,
 
     gasDrawdownPerDay: 0.15,
-    gasFloorPct: 20,
-    gasRestockStartDay: 55,
-    gasRestockPerDay: 0.25,
+    gasFloorPct: 18,
+    gasRestockStartDay: 60,
+    gasRestockPerDay: 0.20,
 
     severityTrend: 'deescalate',
-    severityIntervalDays: 10,
+    severityIntervalDays: 12,
 
     events: [
-      { day: 38, country: 'Global', text: 'Ceasefire agreement signed. Hormuz demining operations begin.' },
-      { day: 45, country: 'IEA', text: 'SPR release rate reduced as crisis eases. Markets stabilizing.' },
-      { day: 55, country: 'Qatar', text: 'Hormuz-related force majeure lifted. But Ras Laffan LNG damage (17% capacity) needs 3-5 years to repair.' },
-      { day: 65, country: 'Global shipping', text: 'Hormuz transits above 100/day. Insurance premiums falling. Mine clearance ongoing.' },
+      { day: 42, country: 'USA', text: 'Limited strikes on military targets only. Trump claims victory. Diplomatic channel reopens.' },
+      { day: 48, country: 'Global', text: 'Pakistan-brokered ceasefire signed after 10-point counter-proposal framework accepted.' },
+      { day: 58, country: 'IEA', text: 'SPR release rate reduced. Hormuz demining begins. Insurance still elevated.' },
+      { day: 68, country: 'Qatar', text: 'Hormuz-related force majeure lifted. Ras Laffan needs 3-5 years to repair (13,000+ targets damaged).' },
     ],
   },
 
@@ -152,18 +152,18 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     id: 'grind',
     label: 'Grind',
     shortLabel: 'B',
-    description: 'War winds down but Strait remains contested. Tollbooth expands slowly.',
+    description: 'Limited strikes, then Trump declares victory. Strait contested. Tollbooth expands.',
     color: '#ffab40',
-    probability: 0.50,
+    probability: 0.25, // Trump rhetoric makes quiet wind-down harder, but "mission accomplished" still possible
 
     hormuzReopenStartDay: null,
     hormuzReopenFullDay: null,
-    hormuzFloorTransits: 12,
-    hormuzCeilingTransits: 20, // tollbooth slowly expands
+    hormuzFloorTransits: 10, // deadline tension reduced from 12
+    hormuzCeilingTransits: 22, // tollbooth slowly expands with 8 approved nations
 
-    brentTarget: 140,  // sustained partial-disruption + cargo diversion premium
+    brentTarget: 145,  // sustained partial-disruption + Kharg military damage + cargo diversion
     brentTauDays: 35,
-    dubaiSpreadTarget: 22, // Asian premium widens as bidding war intensifies
+    dubaiSpreadTarget: 24, // Asian premium widens — Saudi cut India's supply, bidding war intensifies
     jetFuelBrentRatio: 16.5,
 
     bypassSupplyMbpd: 4.5, // Yanbu port bottleneck (Argus: pipeline 7 mbpd, port ~4.5 effective)
@@ -178,13 +178,13 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     gasRestockPerDay: 0,
 
     severityTrend: 'escalate',
-    severityIntervalDays: 20,
+    severityIntervalDays: 18,
 
     events: [
-      { day: 38, country: 'USA', text: 'Trump declares "mission accomplished." Begins withdrawal timeline.' },
-      { day: 45, country: 'UK', text: 'Starmer 35-nation coalition begins Hormuz escort planning.' },
-      { day: 55, country: 'Germany', text: 'First fuel shortages reported. End-of-April warning materializes.' },
-      { day: 65, country: 'EU', text: 'Emergency energy summit. Mandatory demand reduction discussed.' },
+      { day: 41, country: 'USA', text: 'Targeted strikes on military infrastructure. Trump declares "mission accomplished."' },
+      { day: 48, country: 'UK', text: 'Starmer 35-nation coalition begins Hormuz escort operations. Mine clearance.' },
+      { day: 55, country: 'Germany', text: 'Fuel shortages reported — Reiche end-of-April warning materializes.' },
+      { day: 65, country: 'EU', text: 'Emergency energy summit. Mandatory demand reduction. TTF above €100/MWh.' },
       { day: 75, country: 'Global', text: 'European recession officially declared. Q2 GDP negative.' },
     ],
   },
@@ -193,41 +193,42 @@ export const SCENARIOS: Record<ScenarioId, ScenarioParams> = {
     id: 'escalation',
     label: 'Escalation',
     shortLabel: 'C',
-    description: 'Power grid strikes + Houthi Red Sea blockade. $200 oil.',
+    description: 'Power grid strikes tonight. Human chains become casualties. Houthi Red Sea blockade. $200 oil.',
     color: '#ff4444',
-    probability: 0.38,
+    probability: 0.70, // Trump "civilization will die tonight," human chains at power plants, IRGC No.2 killed
 
     hormuzReopenStartDay: null,
     hormuzReopenFullDay: null,
-    hormuzFloorTransits: 12,
-    hormuzCeilingTransits: 5, // drops as Houthis threaten Bab al-Mandeb
+    hormuzFloorTransits: 8, // deadline-day traffic already down; drops further post-strikes
+    hormuzCeilingTransits: 3, // collapses as Houthis threaten Bab al-Mandeb + retaliatory mine-laying
 
-    brentTarget: 195,
-    brentTauDays: 25,
-    dubaiSpreadTarget: 50,
-    jetFuelBrentRatio: 18.0,
+    brentTarget: 200,  // power grid strikes + Houthi blockade + Abqaiq risk = ATH territory
+    brentTauDays: 20,  // faster convergence — this is a step-change not gradual
+    dubaiSpreadTarget: 55, // physical market completely breaks — no tankers, no insurance
+    jetFuelBrentRatio: 18.5, // jet fuel leads in a total disruption (Shell CEO: "jet leads diesel by 2-4 weeks")
 
-    bypassSupplyMbpd: 3.0, // Yanbu port ~4.5 normal, but Houthi threats to Red Sea tankers reduce to ~3.0
-    sprRateMbpd: 4.4, // max drawdown rate
-    sprStopDay: 70, // countries start hoarding
-    rationingMultiplier: 0.5,
+    bypassSupplyMbpd: 2.5, // Yanbu port ~4.5 normal, but Houthi Red Sea + retaliatory Abqaiq risk = ~2.5
+    sprRateMbpd: 4.8, // emergency max drawdown rate (panic mode)
+    sprStopDay: 65, // countries start hoarding earlier as situation worsens
+    rationingMultiplier: 0.45,
     rationingThresholdDays: 30,
 
-    gasDrawdownPerDay: 0.3,
-    gasFloorPct: 10,
+    gasDrawdownPerDay: 0.35, // accelerated draw as TTF spikes trigger industrial panic-buying
+    gasFloorPct: 8,
     gasRestockStartDay: null,
     gasRestockPerDay: 0,
 
     severityTrend: 'escalate',
-    severityIntervalDays: 8,
+    severityIntervalDays: 7, // faster escalation — countries reaching crisis sooner
 
     events: [
-      { day: 38, country: 'USA', text: 'US strikes all Iranian power plants simultaneously. 85M people lose electricity.' },
-      { day: 42, country: 'Yemen', text: 'Houthis declare Bab al-Mandeb blockade. Red Sea shipping halted.' },
-      { day: 48, country: 'Iran', text: 'Iran retaliates against Saudi Abqaiq. 5M bpd processing offline.' },
-      { day: 55, country: 'EU', text: 'Formal fuel rationing across Europe. Driving bans in Germany, France.' },
-      { day: 73, country: 'Global', text: 'Brent passes $180. IEA declares "unprecedented energy emergency."' },
-      { day: 85, country: 'USA', text: 'US gas above $6.50/gal. Recession deepens. Calls for withdrawal intensify.' },
+      { day: 40, country: 'Iran', text: 'US strikes all power plants and bridges. Human chain casualties. 85M lose electricity. International condemnation.' },
+      { day: 43, country: 'Yemen', text: 'Houthis declare Bab al-Mandeb blockade in retaliation. Red Sea shipping halted. Saudi Yanbu bypass threatened.' },
+      { day: 48, country: 'Iran', text: 'Iran retaliates against Saudi Abqaiq/Ras Tanura. 5M bpd processing offline. Oil gaps above $160.' },
+      { day: 55, country: 'EU', text: 'Formal fuel rationing across Europe. Driving bans in Germany, France. TTF above €120/MWh.' },
+      { day: 62, country: 'Global', text: 'IRGC threatens Stargate + Gulf data centers. Tech companies evacuate. AI infrastructure at risk.' },
+      { day: 70, country: 'Global', text: 'Brent passes $180. IEA declares "unprecedented energy emergency." SPR hoarding begins.' },
+      { day: 80, country: 'USA', text: 'US gas above $6/gal. S&P -20% from pre-war. 25th Amendment pressure intensifies.' },
     ],
   },
 };
@@ -250,10 +251,10 @@ function logistic(day: number, startDay: number, fullDay: number): number {
 // ── Projection Engine ──
 
 export function generateProjection(scenario: ScenarioParams): ScenarioProjection {
-  const PROJ_DAYS = 55; // Days 36-90
+  const PROJ_DAYS = 55; // Days 40-94 (from current Day 39 real data)
   const days: ProjectedDay[] = [];
 
-  // Initial conditions from Day 35 (index 34)
+  // Initial conditions from last real data day (TOTAL_DAYS - 1)
   const d35 = TOTAL_DAYS - 1;
   let prevBrent = BRENT_PRICES[d35];
   let prevDubai = DUBAI_PRICES[d35];
@@ -283,7 +284,7 @@ export function generateProjection(scenario: ScenarioParams): ScenarioProjection
   }
 
   for (let i = 0; i < PROJ_DAYS; i++) {
-    const absDay = TOTAL_DAYS + 1 + i; // Day 36, 37, ... 90
+    const absDay = TOTAL_DAYS + 1 + i; // Day 40, 41, ... 94
     const projDay = i; // 0-indexed into projection
 
     // ── 1. Hormuz transits ──
@@ -597,7 +598,7 @@ export function generateAllProjections(): Record<ScenarioId, ScenarioProjection>
   };
 }
 
-// ── Projection dates (Apr 4 - May 29) ──
+// ── Projection dates (Apr 8 - Jun 1) ──
 
 export const PROJECTION_DAYS = 55;
 export const MAX_DAY = TOTAL_DAYS + PROJECTION_DAYS; // 90
