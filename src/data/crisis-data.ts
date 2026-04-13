@@ -1329,6 +1329,9 @@ export const EVENTS: CrisisEvent[] = [
 
   // Russia/China UN veto context
   { day: 45, country: "UN Security Council", who: "Russia + China", type: "diplomatic", text: "Apr 7 UN Security Council veto of Hormuz shipping protection resolution remains defining posture (11-2, Pakistan + Colombia abstain). Beijing and Moscow called resolution biased against Iran, said it \"failed to capture root causes.\" No new UNSC action on blockade.", gap: null },
+
+  // TOTO halts prefab bathroom orders — naphtha petrochemical cascade hits consumer durables
+  { day: 45, country: "Japan", who: "TOTO Ltd.", type: "warning", text: "Suspends new orders for prefabricated bathrooms citing shortage of organic solvents used in wall/ceiling coatings. \"Procurement of raw materials both domestically and internationally has become extremely unstable as a result of the Middle East conflict.\" Shares fall as much as 8.8% — biggest drop since Oct 2024. Japan imports ~40% of naphtha (plastic/petrochemical feedstock) from the Middle East per Japan Petrochemical Industry Association. Joins growing list of Japanese manufacturers cutting production on naphtha squeeze. Validates Shell CEO Sawan's Day 25 warning: \"South Asia first... then Europe in April.\"", gap: null },
 ];
 
 // ── Fuel days remaining (strategic reserves / days of supply) ──
