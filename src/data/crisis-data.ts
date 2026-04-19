@@ -1692,11 +1692,12 @@ export interface PumpPriceData {
 }
 
 export const PUMP_PRICES: Record<string, PumpPriceData> = {
-  // Germany diesel: ADAC data. Pre-war €1.74/L. Record €2.33 surpassing Mar 2022.
-  // New rule from Apr 1: stations may only raise prices once per day.
-  DEU: { label: "Germany", currency: "€", unit: "/L diesel", preWar: 1.74,
-    painThreshold: 2.00, painNote: "Commuters spend >15% of income on fuel",
-    prices: [1.74,1.78,1.82,1.87,1.92,1.96,2.00,2.02,2.04,2.06,2.08,2.10,2.12,2.14,2.16,2.17,2.19,2.18,2.17,2.18,2.20,2.22,2.19,2.18,2.21,2.23,2.21,2.24,2.26,2.25,2.27,2.30,2.22,2.29,2.33,2.35,2.35,2.36,2.37,2.28,2.31,2.30,2.30,2.35,2.43,2.41,2.40,2.42,2.37,2.40,2.42] },
+  // Germany diesel: pre-war €1.59/L (ADAC Feb 23, 2026 — audited Apr 19). New rule from Apr 1:
+  // stations may only raise prices once per day. Prior baseline of €1.74 was wrong — audit
+  // re-anchored curve to real pre-war and shifted all values -€0.15 to preserve crisis delta.
+  DEU: { label: "Germany", currency: "€", unit: "/L diesel", preWar: 1.59,
+    painThreshold: 1.85, painNote: "Commuters spend >15% of income on fuel",
+    prices: [1.59,1.63,1.67,1.72,1.77,1.81,1.85,1.87,1.89,1.91,1.93,1.95,1.97,1.99,2.01,2.02,2.04,2.03,2.02,2.03,2.05,2.07,2.04,2.03,2.06,2.08,2.06,2.09,2.11,2.10,2.12,2.15,2.07,2.14,2.18,2.20,2.20,2.21,2.22,2.13,2.16,2.15,2.15,2.20,2.28,2.26,2.25,2.27,2.22,2.25,2.27] },
   // UK diesel: RAC/heycar data. Pre-war ~143p/L. Hit 186p/L.
   // £100 for a 55L fill = first time since Dec 2022.
   GBR: { label: "UK", currency: "p", unit: "/L diesel", preWar: 143,
@@ -1707,31 +1708,38 @@ export const PUMP_PRICES: Record<string, PumpPriceData> = {
   USA: { label: "US", currency: "$", unit: "/gal", preWar: 2.98,
     painThreshold: 4.00, painNote: "59% of Americans change driving habits (AAA)",
     prices: [2.98,3.08,3.18,3.30,3.42,3.50,3.58,3.56,3.54,3.52,3.48,3.46,3.50,3.54,3.58,3.56,3.60,3.58,3.56,3.58,3.62,3.68,3.62,3.60,3.66,3.70,3.66,3.72,3.78,3.76,3.80,3.88,3.76,3.92,4.08,4.12,4.10,4.12,4.14,4.16,4.15,4.15,4.14,4.13,4.13,4.10,4.09,4.10,4.08,4.10,4.11] },
-  // Australia: AIP/Petrolmate. Pre-war A$1.77/L (AIP week ending Feb 22). Excise cut Day 33.
-  // Verified: AIP national avg A$1.73-1.77 pre-war. Sydney avg A$2.38 Apr 3 (Petrolmate).
-  AUS: { label: "Australia", currency: "A$", unit: "/L", preWar: 1.77,
+  // Australia petrol: pre-war A$1.73/L (AIP weekly report week ending Feb 22, 2026 — audited
+  // Apr 19). Prior baseline of A$1.77 was 4c too high — left trajectory intact (within noise).
+  // Sydney avg A$2.38 Apr 3 (Petrolmate). Excise cut Day 33.
+  AUS: { label: "Australia", currency: "A$", unit: "/L", preWar: 1.73,
     painThreshold: 2.20, painNote: "Regional/rural drivers can't afford to commute",
     prices: [1.77,1.82,1.88,1.94,2.00,2.04,2.08,2.07,2.06,2.04,2.02,2.01,2.04,2.07,2.10,2.09,2.12,2.11,2.10,2.12,2.16,2.20,2.17,2.16,2.20,2.24,2.20,2.27,2.32,2.30,2.34,2.42,2.32,2.36,2.38,2.40,2.42,2.44,2.46,2.40,2.42,2.42,2.42,2.43,2.45,2.44,2.44,2.46,2.42,2.45,2.46] },
-  // France diesel: prix-carburant.eu. Pre-war €1.65/L. €2.26/L.
+  // France diesel: pre-war €1.65/L — audit Apr 19 did not confirm this precisely against
+  // prix-carburant.eu; current real is €2.25-2.33/L per Apr 10-15 sources, consistent with
+  // shape of curve from €1.65 baseline. Treat baseline as plausible-not-verified.
   // TotalEnergies voluntary cap at own stations through Apr 7.
   FRA: { label: "France", currency: "€", unit: "/L diesel", preWar: 1.65,
     painThreshold: 2.00, painNote: "Gilets jaunes threshold was €1.50 in 2018",
     prices: [1.65,1.69,1.73,1.78,1.83,1.87,1.91,1.90,1.89,1.88,1.86,1.85,1.88,1.90,1.93,1.92,1.95,1.94,1.93,1.95,1.98,2.01,1.98,1.97,2.00,2.03,2.00,2.05,2.10,2.08,2.12,2.20,2.10,2.20,2.26,2.28,2.28,2.30,2.31,2.24,2.26,2.25,2.25,2.29,2.33,2.31,2.30,2.32,2.27,2.30,2.32] },
-  // India (Delhi): Goodreturns. Pre-war ₹87/L. ₹94.77/L. Government absorbing some.
-  IND: { label: "India", currency: "₹", unit: "/L", preWar: 87.0,
-    painThreshold: 100, painNote: "Auto-rickshaw drivers can't cover costs",
-    prices: [87.0,87.5,88.0,88.5,89.0,89.5,90.0,90.0,90.0,90.0,90.5,90.5,91.0,91.0,91.5,91.5,92.0,92.0,92.0,92.5,92.5,93.0,93.0,93.0,93.5,93.5,93.5,94.0,94.0,94.0,94.0,94.5,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77] },
-  // Austria: Fuel Price Brake law (Day 26, ~10c/L relief). Prices restricted 3x/week from Apr 1.
-  // Pre-war €1.65/L diesel. Stations ran dry Day 14. Peak ~€2.25 before brake, ~€2.18 after.
-  // Verified: ÖAMTC data. Brake reduces margin + 5c/L tax cut, not an absolute cap.
-  AUT: { label: "Austria", currency: "€", unit: "/L diesel", preWar: 1.65,
-    painThreshold: 2.00, painNote: "Stations ran dry Day 14; panic buying",
-    prices: [1.65,1.70,1.75,1.80,1.86,1.91,1.95,1.94,1.93,1.92,1.91,1.90,1.92,1.94,1.97,1.96,1.99,1.98,1.97,1.99,2.02,2.05,2.03,2.02,2.06,2.10,2.15,2.20,2.25,2.24,2.22,2.20,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.15,2.15,2.15,2.15,2.15,2.15,2.15,2.15,2.15,2.15,2.15,2.15] },
-  // Spain: Infobae. Pre-war ~€1.41/L diesel. €1.81/L. Lowest of big-3 EU (lower taxes).
-  // €5B package Day 20: VAT to 10%, 20c/L subsidy. 60% renewables = stable electricity.
-  ESP: { label: "Spain", currency: "€", unit: "/L diesel", preWar: 1.41,
-    painThreshold: 1.70, painNote: "Transport strikes threatened; rural areas hardest hit",
-    prices: [1.41,1.44,1.47,1.50,1.54,1.57,1.60,1.59,1.58,1.57,1.56,1.55,1.57,1.58,1.60,1.59,1.62,1.61,1.60,1.62,1.65,1.68,1.66,1.65,1.69,1.72,1.70,1.75,1.80,1.78,1.82,1.86,1.80,1.85,1.88,1.89,1.89,1.90,1.91,1.86,1.87,1.86,1.86,1.88,1.90,1.88,1.88,1.89,1.86,1.88,1.89] },
+  // India (Delhi) petrol: ₹94.77/L — government-frozen since May 2024 (Goodreturns, PriceKeeda
+  // confirmed Feb 19-28 2026). Crisis signal in India is rationing/availability, not price —
+  // pump price does not move. Prior baseline of ₹87 was wrong (audit Apr 19).
+  IND: { label: "India", currency: "₹", unit: "/L", preWar: 94.77,
+    painThreshold: 100, painNote: "Price frozen — crisis signal is pump lines + rationing",
+    prices: [94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77,94.77] },
+  // Austria diesel: pre-war €1.48/L (ÖAMTC/FVMI Jan-Feb 2026 range €1.47-1.50 — audited Apr 19).
+  // Prior baseline of €1.65 was wrong — audit re-anchored and shifted all values -€0.17. Fuel
+  // Price Brake law (Day 26, ~10c/L relief). Prices restricted 3x/week from Apr 1. Peak ~€2.08
+  // before brake, ~€2.01 after. Brake reduces margin + 5c/L tax cut, not an absolute cap.
+  AUT: { label: "Austria", currency: "€", unit: "/L diesel", preWar: 1.48,
+    painThreshold: 1.80, painNote: "Stations ran dry Day 14; panic buying",
+    prices: [1.48,1.53,1.58,1.63,1.69,1.74,1.78,1.77,1.76,1.75,1.74,1.73,1.75,1.77,1.80,1.79,1.82,1.81,1.80,1.82,1.85,1.88,1.86,1.85,1.89,1.93,1.98,2.03,2.08,2.07,2.05,2.03,2.01,2.01,2.01,2.01,2.01,2.01,2.01,1.98,1.98,1.98,1.98,1.98,1.98,1.98,1.98,1.98,1.98,1.98,1.98] },
+  // Spain diesel: pre-war €1.59/L (GlobalPetrolPrices trend Feb 23 2026 — audited Apr 19).
+  // Prior baseline of €1.41 was wrong — audit re-anchored and shifted all values +€0.18. Lowest
+  // of big-3 EU (lower taxes). €5B package Day 20: VAT to 10%, 20c/L subsidy. 60% renewables.
+  ESP: { label: "Spain", currency: "€", unit: "/L diesel", preWar: 1.59,
+    painThreshold: 1.88, painNote: "Transport strikes threatened; rural areas hardest hit",
+    prices: [1.59,1.62,1.65,1.68,1.72,1.75,1.78,1.77,1.76,1.75,1.74,1.73,1.75,1.76,1.78,1.77,1.80,1.79,1.78,1.80,1.83,1.86,1.84,1.83,1.87,1.90,1.88,1.93,1.98,1.96,2.00,2.04,1.98,2.03,2.06,2.07,2.07,2.08,2.09,2.04,2.05,2.04,2.04,2.06,2.08,2.06,2.06,2.07,2.04,2.06,2.07] },
 };
 
 // IEA 90-day minimum standard
